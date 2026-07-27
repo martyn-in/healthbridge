@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { AppProvider } from '@/context/AppContext';
+import ConvexClientProvider from '@/components/ConvexClientProvider';
 
 export const metadata: Metadata = {
   title: 'HealthBridge AI — Understand your health. Act with confidence.',
@@ -19,7 +20,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="bg-background text-foreground antialiased selection:bg-teal-500 selection:text-white">
-        <AppProvider>{children}</AppProvider>
+        <ConvexClientProvider>
+          <AppProvider>{children}</AppProvider>
+        </ConvexClientProvider>
       </body>
     </html>
   );

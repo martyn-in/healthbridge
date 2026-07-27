@@ -17,24 +17,22 @@ import {
   WellnessCheckin,
   AssistantMessage,
 } from '@/types';
-import {
-  emptyProfiles,
-  emptyEmergencyContacts,
-  emptyMedications,
-  emptyMedicationLogs,
-  emptyReports,
-  emptyPrescriptions,
-  emptyAssessments,
-  emptyFacilities,
-  emptyRecords,
-  emptyAppointments,
-  emptyVaccinations,
-  defaultLiveWellness,
-  defaultLiveAssistantMessages,
-  seedSampleProfiles,
-  seedSampleMedications,
-  seedSampleReports,
-} from '@/services/demoData';
+const emptyProfiles: FamilyMember[] = [{ id: 'default', name: 'User', role: 'patient', isPrimary: true, relation: 'Self', gender: 'male', dob: '2000-01-01', weight: 70, height: 170 }];
+const emptyEmergencyContacts: EmergencyContact[] = [];
+const emptyMedications: Medication[] = [];
+const emptyMedicationLogs: MedicationLog[] = [];
+const emptyReports: MedicalReport[] = [];
+const emptyPrescriptions: PrescriptionScan[] = [];
+const emptyAssessments: SymptomAssessment[] = [];
+const emptyFacilities: Facility[] = [];
+const emptyRecords: HealthRecord[] = [];
+const emptyAppointments: Appointment[] = [];
+const emptyVaccinations: Vaccination[] = [];
+const defaultLiveWellness: WellnessCheckin = { id: 'w1', profileId: 'default', date: '2026-07-27', mood: 'Good', sleepHours: 8, waterIntake: 2, exerciseMinutes: 30 };
+const defaultLiveAssistantMessages: AssistantMessage[] = [];
+const seedSampleProfiles: FamilyMember[] = emptyProfiles;
+const seedSampleMedications: Medication[] = [];
+const seedSampleReports: MedicalReport[] = [];
 
 interface AppContextType {
   language: Language;
