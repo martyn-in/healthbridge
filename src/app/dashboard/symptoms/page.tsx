@@ -167,38 +167,6 @@ export default function SymptomsPage() {
             />
           </div>
 
-          {/* Quick Preset Buttons for testing */}
-          <div>
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-2.5">
-              Quick Preset Samples (Click to test):
-            </span>
-            <div className="flex flex-wrap gap-2.5">
-              <button
-                onClick={() => setMainConcern('Mild throat discomfort and dry cough')}
-                className="px-3.5 py-2 rounded-xl bg-teal-950/40 text-cyan-300 text-xs font-semibold border border-teal-800/80 hover:border-teal-500 transition-colors"
-              >
-                Mild Throat Irritation
-              </button>
-              <button
-                onClick={() => setMainConcern('Moderate stomach cramping after meals for 3 days')}
-                className="px-3.5 py-2 rounded-xl bg-amber-950/40 text-amber-300 text-xs font-semibold border border-amber-800/80 hover:border-amber-500 transition-colors"
-              >
-                Stomach Cramping
-              </button>
-              <button
-                onClick={() => {
-                  setMainConcern('Severe crushing chest pain radiating to left arm');
-                  setSeverity('Severe');
-                  setSelectedBodyArea('Chest / Heart');
-                }}
-                className="px-3.5 py-2 rounded-xl bg-red-950/50 text-red-300 text-xs font-bold border border-red-800/80 hover:border-red-500 transition-colors flex items-center gap-1.5"
-              >
-                <ShieldAlert className="h-4 w-4 text-red-400" />
-                <span>Test Emergency Triage Safeguard</span>
-              </button>
-            </div>
-          </div>
-
           <button
             disabled={!mainConcern.trim()}
             onClick={() => setStep(2)}
