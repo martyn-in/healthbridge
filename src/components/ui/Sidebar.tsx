@@ -17,6 +17,7 @@ import {
   Bot,
   HeartPulse,
   Settings,
+  Sparkles,
 } from 'lucide-react';
 import { Logo } from './Logo';
 import { useApp } from '@/context/AppContext';
@@ -26,12 +27,12 @@ export const Sidebar: React.FC = () => {
   const pathname = usePathname();
   const { language } = useApp();
 
-  const primaryNav = [
-    { name: t(language, 'navSymptoms'), path: '/dashboard/symptoms', icon: Stethoscope },
-    { name: t(language, 'navReports'), path: '/dashboard/reports', icon: FileText },
-    { name: t(language, 'navPrescriptions'), path: '/dashboard/prescriptions', icon: ScanLine },
-    { name: t(language, 'navMeds'), path: '/dashboard/medications', icon: Pill },
-    { name: t(language, 'navCare'), path: '/dashboard/care', icon: MapPin },
+  const flagshipNav = [
+    { name: t(language, 'navSymptoms'), path: '/dashboard/symptoms', icon: Stethoscope, badge: 'Flagship' },
+    { name: t(language, 'navReports'), path: '/dashboard/reports', icon: FileText, badge: 'Flagship' },
+    { name: t(language, 'navPrescriptions'), path: '/dashboard/prescriptions', icon: ScanLine, badge: 'Flagship' },
+    { name: t(language, 'navMeds'), path: '/dashboard/medications', icon: Pill, badge: 'Flagship' },
+    { name: t(language, 'navCare'), path: '/dashboard/care', icon: MapPin, badge: 'Flagship' },
   ];
 
   const supportingNav = [
@@ -47,50 +48,52 @@ export const Sidebar: React.FC = () => {
 
   return (
     <>
-      {/* Desktop Left Sidebar */}
-      <aside className="hidden lg:flex flex-col w-64 border-r border-slate-200 dark:border-slate-800/80 bg-white dark:bg-slate-950/90 backdrop-blur-md h-screen sticky top-0 shrink-0 z-20 transition-colors">
+      {/* Desktop Left Collapsible Sidebar */}
+      <aside className="hidden lg:flex flex-col w-64 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 h-screen sticky top-0 shrink-0 z-20 transition-colors">
         {/* Top Logo */}
-        <div className="p-4 border-b border-slate-100 dark:border-slate-800/80">
-          <Link href="/" className="focus-visible:ring-1 focus-visible:ring-teal-500 rounded-lg outline-none block">
+        <div className="p-5 border-b border-slate-100 dark:border-slate-800">
+          <Link href="/">
             <Logo size="md" />
           </Link>
         </div>
 
         {/* Scrollable Navigation */}
-        <div className="flex-1 overflow-y-auto p-3 space-y-5">
-          {/* Primary Workflows */}
+        <div className="flex-1 overflow-y-auto p-4 space-y-6">
+          {/* Flagship Workflows Section */}
           <div>
-            <div className="px-3 text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1.5">
-              Primary Workflows
+            <div className="px-3 text-[11px] font-extrabold uppercase tracking-wider text-teal-600 dark:text-cyan-400 mb-2 flex items-center gap-1">
+              <Sparkles className="h-3 w-3" /> Flagship Workflows
             </div>
-            <div className="space-y-0.5">
-              {primaryNav.map((item) => {
+            <div className="space-y-1">
+              {flagshipNav.map((item) => {
                 const Icon = item.icon;
                 const isActive = pathname === item.path;
                 return (
                   <Link
                     key={item.path}
                     href={item.path}
-                    className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs transition-colors focus-visible:ring-1 focus-visible:ring-teal-500 outline-none ${
+                    className={`flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold transition-all ${
                       isActive
-                        ? 'bg-slate-900 text-white font-semibold border-l-2 border-teal-500'
-                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-900/60 font-medium'
+                        ? 'bg-gradient-to-r from-navy-900 to-teal-700 text-white shadow-md shadow-teal-500/10'
+                        : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
                     }`}
                   >
-                    <Icon className={`h-4 w-4 ${isActive ? 'text-teal-400' : 'text-slate-400'}`} />
-                    <span>{item.name}</span>
+                    <div className="flex items-center gap-2.5">
+                      <Icon className={`h-4 w-4 ${isActive ? 'text-cyan-300' : 'text-teal-600 dark:text-teal-400'}`} />
+                      <span>{item.name}</span>
+                    </div>
                   </Link>
                 );
               })}
             </div>
           </div>
 
-          {/* Supporting Modules */}
+          {/* Core Modules Section */}
           <div>
-            <div className="px-3 text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1.5">
-              Platform Tools
+            <div className="px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2">
+              Health Platform
             </div>
-            <div className="space-y-0.5">
+            <div className="space-y-1">
               {supportingNav.map((item) => {
                 const Icon = item.icon;
                 const isActive = pathname === item.path;
@@ -98,13 +101,13 @@ export const Sidebar: React.FC = () => {
                   <Link
                     key={item.path}
                     href={item.path}
-                    className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs transition-colors focus-visible:ring-1 focus-visible:ring-teal-500 outline-none ${
+                    className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors ${
                       isActive
-                        ? 'bg-slate-900 text-white font-semibold border-l-2 border-teal-500'
-                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-900/40 font-medium'
+                        ? 'bg-slate-100 dark:bg-slate-800 text-teal-700 dark:text-cyan-400 font-bold'
+                        : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/60'
                     }`}
                   >
-                    <Icon className={`h-4 w-4 ${isActive ? 'text-teal-400' : 'text-slate-400'}`} />
+                    <Icon className={`h-4 w-4 ${isActive ? 'text-teal-600 dark:text-cyan-400' : 'text-slate-400'}`} />
                     <span>{item.name}</span>
                   </Link>
                 );
@@ -115,50 +118,50 @@ export const Sidebar: React.FC = () => {
       </aside>
 
       {/* Mobile Bottom Navigation Bar */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-slate-950/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 px-2 py-1.5 flex justify-around items-center text-[10px] font-medium">
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 px-2 py-1.5 flex justify-around items-center text-[10px] font-medium">
         <Link
           href="/dashboard"
-          className={`flex flex-col items-center gap-0.5 px-2 py-1 rounded-md ${
-            pathname === '/dashboard' ? 'text-teal-600 dark:text-teal-400 font-semibold' : 'text-slate-500 dark:text-slate-400'
+          className={`flex flex-col items-center gap-1 px-3 py-1 rounded-lg ${
+            pathname === '/dashboard' ? 'text-teal-600 dark:text-cyan-400 font-bold' : 'text-slate-500 dark:text-slate-400'
           }`}
         >
-          <LayoutDashboard className="h-4 w-4" />
+          <LayoutDashboard className="h-5 w-5" />
           <span>Home</span>
         </Link>
         <Link
           href="/dashboard/symptoms"
-          className={`flex flex-col items-center gap-0.5 px-2 py-1 rounded-md ${
-            pathname === '/dashboard/symptoms' ? 'text-teal-600 dark:text-teal-400 font-semibold' : 'text-slate-500 dark:text-slate-400'
+          className={`flex flex-col items-center gap-1 px-3 py-1 rounded-lg ${
+            pathname === '/dashboard/symptoms' ? 'text-teal-600 dark:text-cyan-400 font-bold' : 'text-slate-500 dark:text-slate-400'
           }`}
         >
-          <Stethoscope className="h-4 w-4" />
+          <Stethoscope className="h-5 w-5" />
           <span>Symptoms</span>
         </Link>
         <Link
           href="/dashboard/assistant"
-          className={`flex flex-col items-center gap-0.5 px-2 py-1 rounded-md ${
-            pathname === '/dashboard/assistant' ? 'text-teal-600 dark:text-teal-400 font-semibold' : 'text-slate-500 dark:text-slate-400'
+          className={`flex flex-col items-center gap-1 px-3 py-1 rounded-lg ${
+            pathname === '/dashboard/assistant' ? 'text-teal-600 dark:text-cyan-400 font-bold' : 'text-slate-500 dark:text-slate-400'
           }`}
         >
-          <Bot className="h-4 w-4 text-teal-500" />
-          <span>Assistant</span>
+          <Bot className="h-5 w-5 text-teal-600" />
+          <span>Aira AI</span>
         </Link>
         <Link
           href="/dashboard/medications"
-          className={`flex flex-col items-center gap-0.5 px-2 py-1 rounded-md ${
-            pathname === '/dashboard/medications' ? 'text-teal-600 dark:text-teal-400 font-semibold' : 'text-slate-500 dark:text-slate-400'
+          className={`flex flex-col items-center gap-1 px-3 py-1 rounded-lg ${
+            pathname === '/dashboard/medications' ? 'text-teal-600 dark:text-cyan-400 font-bold' : 'text-slate-500 dark:text-slate-400'
           }`}
         >
-          <Pill className="h-4 w-4" />
+          <Pill className="h-5 w-5" />
           <span>Meds</span>
         </Link>
         <Link
           href="/dashboard/records"
-          className={`flex flex-col items-center gap-0.5 px-2 py-1 rounded-md ${
-            pathname === '/dashboard/records' ? 'text-teal-600 dark:text-teal-400 font-semibold' : 'text-slate-500 dark:text-slate-400'
+          className={`flex flex-col items-center gap-1 px-3 py-1 rounded-lg ${
+            pathname === '/dashboard/records' ? 'text-teal-600 dark:text-cyan-400 font-bold' : 'text-slate-500 dark:text-slate-400'
           }`}
         >
-          <FolderHeart className="h-4 w-4" />
+          <FolderHeart className="h-5 w-5" />
           <span>Records</span>
         </Link>
       </nav>

@@ -5,34 +5,36 @@ import { Calendar as CalendarIcon, Clock, Plus, MapPin, CheckCircle, Video, User
 import { useApp } from '@/context/AppContext';
 
 export default function AppointmentsPage() {
-  const { appointments, bookAppointment, cancelAppointment, activeProfile } = useApp();
+  const { appointments, bookAppointment, cancelAppointment, activeProfile, profiles } = useApp();
 
   const [showBookModal, setShowBookModal] = useState(false);
-  const [selectedDoctor, setSelectedDoctor] = useState('');
-  const [specialty, setSpecialty] = useState('');
-  const [hospital, setHospital] = useState('');
-  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
-  const [time, setTime] = useState('10:00 AM');
-  const [reason, setReason] = useState('');
+  const [selectedDoctor, setSelectedDoctor] = useState('Dr. Ananya Mehta');
+  const [specialty, setSpecialty] = useState('General Physician');
+  const [hospital, setHospital] = useState('Apex Health Clinic, Green Park');
+  const [date, setDate] = useState('2026-08-02');
+  const [time, setTime] = useState('10:30 AM');
+  const [reason, setReason] = useState('General Health Consultation');
+
+  const demoDoctors = [
+    { name: 'Dr. Ananya Mehta', spec: 'General Physician', hosp: 'Apex Health Clinic, Green Park' },
+    { name: 'Dr. S. N. Roy', spec: 'Endocrinologist', hosp: 'Apollo Hospital, Sarita Vihar' },
+    { name: 'Dr. V. K. Gupta', spec: 'Cardiologist', hosp: 'AIIMS Emergency & Acute Care' },
+    { name: 'Dr. Rajesh Kumar', spec: 'Pediatrician', hosp: 'Max Children Hospital' },
+  ];
 
   const handleBookSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedDoctor.trim()) return;
     bookAppointment({
       profileId: activeProfile.id,
       profileName: activeProfile.name,
       doctorName: selectedDoctor,
-      specialty: specialty || 'General Health',
-      hospitalName: hospital || 'Local Health Center',
+      specialty,
+      hospitalName: hospital,
       date,
       time,
-      reason: reason || 'Routine Consultation',
+      reason,
       mode: 'In-Person',
     });
-    setSelectedDoctor('');
-    setSpecialty('');
-    setHospital('');
-    setReason('');
     setShowBookModal(false);
   };
 
@@ -63,78 +65,68 @@ export default function AppointmentsPage() {
           Scheduled Appointments ({appointments.length})
         </h3>
 
-        {appointments.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {appointments.map((apt) => (
-              <div
-                key={apt.id}
-                className={`rounded-2xl p-6 shadow-card border transition-all space-y-4 ${
-                  apt.status === 'Cancelled'
-                    ? 'bg-slate-100 dark:bg-slate-800/40 border-slate-200 dark:border-slate-700 opacity-60'
-                    : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800'
-                }`}
-              >
-                <div className="flex items-start justify-between">
-                  <div>
-                    <span className="px-2.5 py-0.5 rounded-full bg-teal-100 text-teal-800 dark:bg-teal-950/60 dark:text-cyan-300 text-[10px] font-bold">
-                      {apt.specialty}
-                    </span>
-                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mt-1">
-                      {apt.doctorName}
-                    </h3>
-                    <p className="text-xs text-slate-500">{apt.hospitalName}</p>
-                  </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {appointments.map((apt) => (
+            <div
+              key={apt.id}
+              className={`rounded-2xl p-6 shadow-card border transition-all space-y-4 ${
+                apt.status === 'Cancelled'
+                  ? 'bg-slate-100 dark:bg-slate-800/40 border-slate-200 dark:border-slate-700 opacity-60'
+                  : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800'
+              }`}
+            >
+              <div className="flex items-start justify-between">
+                <div>
+                  <span className="px-2.5 py-0.5 rounded-full bg-teal-100 text-teal-800 dark:bg-teal-950/60 dark:text-cyan-300 text-[10px] font-bold">
+                    {apt.specialty}
+                  </span>
+                  <h3 className="text-lg font-bold text-slate-900 dark:text-white mt-1">
+                    {apt.doctorName}
+                  </h3>
+                  <p className="text-xs text-slate-500">{apt.hospitalName}</p>
+                </div>
 
-                  <span
-                    className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${
-                      apt.status === 'Upcoming'
-                        ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300'
-                        : 'bg-slate-200 text-slate-700'
-                    }`}
-                  >
-                    {apt.status}
+                <span
+                  className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${
+                    apt.status === 'Upcoming'
+                      ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300'
+                      : 'bg-slate-200 text-slate-700'
+                  }`}
+                >
+                  {apt.status}
+                </span>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2 text-xs text-slate-600 dark:text-slate-300 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                <div>
+                  <span className="font-semibold text-slate-400 block">Date & Time:</span>
+                  <span className="font-bold text-slate-900 dark:text-white">
+                    {apt.date} at {apt.time}
                   </span>
                 </div>
-
-                <div className="grid grid-cols-2 gap-2 text-xs text-slate-600 dark:text-slate-300 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-                  <div>
-                    <span className="font-semibold text-slate-400 block">Date & Time:</span>
-                    <span className="font-bold text-slate-900 dark:text-white">
-                      {apt.date} at {apt.time}
-                    </span>
-                  </div>
-                  <div>
-                    <span className="font-semibold text-slate-400 block">Patient Profile:</span>
-                    <span className="font-bold text-teal-600 dark:text-cyan-400">{apt.profileName}</span>
-                  </div>
-                  <div className="col-span-2">
-                    <span className="font-semibold text-slate-400 block">Reason:</span>
-                    <span>{apt.reason}</span>
-                  </div>
+                <div>
+                  <span className="font-semibold text-slate-400 block">Patient Profile:</span>
+                  <span className="font-bold text-teal-600 dark:text-cyan-400">{apt.profileName}</span>
                 </div>
-
-                {apt.status === 'Upcoming' && (
-                  <div className="flex justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
-                    <button
-                      onClick={() => cancelAppointment(apt.id)}
-                      className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-semibold hover:bg-red-100 hover:text-red-600"
-                    >
-                      Cancel Consultation
-                    </button>
-                  </div>
-                )}
+                <div className="col-span-2">
+                  <span className="font-semibold text-slate-400 block">Reason:</span>
+                  <span>{apt.reason}</span>
+                </div>
               </div>
-            ))}
-          </div>
-        ) : (
-          <div className="p-8 text-center bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3">
-            <CalendarIcon className="h-10 w-10 text-slate-400 mx-auto" />
-            <h4 className="text-sm font-bold text-slate-800 dark:text-slate-200">No Consultations Scheduled</h4>
-            <p className="text-xs text-slate-500 max-w-sm mx-auto">
-              Click the "Book Consultation" button to schedule an appointment with your clinician.
-            </p>
-          </div>
-        )}
+
+              {apt.status === 'Upcoming' && (
+                <div className="flex justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+                  <button
+                    onClick={() => cancelAppointment(apt.id)}
+                    className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-semibold hover:bg-red-100 hover:text-red-600"
+                  >
+                    Cancel Consultation
+                  </button>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Book Modal */}
@@ -145,44 +137,26 @@ export default function AppointmentsPage() {
             <form onSubmit={handleBookSubmit} className="space-y-3 text-xs">
               <div>
                 <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                  Doctor Name:
+                  Select Doctor:
                 </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. Dr. Sarah Jenkins"
+                <select
                   value={selectedDoctor}
-                  onChange={(e) => setSelectedDoctor(e.target.value)}
-                  className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-semibold outline-none focus:ring-2 focus:ring-teal-500"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                    Specialty:
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="e.g. Cardiology"
-                    value={specialty}
-                    onChange={(e) => setSpecialty(e.target.value)}
-                    className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-teal-500"
-                  />
-                </div>
-
-                <div>
-                  <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                    Clinic / Hospital:
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="e.g. City Health Clinic"
-                    value={hospital}
-                    onChange={(e) => setHospital(e.target.value)}
-                    className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-teal-500"
-                  />
-                </div>
+                  onChange={(e) => {
+                    const doc = demoDoctors.find((d) => d.name === e.target.value);
+                    if (doc) {
+                      setSelectedDoctor(doc.name);
+                      setSpecialty(doc.spec);
+                      setHospital(doc.hosp);
+                    }
+                  }}
+                  className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-semibold"
+                >
+                  {demoDoctors.map((d) => (
+                    <option key={d.name} value={d.name}>
+                      {d.name} ({d.spec})
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
@@ -205,7 +179,6 @@ export default function AppointmentsPage() {
                   <input
                     type="text"
                     value={time}
-                    placeholder="10:00 AM"
                     onChange={(e) => setTime(e.target.value)}
                     className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white"
                   />
@@ -218,10 +191,9 @@ export default function AppointmentsPage() {
                 </label>
                 <input
                   type="text"
-                  placeholder="e.g. Annual Checkup"
                   value={reason}
                   onChange={(e) => setReason(e.target.value)}
-                  className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-teal-500"
+                  className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white"
                 />
               </div>
 
@@ -235,7 +207,7 @@ export default function AppointmentsPage() {
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 py-2.5 rounded-xl bg-teal-600 text-white font-bold hover:bg-teal-700 transition-colors"
+                  className="flex-1 py-2.5 rounded-xl bg-teal-600 text-white font-bold hover:bg-teal-700"
                 >
                   Confirm Booking
                 </button>

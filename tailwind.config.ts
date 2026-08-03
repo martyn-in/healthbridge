@@ -9,9 +9,6 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      fontFamily: {
-        sans: ['Plus Jakarta Sans', 'Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
-      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
@@ -20,8 +17,7 @@ const config: Config = {
           100: '#D9E2EC',
           500: '#1E3E62',
           700: '#0F2A4A',
-          900: '#090D16',
-          950: '#070B14',
+          900: '#0B192C',
         },
         teal: {
           50: '#F0FDFA',
@@ -46,15 +42,15 @@ const config: Config = {
         }
       },
       borderRadius: {
-        'lg': '8px',
-        'xl': '12px',
-        '2xl': '16px',
-        '3xl': '24px',
+        'lg': '14px',
+        'xl': '18px',
+        '2xl': '24px',
       },
       boxShadow: {
-        'subtle': '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
-        'card': '0 4px 12px 0 rgba(0, 0, 0, 0.05)',
-        'elevation': '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)',
+        'soft': '0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.03)',
+        'card': '0 10px 30px -5px rgba(15, 23, 42, 0.08)',
+        'glow': '0 0 25px -5px rgba(13, 148, 136, 0.3)',
+        'emergency-glow': '0 0 25px -3px rgba(220, 38, 38, 0.4)',
       }
     },
   },

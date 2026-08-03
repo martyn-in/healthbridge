@@ -17,11 +17,6 @@ import {
   Plus,
   Edit3,
   HeartPulse,
-  SmilePlus,
-  Smile,
-  Meh,
-  Frown,
-  AlertCircle,
 } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
 import { t } from '@/lib/i18n';
@@ -56,11 +51,11 @@ export default function DashboardOverviewPage() {
   const upcomingApt = appointments.find((a) => a.status === 'Upcoming');
 
   const feelings = [
-    { label: 'Great', icon: SmilePlus },
-    { label: 'Good', icon: Smile },
-    { label: 'Okay', icon: Meh },
-    { label: 'Stressed', icon: Frown },
-    { label: 'Unwell', icon: AlertCircle },
+    { label: 'Great', emoji: '😄' },
+    { label: 'Good', emoji: '😊' },
+    { label: 'Okay', emoji: '😐' },
+    { label: 'Stressed', emoji: '😓' },
+    { label: 'Unwell', emoji: '🤒' },
   ];
 
   const handleSaveProfileEdit = (e: React.FormEvent) => {
@@ -86,10 +81,10 @@ export default function DashboardOverviewPage() {
             </span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-            Welcome to HealthBridge
+            Welcome to HealthBridge AI
           </h1>
           <p className="text-xs sm:text-sm text-slate-200 mt-1 max-w-xl">
-            Manage family health records, evaluate symptoms, parse lab documents, track prescriptions, and access emergency services.
+            Live Application Active. Understand symptoms, upload lab reports, scan prescriptions, and manage family health records in real-time.
           </p>
         </div>
 
@@ -177,11 +172,38 @@ export default function DashboardOverviewPage() {
         )}
       </div>
 
+      {/* "How are you feeling today?" Check-in */}
+      <div className="rounded-2xl bg-white dark:bg-slate-900 p-5 shadow-card border border-slate-200 dark:border-slate-800 space-y-3">
+        <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+          {t(language, 'howAreYouFeeling')}
+        </h3>
+        <div className="flex flex-wrap gap-2">
+          {feelings.map((f) => (
+            <button
+              key={f.label}
+              onClick={() => {
+                setSelectedFeeling(f.label);
+                updateWellness({ mood: f.label as any });
+                showToast(`Logged daily mood as ${f.label}`);
+              }}
+              className={`px-4 py-2 rounded-xl text-xs font-semibold border transition-all flex items-center gap-2 ${
+                selectedFeeling === f.label
+                  ? 'bg-teal-600 text-white border-teal-700 shadow-md'
+                  : 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-100'
+              }`}
+            >
+              <span>{f.emoji}</span>
+              <span>{f.label}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
       {/* Flagship Quick Action Cards */}
       <div>
         <div className="flex items-center justify-between mb-3">
           <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-400">
-            Healthcare Workflows
+            Real Live Healthcare Workflows
           </h3>
         </div>
 
@@ -195,7 +217,7 @@ export default function DashboardOverviewPage() {
             </div>
             <div>
               <h4 className="text-sm font-bold">Check Symptoms</h4>
-              <p className="text-[11px] text-teal-100 mt-0.5">Clinical Triage</p>
+              <p className="text-[11px] text-teal-100 mt-0.5">Real AI Triage</p>
             </div>
           </Link>
 
@@ -208,7 +230,7 @@ export default function DashboardOverviewPage() {
             </div>
             <div>
               <h4 className="text-sm font-bold">Analyze Report</h4>
-              <p className="text-[11px] text-slate-300 mt-0.5">Lab Documents</p>
+              <p className="text-[11px] text-slate-300 mt-0.5">Live File Upload OCR</p>
             </div>
           </Link>
 
@@ -221,7 +243,7 @@ export default function DashboardOverviewPage() {
             </div>
             <div>
               <h4 className="text-sm font-bold">Scan Medicine</h4>
-              <p className="text-[11px] text-cyan-100 mt-0.5">Digital Schedule</p>
+              <p className="text-[11px] text-cyan-100 mt-0.5">Prescription Reader</p>
             </div>
           </Link>
 
@@ -234,7 +256,7 @@ export default function DashboardOverviewPage() {
             </div>
             <div>
               <h4 className="text-sm font-bold">Find Nearby Care</h4>
-              <p className="text-[11px] text-slate-300 mt-0.5">Hospitals & Clinics</p>
+              <p className="text-[11px] text-slate-300 mt-0.5">Live GPS Discovery</p>
             </div>
           </Link>
         </div>

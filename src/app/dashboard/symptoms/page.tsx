@@ -92,30 +92,30 @@ export default function SymptomsPage() {
 
   return (
     <div className="space-y-6">
-      {/* Header Banner */}
-      <div className="rounded-3xl bg-gradient-to-r from-teal-950/80 via-slate-900 to-slate-950 p-6 sm:p-8 shadow-premium border border-teal-500/30 flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-teal-500/10 blur-[80px] pointer-events-none" />
-        <div className="space-y-1 z-10">
-          <div className="flex items-center gap-2 text-xs font-extrabold text-cyan-300 uppercase tracking-widest">
-            <Sparkles className="h-4 w-4 text-cyan-400" /> Flagship Workflow #1
+      {/* Top Banner */}
+      <div className="rounded-2xl bg-gradient-to-r from-navy-900 via-navy-700 to-teal-700 p-6 text-white shadow-lg flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div>
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-500/20 text-cyan-300 text-xs font-bold uppercase mb-2 border border-teal-500/30">
+            <Sparkles className="h-3.5 w-3.5" /> Flagship Workflow #1
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white">
-            AI-Guided Symptom Assessment
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+            AI Guided Symptom Assessment
           </h1>
-          <p className="text-xs sm:text-sm text-slate-300 max-w-xl leading-relaxed">
+          <p className="text-sm text-slate-200 mt-1 max-w-xl">
             Interactive clinical evaluation for <span className="font-bold text-teal-300">{activeProfile.name}</span>. Receive preliminary health guidance, urgency classification, and safe next steps.
           </p>
         </div>
 
-        <div className="z-10 bg-slate-900/90 border border-slate-800 p-3 rounded-2xl">
-          <span className="text-[10px] uppercase font-bold text-slate-400 block mb-1">Assessing for:</span>
+        {/* Profile Switcher Quick Pill */}
+        <div className="bg-white/10 p-3 rounded-xl backdrop-blur-sm border border-white/10 text-xs space-y-1">
+          <span className="text-slate-300 block">Assessing for:</span>
           <select
             value={activeProfile.id}
             onChange={(e) => {
-              const selected = profiles.find((p) => p.id === e.target.value);
-              if (selected) setActiveProfile(selected);
+              const p = profiles.find((prof) => prof.id === e.target.value);
+              if (p) setActiveProfile(p);
             }}
-            className="bg-slate-950 text-xs font-bold text-teal-300 border border-teal-500/30 rounded-xl px-3 py-2 outline-none focus:ring-2 focus:ring-teal-500 cursor-pointer"
+            className="bg-navy-900 text-white font-bold py-1 px-2.5 rounded-lg border border-teal-500/40 outline-none text-xs"
           >
             {profiles.map((p) => (
               <option key={p.id} value={p.id}>
@@ -128,19 +128,19 @@ export default function SymptomsPage() {
 
       {/* Progress Wizard Steps Indicator */}
       {step < 4 && (
-        <div className="flex items-center justify-center gap-2 sm:gap-6 text-xs font-bold text-slate-500 py-2">
-          <div className={`flex items-center gap-2 ${step >= 1 ? 'text-cyan-400 font-extrabold' : ''}`}>
-            <span className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-extrabold shadow-sm ${step >= 1 ? 'bg-gradient-to-r from-teal-500 to-cyan-500 text-slate-950 shadow-glow' : 'bg-slate-800 text-slate-400'}`}>1</span>
+        <div className="flex items-center justify-center gap-2 sm:gap-4 text-xs font-bold text-slate-500">
+          <div className={`flex items-center gap-2 ${step >= 1 ? 'text-teal-600 dark:text-cyan-400 font-extrabold' : ''}`}>
+            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-teal-600 text-white text-xs">1</span>
             <span>Symptoms</span>
           </div>
-          <ChevronRight className="h-4 w-4 text-slate-600" />
-          <div className={`flex items-center gap-2 ${step >= 2 ? 'text-cyan-400 font-extrabold' : ''}`}>
-            <span className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-extrabold shadow-sm ${step >= 2 ? 'bg-gradient-to-r from-teal-500 to-cyan-500 text-slate-950 shadow-glow' : 'bg-slate-800 text-slate-400'}`}>2</span>
+          <ChevronRight className="h-4 w-4 text-slate-300" />
+          <div className={`flex items-center gap-2 ${step >= 2 ? 'text-teal-600 dark:text-cyan-400 font-extrabold' : ''}`}>
+            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-teal-600 text-white text-xs">2</span>
             <span>Severity & Area</span>
           </div>
-          <ChevronRight className="h-4 w-4 text-slate-600" />
-          <div className={`flex items-center gap-2 ${step >= 3 ? 'text-cyan-400 font-extrabold' : ''}`}>
-            <span className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-extrabold shadow-sm ${step >= 3 ? 'bg-gradient-to-r from-teal-500 to-cyan-500 text-slate-950 shadow-glow' : 'bg-slate-800 text-slate-400'}`}>3</span>
+          <ChevronRight className="h-4 w-4 text-slate-300" />
+          <div className={`flex items-center gap-2 ${step >= 3 ? 'text-teal-600 dark:text-cyan-400 font-extrabold' : ''}`}>
+            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-teal-600 text-white text-xs">3</span>
             <span>Questions</span>
           </div>
         </div>
@@ -148,14 +148,13 @@ export default function SymptomsPage() {
 
       {/* Wizard Form Containers */}
       {step === 1 && (
-        <div className="rounded-3xl bg-slate-900/90 backdrop-blur-xl p-6 sm:p-8 shadow-2xl border border-slate-800 space-y-6">
-          <h2 className="text-lg font-bold text-white flex items-center gap-2">
-            <span>1. What is the primary concern for</span>
-            <span className="text-teal-400 font-extrabold">{activeProfile.name}?</span>
+        <div className="rounded-2xl bg-white dark:bg-slate-900 p-6 shadow-card border border-slate-200 dark:border-slate-800 space-y-6">
+          <h2 className="text-lg font-bold text-slate-900 dark:text-white">
+            1. What is the primary concern for {activeProfile.name}?
           </h2>
 
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
+            <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-2">
               Describe your main symptoms or discomfort:
             </label>
             <textarea
@@ -163,14 +162,45 @@ export default function SymptomsPage() {
               value={mainConcern}
               onChange={(e) => setMainConcern(e.target.value)}
               placeholder="e.g. Mild persistent dry cough, scratchy throat, and slight headache since yesterday..."
-              className="w-full rounded-2xl bg-slate-950/80 p-4 text-sm text-white border border-slate-800 outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/30 transition-all placeholder:text-slate-600"
+              className="w-full rounded-xl bg-slate-50 dark:bg-slate-800 p-4 text-sm text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-teal-500"
             />
+          </div>
+
+          {/* Quick Preset Buttons for Hackathon Demo testing */}
+          <div>
+            <span className="text-xs font-semibold text-slate-400 block mb-2">
+              Quick Preset Samples (Click to test):
+            </span>
+            <div className="flex flex-wrap gap-2">
+              <button
+                onClick={() => setMainConcern('Mild throat discomfort and dry cough')}
+                className="px-3 py-1.5 rounded-lg bg-teal-50 dark:bg-teal-950/40 text-teal-700 dark:text-cyan-300 text-xs font-medium border border-teal-200 dark:border-teal-800 hover:bg-teal-100"
+              >
+                Mild Throat Irritation
+              </button>
+              <button
+                onClick={() => setMainConcern('Moderate stomach cramping after meals for 3 days')}
+                className="px-3 py-1.5 rounded-lg bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 text-xs font-medium border border-amber-200 dark:border-amber-800 hover:bg-amber-100"
+              >
+                Stomach Cramping
+              </button>
+              <button
+                onClick={() => {
+                  setMainConcern('Sudden severe crushing chest pain radiating to left arm');
+                  setSeverity('Severe');
+                  setSelectedBodyArea('Chest / Heart');
+                }}
+                className="px-3 py-1.5 rounded-lg bg-red-50 dark:bg-red-950/40 text-red-700 dark:text-red-300 text-xs font-bold border border-red-200 dark:border-red-800 hover:bg-red-100"
+              >
+                🚨 Test Emergency Triage Safeguard
+              </button>
+            </div>
           </div>
 
           <button
             disabled={!mainConcern.trim()}
             onClick={() => setStep(2)}
-            className="w-full py-4 rounded-2xl bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-400 hover:to-teal-500 text-slate-950 font-extrabold text-sm shadow-glow hover:shadow-glow-lg disabled:opacity-40 transition-all flex items-center justify-center gap-2"
+            className="w-full py-3.5 rounded-xl bg-teal-600 disabled:opacity-50 text-white font-bold text-sm shadow-md hover:bg-teal-700 transition-colors flex items-center justify-center gap-2"
           >
             <span>Continue to Severity & Area</span>
             <ChevronRight className="h-4 w-4" />
@@ -260,18 +290,13 @@ export default function SymptomsPage() {
                 <button
                   key={sym}
                   onClick={() => toggleAssociated(sym)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors flex items-center gap-1.5 ${
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
                     associatedSymptoms.includes(sym)
                       ? 'bg-teal-600 text-white border-teal-700'
                       : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700'
                   }`}
                 >
-                  {associatedSymptoms.includes(sym) ? (
-                    <CheckCircle2 className="h-3.5 w-3.5" />
-                  ) : (
-                    <span className="font-bold text-xs">+</span>
-                  )}
-                  <span>{sym}</span>
+                  {associatedSymptoms.includes(sym) ? '✓ ' : '+ '} {sym}
                 </button>
               ))}
             </div>

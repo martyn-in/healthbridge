@@ -69,7 +69,7 @@ export const JudgeDemoBar: React.FC<{ onOpenHealthCard?: () => void }> = ({ onOp
               className="flex items-center gap-1 bg-cyan-500/20 text-cyan-200 hover:bg-cyan-500/30 px-2 py-1 rounded-md font-semibold transition-colors border border-cyan-500/40"
               title="Load sample reference data for evaluation"
             >
-              <Sparkles className="h-3.5 w-3.5" /> Load Clinical Data
+              <Sparkles className="h-3.5 w-3.5" /> Load Reference Sample
             </button>
           </div>
         )}

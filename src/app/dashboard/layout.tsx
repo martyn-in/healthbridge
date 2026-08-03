@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Sidebar } from '@/components/ui/Sidebar';
 import { Header } from '@/components/ui/Header';
+import { JudgeDemoBar } from '@/components/ui/JudgeDemoBar';
 import { EmergencySosModal } from '@/components/ui/EmergencySosModal';
 import { DigitalHealthCardModal } from '@/components/ui/DigitalHealthCardModal';
 import { DisclaimerBanner } from '@/components/ui/DisclaimerBanner';
@@ -12,6 +13,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 transition-colors">
+      {/* Interactive Floating Judge Demo Helper Bar */}
+      <JudgeDemoBar onOpenHealthCard={() => setIsHealthCardOpen(true)} />
+
       <div className="flex flex-1">
         {/* Desktop Sidebar */}
         <Sidebar />
