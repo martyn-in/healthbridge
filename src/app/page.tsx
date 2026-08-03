@@ -9,32 +9,18 @@ import {
   Pill,
   ShieldAlert,
   MapPin,
-  Sparkles,
-  ChevronRight,
-  ShieldCheck,
   CheckCircle2,
-  Users,
   Activity,
   ArrowRight,
   Lock,
-  HeartPulse,
   Menu,
   X,
   ChevronDown,
   Building2,
-  Star,
-  LockKeyhole,
-  Check,
   Mail,
   Phone,
-  MessageSquare,
   Send,
-  HelpCircle,
-  Clock,
-  UserCheck,
-  FileSearch,
   Globe,
-  Share2,
 } from 'lucide-react';
 import { Logo } from '@/components/ui/Logo';
 
@@ -62,126 +48,121 @@ export default function LandingPage() {
   const showcaseTabs = [
     { id: 'dashboard', label: 'Dashboard Overview', icon: Activity },
     { id: 'symptoms', label: 'Symptom Triage', icon: Stethoscope },
-    { id: 'reports', label: 'Lab Report OCR', icon: FileText },
-    { id: 'prescriptions', label: 'Prescription Scanner', icon: ScanLine },
-    { id: 'care', label: '24/7 Care Map', icon: MapPin },
+    { id: 'reports', label: 'Lab Report Analysis', icon: FileText },
+    { id: 'prescriptions', label: 'Prescription Reader', icon: ScanLine },
+    { id: 'care', label: 'Nearby Facilities', icon: MapPin },
   ] as const;
 
   const faqs = [
     {
-      q: 'How does the AI Guided Symptom Assessment work?',
-      a: 'The symptom checker asks structured clinical questions regarding body location, severity, duration, and associated symptoms. It applies deterministic red-flag rules for urgent conditions (like chest pain or stroke signs) to ensure safe triage advice.',
+      q: 'How does the symptom assessment tool work?',
+      a: 'The symptom checker collects structured clinical information regarding anatomical location, severity, duration, and associated symptoms. It incorporates deterministic red-flag rules to flag urgent symptoms requiring immediate emergency medical care.',
     },
     {
-      q: 'Is my medical data kept private and secure?',
-      a: 'Yes. HealthBridge AI uses client-side processing where possible for OCR operations, strict access permissions for digital health passes, and encrypted data storage standards compliant with healthcare privacy guidelines.',
+      q: 'How is patient medical data protected?',
+      a: 'HealthBridge utilizes client-side processing where possible for document analysis, strict access permissions for digital health cards, and encrypted data storage aligned with international medical privacy standards.',
     },
     {
-      q: 'How does the Medical Report OCR parser handle abnormal values?',
-      a: 'When you upload a lab report (PDF or image), our OCR engine extracts blood parameters, compares them against established clinical reference ranges, highlights abnormal results in yellow/red, and provides suggested questions for your doctor.',
+      q: 'How does lab report analysis handle out-of-range values?',
+      a: 'When you upload a lab report (PDF or image), the OCR engine extracts blood test values, compares them against standard reference ranges, highlights abnormal metrics, and suggests relevant questions for your physician.',
     },
     {
-      q: 'Can I manage health records for multiple family members?',
-      a: 'Yes. HealthBridge supports family profile switching, allowing primary account holders to manage prescription timelines, vaccination logs, and emergency passes for children, spouses, or elderly parents.',
+      q: 'Can I manage health records for my family members?',
+      a: 'Yes. HealthBridge supports family profile management, allowing primary account holders to manage prescription schedules, vaccination logs, and emergency passes for dependents.',
     },
     {
       q: 'Does HealthBridge replace a licensed physician?',
-      a: 'No. HealthBridge AI provides educational health intelligence and administrative management tools. It does not provide definitive medical diagnoses or replace consultations with certified healthcare professionals.',
+      a: 'No. HealthBridge provides health record management tools and educational guidance. It does not provide definitive medical diagnoses or replace consultations with licensed healthcare professionals.',
     },
   ];
 
   const testimonials = [
     {
       name: 'Dr. Marcus Vance',
-      role: 'Chief Medical Officer, Regional Care Network',
-      quote: 'HealthBridge AI simplifies patient prep before consultations. Patients arrive with structured symptom histories and clear questions, making clinical visits significantly more effective.',
+      role: 'Chief Medical Officer, Regional Health Network',
+      quote: 'HealthBridge improves patient consultation prep. Patients present structured symptom histories and targeted questions, allowing clinicians to focus on care decisions.',
       badge: 'Clinician Partner',
     },
     {
       name: 'Priya N.',
       role: 'Family Caregiver',
-      quote: 'Managing prescription timings for my elderly parents used to be overwhelming. HealthBridge synced all dosage schedules and lab reports into one clear dashboard.',
-      badge: 'Verified Patient',
+      quote: 'Managing prescription schedules for my parents is straightforward. HealthBridge consolidates dosage schedules and health records into a clean dashboard.',
+      badge: 'Verified User',
     },
     {
       name: 'Dr. Anita Roy',
-      role: 'Endocrinology Specialist',
-      quote: 'The report parser gives patients immediate clarity on their blood parameter ranges without generating unnecessary panic. It strikes the perfect balance of clarity and medical safety.',
-      badge: 'Verified Specialist',
+      role: 'Endocrinologist',
+      quote: 'The report parser gives patients immediate clarity regarding their blood parameters without generating undue concern. It provides clear, clinical organization.',
+      badge: 'Specialist Partner',
     },
   ];
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-teal-500 selection:text-white relative overflow-hidden font-sans">
-      {/* Background Ambient Gradient Lighting */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[550px] bg-gradient-to-tr from-teal-500/20 via-cyan-500/15 to-indigo-600/20 blur-[140px] rounded-full pointer-events-none -z-10" />
-      <div className="absolute top-[800px] -right-40 w-[600px] h-[600px] bg-teal-600/10 blur-[160px] rounded-full pointer-events-none -z-10" />
-
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-teal-500 selection:text-white relative font-sans">
       {/* Navigation Header */}
-      <header className="sticky top-0 z-50 bg-slate-950/85 backdrop-blur-2xl border-b border-slate-800/80 transition-all">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-18 flex items-center justify-between">
+      <header className="sticky top-0 z-50 bg-slate-950/90 backdrop-blur-md border-b border-slate-800/80">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <Logo size="md" />
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-8 text-xs font-bold text-slate-300">
-            <a href="#features" className="hover:text-cyan-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 rounded-md px-1 py-0.5">Features</a>
-            <a href="#how-it-works" className="hover:text-cyan-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 rounded-md px-1 py-0.5">How It Works</a>
-            <a href="#showcase" className="hover:text-cyan-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 rounded-md px-1 py-0.5">Showcase</a>
-            <a href="#trust" className="hover:text-cyan-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 rounded-md px-1 py-0.5">Security</a>
-            <a href="#testimonials" className="hover:text-cyan-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 rounded-md px-1 py-0.5">Social Proof</a>
-            <a href="#faq" className="hover:text-cyan-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 rounded-md px-1 py-0.5">FAQ & Contact</a>
+          <nav className="hidden lg:flex items-center gap-7 text-xs font-medium text-slate-300">
+            <a href="#features" className="hover:text-white transition-colors focus-visible:ring-1 focus-visible:ring-teal-500 rounded px-1.5 py-1">Features</a>
+            <a href="#how-it-works" className="hover:text-white transition-colors focus-visible:ring-1 focus-visible:ring-teal-500 rounded px-1.5 py-1">Workflow</a>
+            <a href="#showcase" className="hover:text-white transition-colors focus-visible:ring-1 focus-visible:ring-teal-500 rounded px-1.5 py-1">System Showcase</a>
+            <a href="#trust" className="hover:text-white transition-colors focus-visible:ring-1 focus-visible:ring-teal-500 rounded px-1.5 py-1">Security</a>
+            <a href="#testimonials" className="hover:text-white transition-colors focus-visible:ring-1 focus-visible:ring-teal-500 rounded px-1.5 py-1">Testimonials</a>
+            <a href="#faq" className="hover:text-white transition-colors focus-visible:ring-1 focus-visible:ring-teal-500 rounded px-1.5 py-1">FAQ & Contact</a>
           </nav>
 
           {/* Header Action Buttons */}
           <div className="hidden sm:flex items-center gap-3">
             <Link
               href="/dashboard"
-              className="px-4 py-2 rounded-xl text-xs font-bold text-slate-300 hover:text-white hover:bg-slate-900 transition-all focus-visible:ring-2 focus-visible:ring-teal-500 outline-none"
+              className="px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-900 transition-colors focus-visible:ring-1 focus-visible:ring-teal-500 outline-none"
             >
               Sign In
             </Link>
             <Link
               href="/dashboard"
-              className="px-4 py-2 rounded-xl bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-400 hover:to-cyan-400 text-slate-950 text-xs font-extrabold shadow-glow hover:shadow-glow-lg transition-all active:scale-95 flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-teal-400 outline-none"
+              className="px-4 py-2 rounded-lg bg-teal-600 hover:bg-teal-500 text-white text-xs font-semibold shadow-sm transition-colors focus-visible:ring-1 focus-visible:ring-teal-400 outline-none"
             >
-              <Sparkles className="h-3.5 w-3.5" />
-              <span>Explore Portal</span>
+              Open Workspace
             </Link>
           </div>
 
           {/* Mobile Menu Toggle */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 text-slate-400 hover:text-white focus-visible:ring-2 focus-visible:ring-teal-500 rounded-xl"
+            className="lg:hidden p-2 text-slate-400 hover:text-white focus-visible:ring-1 focus-visible:ring-teal-500 rounded-lg"
             aria-label="Toggle menu"
           >
-            {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
 
         {/* Mobile Navigation Drawer */}
         {mobileMenuOpen && (
-          <div className="lg:hidden bg-slate-950 border-b border-slate-800 p-6 space-y-4 animate-in slide-in-from-top duration-200">
-            <nav className="flex flex-col gap-4 text-sm font-bold text-slate-300">
-              <a href="#features" onClick={() => setMobileMenuOpen(false)} className="hover:text-cyan-400 py-1">Features</a>
-              <a href="#how-it-works" onClick={() => setMobileMenuOpen(false)} className="hover:text-cyan-400 py-1">How It Works</a>
-              <a href="#showcase" onClick={() => setMobileMenuOpen(false)} className="hover:text-cyan-400 py-1">Showcase</a>
-              <a href="#trust" onClick={() => setMobileMenuOpen(false)} className="hover:text-cyan-400 py-1">Security & Privacy</a>
-              <a href="#testimonials" onClick={() => setMobileMenuOpen(false)} className="hover:text-cyan-400 py-1">Testimonials</a>
-              <a href="#faq" onClick={() => setMobileMenuOpen(false)} className="hover:text-cyan-400 py-1">FAQ & Contact</a>
+          <div className="lg:hidden bg-slate-950 border-b border-slate-800 p-5 space-y-4">
+            <nav className="flex flex-col gap-3 text-xs font-medium text-slate-300">
+              <a href="#features" onClick={() => setMobileMenuOpen(false)} className="hover:text-white py-1">Features</a>
+              <a href="#how-it-works" onClick={() => setMobileMenuOpen(false)} className="hover:text-white py-1">Workflow</a>
+              <a href="#showcase" onClick={() => setMobileMenuOpen(false)} className="hover:text-white py-1">System Showcase</a>
+              <a href="#trust" onClick={() => setMobileMenuOpen(false)} className="hover:text-white py-1">Security</a>
+              <a href="#testimonials" onClick={() => setMobileMenuOpen(false)} className="hover:text-white py-1">Testimonials</a>
+              <a href="#faq" onClick={() => setMobileMenuOpen(false)} className="hover:text-white py-1">FAQ & Contact</a>
             </nav>
-            <div className="pt-4 border-t border-slate-800 flex flex-col gap-3">
+            <div className="pt-3 border-t border-slate-800 flex flex-col gap-2">
               <Link
                 href="/dashboard"
-                className="w-full py-2.5 rounded-xl text-center text-xs font-bold bg-slate-900 text-white"
+                className="w-full py-2 rounded-lg text-center text-xs font-medium bg-slate-900 text-white border border-slate-800"
               >
                 Sign In
               </Link>
               <Link
                 href="/dashboard"
-                className="w-full py-2.5 rounded-xl text-center text-xs font-extrabold bg-gradient-to-r from-teal-500 to-cyan-500 text-slate-950"
+                className="w-full py-2 rounded-lg text-center text-xs font-semibold bg-teal-600 text-white"
               >
-                Explore Clinical Portal
+                Open Workspace
               </Link>
             </div>
           </div>
@@ -189,73 +170,73 @@ export default function LandingPage() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative pt-16 pb-24 px-4 sm:px-6 max-w-7xl mx-auto text-center space-y-8">
-        <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-teal-950/80 border border-teal-500/30 text-cyan-300 text-xs font-bold shadow-soft">
-          <ShieldCheck className="h-4 w-4 text-teal-400" />
-          <span>Private by Design · HIPAA & GDPR Compliant Standards</span>
+      <section className="pt-20 pb-20 px-4 sm:px-6 max-w-5xl mx-auto text-center space-y-6">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-slate-900 border border-slate-800 text-slate-300 text-xs font-medium">
+          <CheckCircle2 className="h-3.5 w-3.5 text-teal-400" />
+          <span>Patient Health Records & Clinical Triage Platform</span>
         </div>
 
-        <h1 className="text-4xl sm:text-7xl font-extrabold tracking-tight text-white max-w-5xl mx-auto leading-[1.1]">
-          Clinical Triage & Health Intelligence <span className="bg-gradient-to-r from-teal-400 via-cyan-400 to-indigo-400 bg-clip-text text-transparent">for Modern Healthcare.</span>
+        <h1 className="text-3xl sm:text-6xl font-extrabold tracking-tight text-white max-w-4xl mx-auto leading-tight">
+          Clinical Triage & Patient Health Records
         </h1>
 
-        <p className="text-base sm:text-xl text-slate-400 max-w-3xl mx-auto leading-relaxed font-normal">
-          Understand symptoms with bounded clinical triage, translate lab reports into plain language with OCR, digitize handwritten prescriptions, and access nearby 24/7 emergency care.
+        <p className="text-sm sm:text-base text-slate-400 max-w-2xl mx-auto leading-relaxed">
+          Evaluate symptoms with clinical triage protocols, parse lab documents, track prescriptions, and locate nearby emergency care facilities.
         </p>
 
-        <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
+        <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
           <Link
             href="/dashboard/symptoms"
-            className="px-7 py-4 rounded-2xl bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-400 hover:to-teal-500 text-slate-950 text-sm font-extrabold shadow-glow hover:shadow-glow-lg transition-all duration-200 flex items-center gap-2 hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-teal-400 outline-none"
+            className="px-5 py-2.5 rounded-lg bg-teal-600 hover:bg-teal-500 text-white text-xs font-semibold shadow-sm transition-colors focus-visible:ring-1 focus-visible:ring-teal-400 outline-none flex items-center gap-2"
           >
-            <Stethoscope className="h-5 w-5" /> Check Symptoms Free
+            <Stethoscope className="h-4 w-4" /> Assess Symptoms
           </Link>
           <Link
             href="/dashboard"
-            className="px-7 py-4 rounded-2xl bg-slate-900/90 text-white hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-sm font-bold shadow-lg transition-all duration-200 flex items-center gap-2 hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-teal-400 outline-none"
+            className="px-5 py-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-800 text-xs font-medium transition-colors focus-visible:ring-1 focus-visible:ring-teal-400 outline-none flex items-center gap-2"
           >
-            <span>Explore Clinical Portal</span> <ArrowRight className="h-4 w-4 text-teal-400" />
+            <span>Open Clinical Dashboard</span> <ArrowRight className="h-3.5 w-3.5 text-slate-400" />
           </Link>
         </div>
 
-        {/* Hero Interactive Dashboard Mockup */}
-        <div className="pt-10 max-w-5xl mx-auto">
-          <div className="rounded-3xl bg-slate-900/90 backdrop-blur-2xl p-5 sm:p-7 shadow-2xl border border-slate-800 space-y-5 text-left card-glow">
-            <div className="flex items-center justify-between border-b border-slate-800/80 pb-4">
+        {/* Clean Hero Interface Mockup */}
+        <div className="pt-8 max-w-4xl mx-auto">
+          <div className="rounded-xl bg-slate-900/90 p-5 border border-slate-800 shadow-md text-left space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <div className="flex items-center gap-2">
-                <span className="h-3 w-3 rounded-full bg-red-500/80" />
-                <span className="h-3 w-3 rounded-full bg-amber-500/80" />
-                <span className="h-3 w-3 rounded-full bg-emerald-500/80" />
-                <span className="text-xs font-mono text-slate-400 ml-2">HealthBridge Clinical Platform Interface</span>
+                <span className="h-2.5 w-2.5 rounded-full bg-slate-700" />
+                <span className="h-2.5 w-2.5 rounded-full bg-slate-700" />
+                <span className="h-2.5 w-2.5 rounded-full bg-slate-700" />
+                <span className="text-xs font-mono text-slate-400 ml-2">HealthBridge Interface</span>
               </div>
-              <span className="px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-xs font-bold text-cyan-300">
-                Live System Ready
+              <span className="px-2.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-[11px] font-medium text-slate-300">
+                System Active
               </span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-white text-xs">
-              <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-2.5 hover:border-teal-500/40 transition-colors">
-                <div className="text-amber-400 font-bold flex items-center gap-2">
-                  <Stethoscope className="h-4 w-4 text-amber-400" /> Symptom Triage Engine
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+              <div className="p-3.5 rounded-lg bg-slate-950/80 border border-slate-800 space-y-1.5">
+                <div className="text-teal-400 font-semibold flex items-center gap-1.5">
+                  <Stethoscope className="h-3.5 w-3.5 text-teal-400" /> Symptom Assessment
                 </div>
-                <div className="font-bold text-slate-100 text-sm">Self-Care & Consultation Prep</div>
-                <p className="text-[11px] text-slate-400 leading-relaxed">Deterministic red-flag safety protocols enforce strict emergency escalation.</p>
+                <div className="font-medium text-slate-200">Structured Guidance</div>
+                <p className="text-[11px] text-slate-400 leading-normal">Emergency escalation rules automatically active for acute symptoms.</p>
               </div>
 
-              <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-2.5 hover:border-teal-500/40 transition-colors">
-                <div className="text-cyan-400 font-bold flex items-center gap-2">
-                  <FileText className="h-4 w-4 text-cyan-400" /> Medical Report OCR
+              <div className="p-3.5 rounded-lg bg-slate-950/80 border border-slate-800 space-y-1.5">
+                <div className="text-teal-400 font-semibold flex items-center gap-1.5">
+                  <FileText className="h-3.5 w-3.5 text-teal-400" /> Lab Document OCR
                 </div>
-                <div className="font-bold text-slate-100 text-sm">Lipid Profile Extracted</div>
-                <p className="text-[11px] text-slate-400 leading-relaxed">LDL Cholesterol 142 mg/dL automatically flagged with doctor discussion points.</p>
+                <div className="font-medium text-slate-200">Biomarker Extraction</div>
+                <p className="text-[11px] text-slate-400 leading-normal">Extracted lipid and blood values referenced against standard limits.</p>
               </div>
 
-              <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-2.5 hover:border-teal-500/40 transition-colors">
-                <div className="text-emerald-400 font-bold flex items-center gap-2">
-                  <Pill className="h-4 w-4 text-emerald-400" /> Medication Timeline
+              <div className="p-3.5 rounded-lg bg-slate-950/80 border border-slate-800 space-y-1.5">
+                <div className="text-teal-400 font-semibold flex items-center gap-1.5">
+                  <Pill className="h-3.5 w-3.5 text-teal-400" /> Medication Schedule
                 </div>
-                <div className="font-bold text-slate-100 text-sm">92% Weekly Adherence</div>
-                <p className="text-[11px] text-slate-400 leading-relaxed">Automated dosage reminders synced across all connected family profiles.</p>
+                <div className="font-medium text-slate-200">Dosage Tracking</div>
+                <p className="text-[11px] text-slate-400 leading-normal">Consolidated schedule for daily prescription logging across profiles.</p>
               </div>
             </div>
           </div>
@@ -263,178 +244,175 @@ export default function LandingPage() {
       </section>
 
       {/* Trust & Security Section */}
-      <section id="trust" className="py-20 bg-slate-900/60 border-y border-slate-800/80 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-12">
-          <div className="text-center space-y-3 max-w-2xl mx-auto">
-            <span className="text-xs font-bold uppercase tracking-widest text-teal-400">Security & Clinical Governance</span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-white">Built for Trust, Security & Privacy</h2>
-            <p className="text-sm text-slate-400 leading-relaxed">
-              We design healthcare applications around strict privacy, deterministic red-flag safety protocols, and transparent clinical disclaimers.
+      <section id="trust" className="py-16 bg-slate-900/40 border-y border-slate-800/80">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-10">
+          <div className="text-center space-y-2 max-w-xl mx-auto">
+            <span className="text-xs font-semibold uppercase tracking-wider text-teal-400">Security & Compliance</span>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-white">Data Privacy Standards</h2>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Designed with client-side document processing, access controls, and transparent medical safety guidelines.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div className="p-6 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-3">
-              <div className="p-3 rounded-xl bg-teal-500/10 text-teal-400 w-fit">
-                <LockKeyhole className="h-6 w-6" />
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="p-5 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+              <div className="p-2 rounded bg-slate-900 text-teal-400 w-fit">
+                <Lock className="h-5 w-5" />
               </div>
-              <h3 className="text-base font-bold text-white">End-to-End Privacy</h3>
-              <p className="text-xs text-slate-400 leading-relaxed">Client-side document parsing ensures health data remains under patient control.</p>
+              <h3 className="text-sm font-bold text-white">Client-Side Processing</h3>
+              <p className="text-xs text-slate-400 leading-relaxed">Document extraction is processed locally where feasible to protect data privacy.</p>
             </div>
 
-            <div className="p-6 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-3">
-              <div className="p-3 rounded-xl bg-teal-500/10 text-teal-400 w-fit">
-                <ShieldCheck className="h-6 w-6" />
+            <div className="p-5 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+              <div className="p-2 rounded bg-slate-900 text-teal-400 w-fit">
+                <CheckCircle2 className="h-5 w-5" />
               </div>
-              <h3 className="text-base font-bold text-white">HIPAA & GDPR Standards</h3>
-              <p className="text-xs text-slate-400 leading-relaxed">Architected following strict international medical data handling guidelines.</p>
+              <h3 className="text-sm font-bold text-white">Regulatory Standards</h3>
+              <p className="text-xs text-slate-400 leading-relaxed">Follows guidelines aligned with international healthcare privacy frameworks.</p>
             </div>
 
-            <div className="p-6 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-3">
-              <div className="p-3 rounded-xl bg-red-500/10 text-red-400 w-fit">
-                <ShieldAlert className="h-6 w-6" />
+            <div className="p-5 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+              <div className="p-2 rounded bg-slate-900 text-red-400 w-fit">
+                <ShieldAlert className="h-5 w-5" />
               </div>
-              <h3 className="text-base font-bold text-white">Deterministic Red Flags</h3>
-              <p className="text-xs text-slate-400 leading-relaxed">Emergency indicators (chest pain, stroke signs) trigger mandatory 112/108 escalation.</p>
+              <h3 className="text-sm font-bold text-white">Red-Flag Safety Rules</h3>
+              <p className="text-xs text-slate-400 leading-relaxed">Critical health indicators prompt immediate emergency contact escalation.</p>
             </div>
 
-            <div className="p-6 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-3">
-              <div className="p-3 rounded-xl bg-teal-500/10 text-teal-400 w-fit">
-                <UserCheck className="h-6 w-6" />
+            <div className="p-5 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+              <div className="p-2 rounded bg-slate-900 text-teal-400 w-fit">
+                <Building2 className="h-5 w-5" />
               </div>
-              <h3 className="text-base font-bold text-white">Doctor-First Principles</h3>
-              <p className="text-xs text-slate-400 leading-relaxed">Provides preparation tools and questions to improve clinician consultations.</p>
+              <h3 className="text-sm font-bold text-white">Physician Alignment</h3>
+              <p className="text-xs text-slate-400 leading-relaxed">Generates patient preparation summaries to streamline clinical consultations.</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Feature Cards Grid Section */}
-      <section id="features" className="py-24 max-w-7xl mx-auto px-4 sm:px-6 space-y-12">
-        <div className="text-center space-y-3 max-w-2xl mx-auto">
-          <span className="text-xs font-bold uppercase tracking-widest text-teal-400">Core Capabilities</span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white">Six Core Healthcare Workflows</h2>
-          <p className="text-sm text-slate-400">
-            Integrated tools designed to make healthcare information accessible, actionable, and connected.
-          </p>
+      <section id="features" className="py-20 max-w-7xl mx-auto px-4 sm:px-6 space-y-10">
+        <div className="text-center space-y-2 max-w-xl mx-auto">
+          <span className="text-xs font-semibold uppercase tracking-wider text-teal-400">Core Features</span>
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-white">Integrated Health Tools</h2>
+          <p className="text-xs text-slate-400">Six essential workflows for personal and family health management.</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <div className="p-6 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-4 card-glow">
-            <div className="p-3 rounded-xl bg-teal-500/10 text-teal-400 w-fit">
-              <Stethoscope className="h-6 w-6" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="p-5 rounded-xl bg-slate-900/70 border border-slate-800 space-y-3">
+            <div className="p-2.5 rounded bg-slate-950 text-teal-400 w-fit border border-slate-800">
+              <Stethoscope className="h-5 w-5" />
             </div>
-            <h3 className="text-lg font-bold text-white">1. AI Guided Symptom Checker</h3>
+            <h3 className="text-base font-bold text-white">1. Symptom Triage</h3>
             <p className="text-xs text-slate-400 leading-relaxed">
-              Multi-step intake covering body system, severity, duration, and adaptive follow-up inquiries with strict red-flag safeguards.
+              Structured symptom intake incorporating severity scales, duration metrics, and emergency safety guidelines.
             </p>
           </div>
 
-          <div className="p-6 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-4 card-glow">
-            <div className="p-3 rounded-xl bg-teal-500/10 text-teal-400 w-fit">
-              <FileText className="h-6 w-6" />
+          <div className="p-5 rounded-xl bg-slate-900/70 border border-slate-800 space-y-3">
+            <div className="p-2.5 rounded bg-slate-950 text-teal-400 w-fit border border-slate-800">
+              <FileText className="h-5 w-5" />
             </div>
-            <h3 className="text-lg font-bold text-white">2. Medical Report Analyzer</h3>
+            <h3 className="text-base font-bold text-white">2. Lab Report Parsing</h3>
             <p className="text-xs text-slate-400 leading-relaxed">
-              Extract blood parameters from lab PDFs or photos, highlight out-of-range biomarkers, and generate questions for your doctor.
+              Extract biomarker data from lab PDF files or images, reference standard normal ranges, and review doctor discussion points.
             </p>
           </div>
 
-          <div className="p-6 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-4 card-glow">
-            <div className="p-3 rounded-xl bg-teal-500/10 text-teal-400 w-fit">
-              <ScanLine className="h-6 w-6" />
+          <div className="p-5 rounded-xl bg-slate-900/70 border border-slate-800 space-y-3">
+            <div className="p-2.5 rounded bg-slate-950 text-teal-400 w-fit border border-slate-800">
+              <ScanLine className="h-5 w-5" />
             </div>
-            <h3 className="text-lg font-bold text-white">3. Prescription Scanner</h3>
+            <h3 className="text-base font-bold text-white">3. Prescription Reader</h3>
             <p className="text-xs text-slate-400 leading-relaxed">
-              Scan doctor prescriptions to extract medicine dosages, frequencies, and food instructions into a digital timeline.
+              Digitize handwritten or printed prescriptions into structured dosage schedules with food instructions.
             </p>
           </div>
 
-          <div className="p-6 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-4 card-glow">
-            <div className="p-3 rounded-xl bg-teal-500/10 text-teal-400 w-fit">
-              <Pill className="h-6 w-6" />
+          <div className="p-5 rounded-xl bg-slate-900/70 border border-slate-800 space-y-3">
+            <div className="p-2.5 rounded bg-slate-950 text-teal-400 w-fit border border-slate-800">
+              <Pill className="h-5 w-5" />
             </div>
-            <h3 className="text-lg font-bold text-white">4. Medication Management</h3>
+            <h3 className="text-base font-bold text-white">4. Medication Management</h3>
             <p className="text-xs text-slate-400 leading-relaxed">
-              Track daily dosage schedules, maintain weekly adherence logs, and receive automated refill reminders for family members.
+              Track daily dosage schedules, maintain adherence logs, and manage refill reminders for active family profiles.
             </p>
           </div>
 
-          <div className="p-6 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-4 card-glow">
-            <div className="p-3 rounded-xl bg-red-500/10 text-red-400 w-fit">
-              <ShieldAlert className="h-6 w-6" />
+          <div className="p-5 rounded-xl bg-slate-900/70 border border-slate-800 space-y-3">
+            <div className="p-2.5 rounded bg-slate-950 text-red-400 w-fit border border-slate-800">
+              <ShieldAlert className="h-5 w-5" />
             </div>
-            <h3 className="text-lg font-bold text-white">5. Emergency SOS & Discovery</h3>
+            <h3 className="text-base font-bold text-white">5. Emergency SOS & Nearby Care</h3>
             <p className="text-xs text-slate-400 leading-relaxed">
-              Persistent emergency trigger, live GPS coordinate sharing, one-tap 112/108 calling, and nearby 24/7 facility discovery.
+              Emergency trigger button, direct 112 calling, GPS location helper, and search for 24/7 hospitals and pharmacies.
             </p>
           </div>
 
-          <div className="p-6 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-4 card-glow">
-            <div className="p-3 rounded-xl bg-teal-500/10 text-teal-400 w-fit">
-              <Lock className="h-6 w-6" />
+          <div className="p-5 rounded-xl bg-slate-900/70 border border-slate-800 space-y-3">
+            <div className="p-2.5 rounded bg-slate-950 text-teal-400 w-fit border border-slate-800">
+              <Lock className="h-5 w-5" />
             </div>
-            <h3 className="text-lg font-bold text-white">6. Digital Health Pass QR</h3>
+            <h3 className="text-base font-bold text-white">6. Digital Health Pass</h3>
             <p className="text-xs text-slate-400 leading-relaxed">
-              Generates an emergency health pass QR code for first responders with instant "Disable QR Access" safety controls.
+              Generate emergency health pass QR codes for first responders with instant access toggle controls.
             </p>
           </div>
         </div>
       </section>
 
       {/* How It Works Section */}
-      <section id="how-it-works" className="py-20 bg-slate-900/60 border-y border-slate-800/80 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-12">
-          <div className="text-center space-y-3 max-w-2xl mx-auto">
-            <span className="text-xs font-bold uppercase tracking-widest text-teal-400">Simple Workflow</span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-white">How HealthBridge Works</h2>
-            <p className="text-sm text-slate-400">From initial symptom intake to doctor consultation and follow-up care.</p>
+      <section id="how-it-works" className="py-16 bg-slate-900/40 border-y border-slate-800/80">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-10">
+          <div className="text-center space-y-2 max-w-xl mx-auto">
+            <span className="text-xs font-semibold uppercase tracking-wider text-teal-400">Process</span>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-white">System Workflow</h2>
+            <p className="text-xs text-slate-400">From initial intake to clinical consultation and ongoing record keeping.</p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-5 gap-4 relative">
-            <div className="p-5 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-2 relative">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-teal-500/20 text-cyan-300 font-extrabold text-xs">1</div>
-              <h3 className="text-sm font-bold text-white">Create Profile</h3>
-              <p className="text-[11px] text-slate-400 leading-relaxed">Set up primary and family health profiles with blood group & allergies.</p>
+          <div className="grid grid-cols-1 sm:grid-cols-5 gap-3">
+            <div className="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+              <span className="text-xs font-mono text-teal-400 font-bold block">01</span>
+              <h3 className="text-xs font-bold text-white">Create Profile</h3>
+              <p className="text-[11px] text-slate-400 leading-relaxed">Set up primary and family health details.</p>
             </div>
 
-            <div className="p-5 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-2 relative">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-teal-500/20 text-cyan-300 font-extrabold text-xs">2</div>
-              <h3 className="text-sm font-bold text-white">Symptom Intake</h3>
-              <p className="text-[11px] text-slate-400 leading-relaxed">Answer structured questions to receive clinical triage advice.</p>
+            <div className="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+              <span className="text-xs font-mono text-teal-400 font-bold block">02</span>
+              <h3 className="text-xs font-bold text-white">Symptom Intake</h3>
+              <p className="text-[11px] text-slate-400 leading-relaxed">Answer structured questions for triage advice.</p>
             </div>
 
-            <div className="p-5 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-2 relative">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-teal-500/20 text-cyan-300 font-extrabold text-xs">3</div>
-              <h3 className="text-sm font-bold text-white">Consult Doctor</h3>
-              <p className="text-[11px] text-slate-400 leading-relaxed">Book appointments and share structured report questions with your clinician.</p>
+            <div className="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+              <span className="text-xs font-mono text-teal-400 font-bold block">03</span>
+              <h3 className="text-xs font-bold text-white">Consult Doctor</h3>
+              <p className="text-[11px] text-slate-400 leading-relaxed">Book appointments and share report notes.</p>
             </div>
 
-            <div className="p-5 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-2 relative">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-teal-500/20 text-cyan-300 font-extrabold text-xs">4</div>
-              <h3 className="text-sm font-bold text-white">Track Health</h3>
-              <p className="text-[11px] text-slate-400 leading-relaxed">Log prescription doses, daily water intake, and weekly adherence stats.</p>
+            <div className="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+              <span className="text-xs font-mono text-teal-400 font-bold block">04</span>
+              <h3 className="text-xs font-bold text-white">Track Health</h3>
+              <p className="text-[11px] text-slate-400 leading-relaxed">Log prescription doses and water intake.</p>
             </div>
 
-            <div className="p-5 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-2 relative">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-teal-500/20 text-cyan-300 font-extrabold text-xs">5</div>
-              <h3 className="text-sm font-bold text-white">Follow-up Care</h3>
-              <p className="text-[11px] text-slate-400 leading-relaxed">Maintain digital records, vaccination logs, and emergency contact passes.</p>
+            <div className="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+              <span className="text-xs font-mono text-teal-400 font-bold block">05</span>
+              <h3 className="text-xs font-bold text-white">Follow-up Care</h3>
+              <p className="text-[11px] text-slate-400 leading-relaxed">Maintain digital records and emergency passes.</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Interactive System Showcase Section */}
-      <section id="showcase" className="py-24 max-w-7xl mx-auto px-4 sm:px-6 space-y-10">
-        <div className="text-center space-y-3 max-w-2xl mx-auto">
-          <span className="text-xs font-bold uppercase tracking-widest text-teal-400">Interactive Preview</span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white">System Showcase</h2>
-          <p className="text-sm text-slate-400">Explore key modules of the HealthBridge AI platform.</p>
+      {/* System Showcase Section */}
+      <section id="showcase" className="py-20 max-w-7xl mx-auto px-4 sm:px-6 space-y-8">
+        <div className="text-center space-y-2 max-w-xl mx-auto">
+          <span className="text-xs font-semibold uppercase tracking-wider text-teal-400">System Modules</span>
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-white">Interactive Preview</h2>
         </div>
 
         {/* Tab Selector */}
-        <div className="flex flex-wrap items-center justify-center gap-2 border-b border-slate-800 pb-4">
+        <div className="flex flex-wrap items-center justify-center gap-2 border-b border-slate-800 pb-3">
           {showcaseTabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeShowcaseTab === tab.id;
@@ -442,175 +420,154 @@ export default function LandingPage() {
               <button
                 key={tab.id}
                 onClick={() => setActiveShowcaseTab(tab.id)}
-                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 focus-visible:ring-2 focus-visible:ring-teal-500 outline-none ${
+                className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-2 focus-visible:ring-1 focus-visible:ring-teal-500 outline-none ${
                   isActive
-                    ? 'bg-gradient-to-r from-teal-500 to-cyan-500 text-slate-950 shadow-glow'
-                    : 'bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800'
+                    ? 'bg-slate-800 text-white border border-slate-700 font-semibold'
+                    : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-900'
                 }`}
               >
-                <Icon className="h-4 w-4" />
+                <Icon className="h-3.5 w-3.5 text-teal-400" />
                 <span>{tab.label}</span>
               </button>
             );
           })}
         </div>
 
-        {/* Dynamic Showcase View Container */}
-        <div className="rounded-3xl bg-slate-900/90 p-6 border border-slate-800 shadow-2xl space-y-4">
+        {/* Showcase Box */}
+        <div className="rounded-xl bg-slate-900/90 p-5 border border-slate-800 space-y-3">
           {activeShowcaseTab === 'dashboard' && (
-            <div className="space-y-4">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-                <h3 className="text-base font-bold text-white flex items-center gap-2">
-                  <Activity className="h-5 w-5 text-teal-400" /> Patient Overview Dashboard
+            <div className="space-y-3">
+              <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                  <Activity className="h-4 w-4 text-teal-400" /> Dashboard Overview
                 </h3>
-                <Link href="/dashboard" className="text-xs font-bold text-cyan-400 hover:underline">Open Live Dashboard →</Link>
+                <Link href="/dashboard" className="text-xs text-teal-400 hover:underline">Open Workspace →</Link>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs text-slate-300">
-                <div className="p-4 rounded-xl bg-slate-950 border border-slate-800">
-                  <span className="text-slate-400 block font-semibold">Active Profile</span>
-                  <span className="text-sm font-bold text-white">Rahul Sharma (Self)</span>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-slate-300">
+                <div className="p-3 rounded-lg bg-slate-950 border border-slate-800">
+                  <span className="text-slate-400 block text-[11px]">Primary Profile</span>
+                  <span className="font-semibold text-white">My Health Profile</span>
                 </div>
-                <div className="p-4 rounded-xl bg-slate-950 border border-slate-800">
-                  <span className="text-slate-400 block font-semibold">Weekly Adherence</span>
-                  <span className="text-sm font-bold text-teal-400">92% Doses Logged</span>
+                <div className="p-3 rounded-lg bg-slate-950 border border-slate-800">
+                  <span className="text-slate-400 block text-[11px]">Medication Schedule</span>
+                  <span className="font-semibold text-teal-400">92% Adherence</span>
                 </div>
-                <div className="p-4 rounded-xl bg-slate-950 border border-slate-800">
-                  <span className="text-slate-400 block font-semibold">Upcoming Consultation</span>
-                  <span className="text-sm font-bold text-cyan-300">Dr. Ananya Mehta (10:30 AM)</span>
+                <div className="p-3 rounded-lg bg-slate-950 border border-slate-800">
+                  <span className="text-slate-400 block text-[11px]">Consultation Status</span>
+                  <span className="font-semibold text-slate-200">No Pending Follow-ups</span>
                 </div>
               </div>
             </div>
           )}
 
           {activeShowcaseTab === 'symptoms' && (
-            <div className="space-y-4">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-                <h3 className="text-base font-bold text-white flex items-center gap-2">
-                  <Stethoscope className="h-5 w-5 text-amber-400" /> AI Guided Symptom Assessment
+            <div className="space-y-2 text-xs">
+              <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                  <Stethoscope className="h-4 w-4 text-teal-400" /> Symptom Assessment
                 </h3>
-                <Link href="/dashboard/symptoms" className="text-xs font-bold text-cyan-400 hover:underline">Launch Triage Tool →</Link>
+                <Link href="/dashboard/symptoms" className="text-xs text-teal-400 hover:underline">Launch Tool →</Link>
               </div>
-              <p className="text-xs text-slate-300">
-                Interactive clinical triage engine evaluates primary concerns, body region, and symptom severity while enforcing red-flag emergency safety rules.
+              <p className="text-slate-300 leading-relaxed">
+                Structured clinical questionnaire evaluating symptom onset, region, and severity with integrated emergency escalation rules.
               </p>
             </div>
           )}
 
           {activeShowcaseTab === 'reports' && (
-            <div className="space-y-4">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-                <h3 className="text-base font-bold text-white flex items-center gap-2">
-                  <FileText className="h-5 w-5 text-cyan-400" /> Medical Report Analyzer & OCR
+            <div className="space-y-2 text-xs">
+              <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                  <FileText className="h-4 w-4 text-teal-400" /> Lab Report Analysis
                 </h3>
-                <Link href="/dashboard/reports" className="text-xs font-bold text-cyan-400 hover:underline">Upload Lab PDF →</Link>
+                <Link href="/dashboard/reports" className="text-xs text-teal-400 hover:underline">Upload PDF →</Link>
               </div>
-              <p className="text-xs text-slate-300">
-                Extract CBC, Lipid, and Blood Sugar test parameters automatically. Highlights out-of-range values and generates questions for your physician.
+              <p className="text-slate-300 leading-relaxed">
+                Extracts lab values from PDF test reports, compares metrics against standard reference limits, and highlights out-of-range results.
               </p>
             </div>
           )}
 
           {activeShowcaseTab === 'prescriptions' && (
-            <div className="space-y-4">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-                <h3 className="text-base font-bold text-white flex items-center gap-2">
-                  <ScanLine className="h-5 w-5 text-emerald-400" /> Prescription & Medicine Scanner
+            <div className="space-y-2 text-xs">
+              <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                  <ScanLine className="h-4 w-4 text-teal-400" /> Prescription Reader
                 </h3>
-                <Link href="/dashboard/prescriptions" className="text-xs font-bold text-cyan-400 hover:underline">Scan Prescription →</Link>
+                <Link href="/dashboard/prescriptions" className="text-xs text-teal-400 hover:underline">Scan Prescription →</Link>
               </div>
-              <p className="text-xs text-slate-300">
-                Scans handwritten or printed prescriptions to digitize dosages, timing, and food-related instructions directly into daily medication reminders.
+              <p className="text-slate-300 leading-relaxed">
+                Scans printed or handwritten prescriptions to add medicine dosages and timing instructions directly into daily health reminders.
               </p>
             </div>
           )}
 
           {activeShowcaseTab === 'care' && (
-            <div className="space-y-4">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-                <h3 className="text-base font-bold text-white flex items-center gap-2">
-                  <MapPin className="h-5 w-5 text-red-400" /> 24/7 Care & Emergency Discovery
+            <div className="space-y-2 text-xs">
+              <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                  <MapPin className="h-4 w-4 text-red-400" /> Nearby Facilities
                 </h3>
-                <Link href="/dashboard/care" className="text-xs font-bold text-cyan-400 hover:underline">Find Nearby Facilities →</Link>
+                <Link href="/dashboard/care" className="text-xs text-teal-400 hover:underline">View Map →</Link>
               </div>
-              <p className="text-xs text-slate-300">
-                Locate local emergency trauma centers, 24-hour pharmacies, diagnostic laboratories, and acute clinics with distance metrics and call actions.
+              <p className="text-slate-300 leading-relaxed">
+                Locate emergency centers, 24-hour pharmacies, and diagnostic laboratories near your current GPS location.
               </p>
             </div>
           )}
         </div>
       </section>
 
-      {/* Social Proof & Testimonials Section */}
-      <section id="testimonials" className="py-20 bg-slate-900/60 border-y border-slate-800/80 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-12">
-          <div className="text-center space-y-3 max-w-2xl mx-auto">
-            <span className="text-xs font-bold uppercase tracking-widest text-teal-400">Social Proof & Feedback</span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-white">Trusted by Patients & Clinicians</h2>
-            <p className="text-sm text-slate-400">Real clinical perspectives on HealthBridge AI.</p>
+      {/* Social Proof Section */}
+      <section id="testimonials" className="py-16 bg-slate-900/40 border-y border-slate-800/80">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-10">
+          <div className="text-center space-y-2 max-w-xl mx-auto">
+            <span className="text-xs font-semibold uppercase tracking-wider text-teal-400">Feedback</span>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-white">Clinical & Patient Perspectives</h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {testimonials.map((t, idx) => (
-              <div key={idx} className="p-6 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-4 flex flex-col justify-between">
-                <div className="space-y-3">
-                  <div className="flex items-center gap-1 text-amber-400">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="h-4 w-4 fill-amber-400" />
-                    ))}
-                  </div>
-                  <p className="text-xs text-slate-300 leading-relaxed italic">"{t.quote}"</p>
-                </div>
-                <div className="pt-4 border-t border-slate-900 flex items-center justify-between">
+              <div key={idx} className="p-5 rounded-xl bg-slate-950/80 border border-slate-800 space-y-3 flex flex-col justify-between">
+                <p className="text-xs text-slate-300 leading-relaxed">"{t.quote}"</p>
+                <div className="pt-3 border-t border-slate-900 flex items-center justify-between">
                   <div>
                     <h4 className="text-xs font-bold text-white">{t.name}</h4>
                     <p className="text-[10px] text-slate-400">{t.role}</p>
                   </div>
-                  <span className="px-2 py-0.5 rounded-full bg-teal-500/10 text-teal-400 text-[10px] font-bold border border-teal-500/20">
+                  <span className="px-2 py-0.5 rounded bg-slate-900 text-teal-400 text-[10px] font-medium border border-slate-800">
                     {t.badge}
                   </span>
                 </div>
               </div>
             ))}
           </div>
-
-          {/* Network Partner Placeholders */}
-          <div className="pt-8 border-t border-slate-800/60 text-center space-y-4">
-            <span className="text-[11px] font-bold uppercase tracking-widest text-slate-400 block">
-              Compatible with Major Clinical Data Systems (Demonstration Partners)
-            </span>
-            <div className="flex flex-wrap items-center justify-center gap-8 text-xs font-bold text-slate-400">
-              <span className="px-4 py-2 rounded-xl bg-slate-950 border border-slate-800 flex items-center gap-2"><Building2 className="h-4 w-4 text-teal-400" /> Metro Health System</span>
-              <span className="px-4 py-2 rounded-xl bg-slate-950 border border-slate-800 flex items-center gap-2"><Building2 className="h-4 w-4 text-teal-400" /> Apex Diagnostic Labs</span>
-              <span className="px-4 py-2 rounded-xl bg-slate-950 border border-slate-800 flex items-center gap-2"><Building2 className="h-4 w-4 text-teal-400" /> City Acute Care</span>
-              <span className="px-4 py-2 rounded-xl bg-slate-950 border border-slate-800 flex items-center gap-2"><Building2 className="h-4 w-4 text-teal-400" /> MedPlus Pharmacies</span>
-            </div>
-          </div>
         </div>
       </section>
 
       {/* Contact & FAQ Section */}
-      <section id="faq" className="py-24 max-w-7xl mx-auto px-4 sm:px-6 space-y-16">
+      <section id="faq" className="py-20 max-w-7xl mx-auto px-4 sm:px-6 space-y-12">
         {/* FAQ Accordion */}
-        <div className="space-y-8 max-w-3xl mx-auto">
-          <div className="text-center space-y-3">
-            <span className="text-xs font-bold uppercase tracking-widest text-teal-400">Frequently Asked Questions</span>
-            <h2 className="text-3xl font-extrabold text-white">Got Questions? We Have Answers</h2>
+        <div className="space-y-6 max-w-2xl mx-auto">
+          <div className="text-center space-y-2">
+            <span className="text-xs font-semibold uppercase tracking-wider text-teal-400">Support</span>
+            <h2 className="text-2xl font-extrabold text-white">Frequently Asked Questions</h2>
           </div>
 
-          <div className="space-y-3">
+          <div className="space-y-2">
             {faqs.map((faq, idx) => {
               const isOpen = openFaqIndex === idx;
               return (
-                <div key={idx} className="rounded-2xl bg-slate-900/80 border border-slate-800 overflow-hidden transition-all">
+                <div key={idx} className="rounded-xl bg-slate-900/70 border border-slate-800 overflow-hidden">
                   <button
                     onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
-                    className="w-full p-5 text-left text-sm font-bold text-white flex items-center justify-between gap-4 focus-visible:ring-2 focus-visible:ring-teal-500 outline-none"
+                    className="w-full p-4 text-left text-xs font-semibold text-white flex items-center justify-between gap-3 focus-visible:ring-1 focus-visible:ring-teal-500 outline-none"
                   >
                     <span>{faq.q}</span>
-                    <ChevronDown className={`h-4 w-4 text-teal-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+                    <ChevronDown className={`h-4 w-4 text-slate-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
                   </button>
                   {isOpen && (
-                    <div className="px-5 pb-5 text-xs text-slate-400 leading-relaxed border-t border-slate-800/60 pt-3">
+                    <div className="px-4 pb-4 text-xs text-slate-400 leading-relaxed border-t border-slate-800/60 pt-2.5">
                       {faq.a}
                     </div>
                   )}
@@ -620,113 +577,110 @@ export default function LandingPage() {
           </div>
         </div>
 
-        {/* Contact Form Section */}
-        <div className="max-w-2xl mx-auto rounded-3xl bg-slate-900/90 p-8 border border-slate-800 shadow-2xl space-y-6">
-          <div className="text-center space-y-2">
-            <h3 className="text-2xl font-extrabold text-white">Get in Touch with HealthBridge</h3>
-            <p className="text-xs text-slate-400">Have feedback or inquiry about deployment? Send us a message.</p>
+        {/* Contact Form */}
+        <div className="max-w-xl mx-auto rounded-xl bg-slate-900/80 p-6 border border-slate-800 space-y-4">
+          <div className="text-center space-y-1">
+            <h3 className="text-lg font-bold text-white">Contact Support & Inquiries</h3>
+            <p className="text-xs text-slate-400">Send your inquiry or technical feedback to our team.</p>
           </div>
 
           {contactSuccess ? (
-            <div className="p-4 rounded-xl bg-teal-950/80 border border-teal-500/40 text-cyan-300 text-xs font-semibold text-center flex items-center justify-center gap-2">
-              <Check className="h-5 w-5 text-teal-400" />
-              <span>Thank you! Your message has been received. Our team will respond shortly.</span>
+            <div className="p-3.5 rounded-lg bg-slate-950 border border-teal-500/40 text-teal-300 text-xs text-center">
+              Message received. Our technical team will respond shortly.
             </div>
           ) : (
-            <form onSubmit={handleContactSubmit} className="space-y-4 text-xs">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <form onSubmit={handleContactSubmit} className="space-y-3 text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-bold text-slate-300 mb-1">Your Name</label>
+                  <label className="block font-medium text-slate-300 mb-1">Your Name</label>
                   <input
                     type="text"
                     required
-                    placeholder="Rahul Sharma"
+                    placeholder="Full Name"
                     value={contactName}
                     onChange={(e) => setContactName(e.target.value)}
-                    className="w-full p-3 rounded-xl bg-slate-950 border border-slate-800 text-white placeholder-slate-600 outline-none focus:ring-2 focus:ring-teal-500"
+                    className="w-full p-2.5 rounded-lg bg-slate-950 border border-slate-800 text-white placeholder-slate-600 outline-none focus:ring-1 focus:ring-teal-500"
                   />
                 </div>
                 <div>
-                  <label className="block font-bold text-slate-300 mb-1">Email Address</label>
+                  <label className="block font-medium text-slate-300 mb-1">Email Address</label>
                   <input
                     type="email"
                     required
-                    placeholder="rahul@example.com"
+                    placeholder="email@example.com"
                     value={contactEmail}
                     onChange={(e) => setContactEmail(e.target.value)}
-                    className="w-full p-3 rounded-xl bg-slate-950 border border-slate-800 text-white placeholder-slate-600 outline-none focus:ring-2 focus:ring-teal-500"
+                    className="w-full p-2.5 rounded-lg bg-slate-950 border border-slate-800 text-white placeholder-slate-600 outline-none focus:ring-1 focus:ring-teal-500"
                   />
                 </div>
               </div>
               <div>
-                <label className="block font-bold text-slate-300 mb-1">Message</label>
+                <label className="block font-medium text-slate-300 mb-1">Message</label>
                 <textarea
-                  rows={4}
+                  rows={3}
                   required
-                  placeholder="How can we assist you with HealthBridge AI?"
+                  placeholder="Describe your question or technical inquiry..."
                   value={contactMessage}
                   onChange={(e) => setContactMessage(e.target.value)}
-                  className="w-full p-3 rounded-xl bg-slate-950 border border-slate-800 text-white placeholder-slate-600 outline-none focus:ring-2 focus:ring-teal-500"
+                  className="w-full p-2.5 rounded-lg bg-slate-950 border border-slate-800 text-white placeholder-slate-600 outline-none focus:ring-1 focus:ring-teal-500"
                 />
               </div>
               <button
                 type="submit"
-                className="w-full py-3.5 rounded-xl bg-gradient-to-r from-teal-500 to-cyan-500 text-slate-950 font-extrabold text-xs shadow-glow hover:shadow-glow-lg transition-all flex items-center justify-center gap-2 focus-visible:ring-2 focus-visible:ring-teal-400 outline-none"
+                className="w-full py-2.5 rounded-lg bg-teal-600 hover:bg-teal-500 text-white font-semibold text-xs transition-colors flex items-center justify-center gap-2 focus-visible:ring-1 focus-visible:ring-teal-400 outline-none"
               >
-                <Send className="h-4 w-4" /> Send Message
+                <Send className="h-3.5 w-3.5" /> Send Inquiry
               </button>
             </form>
           )}
         </div>
       </section>
 
-      {/* SaaS Footer */}
-      <footer className="mt-auto py-12 bg-slate-950 border-t border-slate-800/80 text-xs text-slate-400">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="space-y-3">
+      {/* Minimal Footer */}
+      <footer className="mt-auto py-10 bg-slate-950 border-t border-slate-800/80 text-xs text-slate-400">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div className="space-y-2">
               <Logo size="sm" />
-              <p className="text-[11px] text-slate-400 leading-relaxed">
-                Patient-first clinical triage, lab report parsing, prescription digitization, and 24/7 care discovery.
+              <p className="text-[11px] text-slate-400 leading-normal">
+                Clinical triage, lab document parsing, prescription digitizing, and emergency care discovery.
               </p>
             </div>
 
             <div>
-              <h4 className="font-bold text-white uppercase tracking-wider text-[11px] mb-3">Product Workflows</h4>
-              <ul className="space-y-2 text-[11px]">
-                <li><Link href="/dashboard/symptoms" className="hover:text-cyan-400">Symptom Checker</Link></li>
-                <li><Link href="/dashboard/reports" className="hover:text-cyan-400">Lab Report OCR</Link></li>
-                <li><Link href="/dashboard/prescriptions" className="hover:text-cyan-400">Prescription Reader</Link></li>
-                <li><Link href="/dashboard/care" className="hover:text-cyan-400">24/7 Care Discovery</Link></li>
+              <h4 className="font-semibold text-white uppercase tracking-wider text-[10px] mb-2">Workflows</h4>
+              <ul className="space-y-1.5 text-[11px]">
+                <li><Link href="/dashboard/symptoms" className="hover:text-white">Symptom Assessment</Link></li>
+                <li><Link href="/dashboard/reports" className="hover:text-white">Lab Report Analysis</Link></li>
+                <li><Link href="/dashboard/prescriptions" className="hover:text-white">Prescription Reader</Link></li>
+                <li><Link href="/dashboard/care" className="hover:text-white">Emergency Facilities</Link></li>
               </ul>
             </div>
 
             <div>
-              <h4 className="font-bold text-white uppercase tracking-wider text-[11px] mb-3">Governance & Privacy</h4>
-              <ul className="space-y-2 text-[11px]">
-                <li><a href="#safety" className="hover:text-cyan-400">Clinical Safety Standards</a></li>
-                <li><a href="#trust" className="hover:text-cyan-400">Privacy & Data Governance</a></li>
-                <li><span className="text-slate-400">HIPAA & GDPR Compliance</span></li>
-                <li><span className="text-slate-400">Terms of Service</span></li>
+              <h4 className="font-semibold text-white uppercase tracking-wider text-[10px] mb-2">Governance</h4>
+              <ul className="space-y-1.5 text-[11px]">
+                <li><a href="#trust" className="hover:text-white">Data Privacy Standards</a></li>
+                <li><a href="#trust" className="hover:text-white">Red-Flag Safety Rules</a></li>
+                <li><span className="text-slate-400">Medical Disclaimer</span></li>
               </ul>
             </div>
 
             <div>
-              <h4 className="font-bold text-white uppercase tracking-wider text-[11px] mb-3">Contact Support</h4>
-              <div className="space-y-2 text-[11px]">
+              <h4 className="font-semibold text-white uppercase tracking-wider text-[10px] mb-2">Contact</h4>
+              <div className="space-y-1.5 text-[11px]">
                 <div className="flex items-center gap-2"><Mail className="h-3.5 w-3.5 text-teal-400" /> support@healthaibridge.org</div>
-                <div className="flex items-center gap-2"><Phone className="h-3.5 w-3.5 text-teal-400" /> +91 (11) 2658-8500 (Emergency 112)</div>
-                <div className="flex items-center gap-2"><Globe className="h-3.5 w-3.5 text-teal-400" /> New Delhi, India</div>
+                <div className="flex items-center gap-2"><Phone className="h-3.5 w-3.5 text-teal-400" /> Emergency Hotline: 112</div>
               </div>
             </div>
           </div>
 
-          <div className="pt-8 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px]">
-            <p>© 2026 HealthBridge AI. All rights reserved. Built for Healthcare Innovation.</p>
-            <div className="flex gap-4">
+          <div className="pt-6 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-slate-400">
+            <p>© 2026 HealthBridge AI. All rights reserved.</p>
+            <div className="flex gap-3">
               <span>Privacy Policy</span>
               <span>•</span>
-              <span>Terms of Service</span>
+              <span>Terms of Use</span>
               <span>•</span>
               <span>Cookie Policy</span>
             </div>
