@@ -14,6 +14,7 @@ import {
   HelpCircle,
   ShieldCheck,
   FileCheck,
+  Zap,
 } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
 import { processFileOCR, parseReportFromText } from '@/services/ocrService';
@@ -108,8 +109,9 @@ export default function ReportsPage() {
             </label>
 
             {isProcessing && (
-              <div className="p-3 bg-teal-100 dark:bg-teal-950/60 rounded-xl text-xs font-semibold text-teal-800 dark:text-teal-300 animate-pulse">
-                ⚡ Extracting OCR text and parsing clinical ranges...
+              <div className="p-3 bg-teal-100 dark:bg-teal-950/60 rounded-xl text-xs font-semibold text-teal-800 dark:text-teal-300 animate-pulse flex items-center gap-2">
+                <Zap className="h-4 w-4 text-amber-500" />
+                <span>Extracting OCR text and parsing clinical ranges...</span>
               </div>
             )}
           </div>

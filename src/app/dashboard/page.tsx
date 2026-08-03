@@ -17,6 +17,11 @@ import {
   Plus,
   Edit3,
   HeartPulse,
+  SmilePlus,
+  Smile,
+  Meh,
+  Frown,
+  AlertCircle,
 } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
 import { t } from '@/lib/i18n';
@@ -51,11 +56,11 @@ export default function DashboardOverviewPage() {
   const upcomingApt = appointments.find((a) => a.status === 'Upcoming');
 
   const feelings = [
-    { label: 'Great', emoji: '😄' },
-    { label: 'Good', emoji: '😊' },
-    { label: 'Okay', emoji: '😐' },
-    { label: 'Stressed', emoji: '😓' },
-    { label: 'Unwell', emoji: '🤒' },
+    { label: 'Great', icon: SmilePlus },
+    { label: 'Good', icon: Smile },
+    { label: 'Okay', icon: Meh },
+    { label: 'Stressed', icon: Frown },
+    { label: 'Unwell', icon: AlertCircle },
   ];
 
   const handleSaveProfileEdit = (e: React.FormEvent) => {
@@ -178,24 +183,27 @@ export default function DashboardOverviewPage() {
           {t(language, 'howAreYouFeeling')}
         </h3>
         <div className="flex flex-wrap gap-2">
-          {feelings.map((f) => (
-            <button
-              key={f.label}
-              onClick={() => {
-                setSelectedFeeling(f.label);
-                updateWellness({ mood: f.label as any });
-                showToast(`Logged daily mood as ${f.label}`);
-              }}
-              className={`px-4 py-2 rounded-xl text-xs font-semibold border transition-all flex items-center gap-2 ${
-                selectedFeeling === f.label
-                  ? 'bg-teal-600 text-white border-teal-700 shadow-md'
-                  : 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-100'
-              }`}
-            >
-              <span>{f.emoji}</span>
-              <span>{f.label}</span>
-            </button>
-          ))}
+          {feelings.map((f) => {
+            const IconComponent = f.icon;
+            return (
+              <button
+                key={f.label}
+                onClick={() => {
+                  setSelectedFeeling(f.label);
+                  updateWellness({ mood: f.label as any });
+                  showToast(`Logged daily mood as ${f.label}`);
+                }}
+                className={`px-4 py-2 rounded-xl text-xs font-semibold border transition-all flex items-center gap-2 ${
+                  selectedFeeling === f.label
+                    ? 'bg-teal-600 text-white border-teal-700 shadow-md'
+                    : 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-100'
+                }`}
+              >
+                <IconComponent className="h-4 w-4" />
+                <span>{f.label}</span>
+              </button>
+            );
+          })}
         </div>
       </div>
 

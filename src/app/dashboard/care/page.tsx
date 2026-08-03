@@ -17,6 +17,7 @@ import {
   CheckCircle,
   Accessibility,
   Compass,
+  X,
 } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
 import { searchNearbyFacilities } from '@/services/mapService';
@@ -97,13 +98,20 @@ export default function CareDiscoveryPage() {
             <button
               key={cat}
               onClick={() => setCategory(cat)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors ${
+              className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors flex items-center gap-1.5 ${
                 category === cat
                   ? 'bg-teal-600 text-white'
                   : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200'
               }`}
             >
-              {cat === 'Emergency' ? '🚨 24/7 Trauma' : cat}
+              {cat === 'Emergency' ? (
+                <>
+                  <ShieldAlert className="h-3.5 w-3.5 text-red-400" />
+                  <span>24/7 Trauma</span>
+                </>
+              ) : (
+                cat
+              )}
             </button>
           ))}
         </div>
@@ -243,7 +251,7 @@ export default function CareDiscoveryPage() {
                   onClick={() => setSelectedFacility(null)}
                   className="text-xs text-slate-400 hover:text-slate-600"
                 >
-                  ✕
+                  <X className="h-4 w-4" />
                 </button>
               </div>
               <div className="flex gap-2 text-xs pt-1">
@@ -256,8 +264,9 @@ export default function CareDiscoveryPage() {
               </div>
             </div>
           ) : (
-            <div className="absolute bottom-4 left-4 bg-slate-900/80 text-white px-3 py-1.5 rounded-xl text-xs backdrop-blur border border-slate-700">
-              📍 Real GPS Map: {userAddress}. Click pins to view facility details.
+            <div className="absolute bottom-4 left-4 bg-slate-900/80 text-white px-3 py-1.5 rounded-xl text-xs backdrop-blur border border-slate-700 flex items-center gap-1.5">
+              <MapPin className="h-3.5 w-3.5 text-teal-400" />
+              <span>Real GPS Location: {userAddress}. Select pins to view details.</span>
             </div>
           )}
         </div>

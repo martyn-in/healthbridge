@@ -186,13 +186,14 @@ export default function SymptomsPage() {
               </button>
               <button
                 onClick={() => {
-                  setMainConcern('Sudden severe crushing chest pain radiating to left arm');
+                  setMainConcern('Severe crushing chest pain radiating to left arm');
                   setSeverity('Severe');
                   setSelectedBodyArea('Chest / Heart');
                 }}
-                className="px-3 py-1.5 rounded-lg bg-red-50 dark:bg-red-950/40 text-red-700 dark:text-red-300 text-xs font-bold border border-red-200 dark:border-red-800 hover:bg-red-100"
+                className="px-3 py-1.5 rounded-lg bg-red-50 dark:bg-red-950/40 text-red-700 dark:text-red-300 text-xs font-bold border border-red-200 dark:border-red-800 hover:bg-red-100 flex items-center gap-1.5"
               >
-                🚨 Test Emergency Triage Safeguard
+                <ShieldAlert className="h-3.5 w-3.5 text-red-600" />
+                <span>Test Emergency Triage Safeguard</span>
               </button>
             </div>
           </div>
@@ -290,13 +291,18 @@ export default function SymptomsPage() {
                 <button
                   key={sym}
                   onClick={() => toggleAssociated(sym)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors flex items-center gap-1.5 ${
                     associatedSymptoms.includes(sym)
                       ? 'bg-teal-600 text-white border-teal-700'
                       : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700'
                   }`}
                 >
-                  {associatedSymptoms.includes(sym) ? '✓ ' : '+ '} {sym}
+                  {associatedSymptoms.includes(sym) ? (
+                    <CheckCircle2 className="h-3.5 w-3.5" />
+                  ) : (
+                    <span className="font-bold text-xs">+</span>
+                  )}
+                  <span>{sym}</span>
                 </button>
               ))}
             </div>

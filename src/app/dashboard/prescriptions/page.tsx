@@ -116,8 +116,9 @@ export default function PrescriptionsPage() {
             </div>
 
             {isScanning && (
-              <div className="p-3 bg-teal-100 dark:bg-teal-950/60 rounded-xl text-xs font-semibold text-teal-800 dark:text-teal-300 animate-pulse">
-                📷 OCR Scanner reading prescription text...
+              <div className="p-3 bg-teal-100 dark:bg-teal-950/60 rounded-xl text-xs font-semibold text-teal-800 dark:text-teal-300 animate-pulse flex items-center gap-2">
+                <Camera className="h-4 w-4 text-teal-600 dark:text-teal-400" />
+                <span>OCR Scanner analyzing prescription details...</span>
               </div>
             )}
 

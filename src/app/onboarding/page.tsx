@@ -126,8 +126,9 @@ export default function OnboardingPage() {
         {step === 5 && (
           <div className="space-y-4 text-xs">
             <h2 className="text-xl font-extrabold text-slate-900 dark:text-white">Notification Preferences</h2>
-            <div className="p-4 rounded-xl bg-teal-50 dark:bg-teal-950/40 border border-teal-200 text-teal-900 dark:text-cyan-300 font-semibold">
-              ✓ Browser push reminders for daily medicine doses & refill dates enabled.
+            <div className="p-4 rounded-xl bg-teal-50 dark:bg-teal-950/40 border border-teal-200 text-teal-900 dark:text-cyan-300 font-semibold flex items-center gap-2">
+              <Check className="h-4 w-4 text-teal-600 dark:text-cyan-400 shrink-0" />
+              <span>Browser push reminders for daily medicine doses & refill dates enabled.</span>
             </div>
           </div>
         )}
@@ -154,8 +155,8 @@ export default function OnboardingPage() {
 
         {step === 7 && (
           <div className="text-center space-y-4 py-4">
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 text-2xl font-bold">
-              ✓
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400">
+              <Check className="h-8 w-8" />
             </div>
             <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white">Onboarding Complete!</h2>
             <p className="text-xs text-slate-500">Your family health account is ready. Welcome to HealthBridge AI.</p>
