@@ -9,6 +9,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['var(--font-jakarta)', 'system-ui', 'sans-serif'],
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
@@ -17,7 +20,8 @@ const config: Config = {
           100: '#D9E2EC',
           500: '#1E3E62',
           700: '#0F2A4A',
-          900: '#0B192C',
+          900: '#090D16',
+          950: '#05070C',
         },
         teal: {
           50: '#F0FDFA',
@@ -45,11 +49,13 @@ const config: Config = {
         'lg': '14px',
         'xl': '18px',
         '2xl': '24px',
+        '3xl': '32px',
       },
       boxShadow: {
         'soft': '0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.03)',
         'card': '0 10px 30px -5px rgba(15, 23, 42, 0.08)',
-        'glow': '0 0 25px -5px rgba(13, 148, 136, 0.3)',
+        'glow': '0 0 25px -5px rgba(13, 148, 136, 0.35)',
+        'glow-lg': '0 0 50px -10px rgba(13, 148, 136, 0.4)',
         'emergency-glow': '0 0 25px -3px rgba(220, 38, 38, 0.4)',
       }
     },

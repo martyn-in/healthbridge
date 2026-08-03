@@ -1,6 +1,13 @@
 import type { Metadata } from 'next';
+import { Plus_Jakarta_Sans } from 'next/font/google';
 import './globals.css';
 import { AppProvider } from '@/context/AppContext';
+
+const jakarta = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700', '800'],
+  variable: '--font-jakarta',
+});
 
 export const metadata: Metadata = {
   title: 'HealthBridge AI — Understand your health. Act with confidence.',
@@ -17,8 +24,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className="bg-background text-foreground antialiased selection:bg-teal-500 selection:text-white">
+    <html lang="en" className={jakarta.variable} suppressHydrationWarning>
+      <body className="font-sans bg-background text-foreground antialiased selection:bg-teal-500 selection:text-white">
         <AppProvider>{children}</AppProvider>
       </body>
     </html>
