@@ -1,0 +1,7 @@
+# User-agent directives for HealthBridge AI
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /dashboard/settings/
+
+Sitemap: https://healthaibridge.vercel.app/sitemap.xml
