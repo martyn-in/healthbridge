@@ -12,13 +12,16 @@ import {
   QrCode,
   Bell,
   Command,
+  LogOut,
 } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
 import { Logo } from './Logo';
 import { Language } from '@/types';
 import { t } from '@/lib/i18n';
+import { useRouter } from 'next/navigation';
 
 export const Header: React.FC<{ onOpenHealthCard?: () => void }> = ({ onOpenHealthCard }) => {
+  const router = useRouter();
   const {
     language,
     setLanguage,
@@ -29,6 +32,7 @@ export const Header: React.FC<{ onOpenHealthCard?: () => void }> = ({ onOpenHeal
     profiles,
     triggerSos,
     toastMessage,
+    logout,
   } = useApp();
 
   const [showLangMenu, setShowLangMenu] = useState(false);
@@ -155,7 +159,7 @@ export const Header: React.FC<{ onOpenHealthCard?: () => void }> = ({ onOpenHeal
             {showProfileMenu && (
               <div className="absolute right-0 mt-2 w-60 rounded-xl bg-white dark:bg-slate-900 shadow-dropdown border border-slate-200 dark:border-slate-800 p-2 z-50">
                 <div className="px-3 py-1.5 text-[10px] uppercase font-bold text-slate-400 tracking-wider">
-                  Active Patient Profile
+                  Active Patient Record
                 </div>
                 {profiles.map((p) => (
                   <button
@@ -177,6 +181,20 @@ export const Header: React.FC<{ onOpenHealthCard?: () => void }> = ({ onOpenHeal
                     {activeProfile.id === p.id && <Check className="h-3.5 w-3.5 text-teal-600 dark:text-teal-400" />}
                   </button>
                 ))}
+
+                <div className="pt-2 mt-2 border-t border-slate-100 dark:border-slate-800">
+                  <button
+                    onClick={() => {
+                      logout();
+                      setShowProfileMenu(false);
+                      router.push('/');
+                    }}
+                    className="w-full text-left px-3 py-2 rounded-lg text-xs font-bold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 flex items-center gap-2 transition-colors"
+                  >
+                    <LogOut className="h-3.5 w-3.5" />
+                    <span>Sign Out of Platform</span>
+                  </button>
+                </div>
               </div>
             )}
           </div>

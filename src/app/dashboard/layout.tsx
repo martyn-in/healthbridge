@@ -6,9 +6,16 @@ import { Header } from '@/components/ui/Header';
 import { EmergencySosModal } from '@/components/ui/EmergencySosModal';
 import { DigitalHealthCardModal } from '@/components/ui/DigitalHealthCardModal';
 import { DisclaimerBanner } from '@/components/ui/DisclaimerBanner';
+import { SignInPortal } from '@/components/ui/SignInPortal';
+import { useApp } from '@/context/AppContext';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+  const { isAuthenticated } = useApp();
   const [isHealthCardOpen, setIsHealthCardOpen] = useState(false);
+
+  if (!isAuthenticated) {
+    return <SignInPortal />;
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 transition-colors">

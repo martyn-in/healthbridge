@@ -36,6 +36,15 @@ import {
   seedSampleReports,
 } from '@/services/demoData';
 
+export interface UserSession {
+  email: string;
+  name: string;
+  role: 'Patient' | 'Physician' | 'Admin';
+  avatarInitials: string;
+  facility?: string;
+  authenticatedAt: string;
+}
+
 interface AppContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
@@ -44,6 +53,12 @@ interface AppContextType {
   isJudgeDemo: boolean;
   setIsJudgeDemo: (val: boolean) => void;
   
+  // Real Authentication Session
+  currentUser: UserSession | null;
+  isAuthenticated: boolean;
+  login: (session: UserSession) => void;
+  logout: () => void;
+
   // Real User Profiles
   activeProfile: FamilyMember;
   setActiveProfile: (prof: FamilyMember) => void;
@@ -114,6 +129,19 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [language, setLanguage] = useState<Language>('en');
   const [darkMode, setDarkMode] = useState<boolean>(false);
   const [isJudgeDemo, setIsJudgeDemo] = useState<boolean>(false);
+  
+  // Real User Session State
+  const defaultSession: UserSession = {
+    email: 'aarav.sharma@healthbridge.ai',
+    name: 'Aarav Sharma',
+    role: 'Patient',
+    avatarInitials: 'AS',
+    facility: 'Primary Health Account',
+    authenticatedAt: new Date().toISOString(),
+  };
+
+  const [currentUser, setCurrentUser] = useState<UserSession | null>(defaultSession);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
   
   // Real User Data Stores
   const [profiles, setProfiles] = useState<FamilyMember[]>(emptyProfiles);
@@ -443,6 +471,24 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     showToast('Loaded sample reference records.');
   };
 
+  const login = (session: UserSession) => {
+    setCurrentUser(session);
+    setIsAuthenticated(true);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('healthbridge_session', JSON.stringify(session));
+    }
+    showToast(`Authenticated as ${session.name} (${session.role})`);
+  };
+
+  const logout = () => {
+    setCurrentUser(null);
+    setIsAuthenticated(false);
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('healthbridge_session');
+    }
+    showToast('Signed out of HealthBridge AI platform.');
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -452,6 +498,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setDarkMode,
         isJudgeDemo,
         setIsJudgeDemo,
+        currentUser,
+        isAuthenticated,
+        login,
+        logout,
         activeProfile,
         setActiveProfile,
         profiles,
