@@ -23,6 +23,7 @@ import { useRouter } from 'next/navigation';
 export const Header: React.FC<{ onOpenHealthCard?: () => void }> = ({ onOpenHealthCard }) => {
   const router = useRouter();
   const {
+    currentUser,
     language,
     setLanguage,
     darkMode,
@@ -141,46 +142,62 @@ export const Header: React.FC<{ onOpenHealthCard?: () => void }> = ({ onOpenHeal
             {darkMode ? <Sun className="h-4 w-4 text-amber-400" /> : <Moon className="h-4 w-4 text-slate-600" />}
           </button>
 
-          {/* Profile Switcher */}
+          {/* Profile / Account Switcher */}
           <div className="relative">
             <button
               onClick={() => setShowProfileMenu(!showProfileMenu)}
               className="flex items-center gap-2 p-1.5 sm:px-3 sm:py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-xs font-medium transition-colors border border-transparent hover:border-slate-200 dark:hover:border-slate-700"
             >
               <div className="flex h-6 w-6 items-center justify-center rounded-full bg-teal-600 text-white font-bold text-[10px]">
-                {activeProfile.name.charAt(0)}
+                {currentUser?.avatarInitials || activeProfile.name.charAt(0)}
               </div>
-              <span className="hidden md:inline text-slate-900 dark:text-slate-100 font-semibold max-w-[110px] truncate">
-                {activeProfile.name}
+              <span className="hidden md:inline text-slate-900 dark:text-slate-100 font-semibold max-w-[130px] truncate">
+                {currentUser?.role === 'Physician' ? currentUser.name : activeProfile.name}
               </span>
               <ChevronDown className="h-3 w-3 text-slate-400" />
             </button>
 
             {showProfileMenu && (
-              <div className="absolute right-0 mt-2 w-60 rounded-xl bg-white dark:bg-slate-900 shadow-dropdown border border-slate-200 dark:border-slate-800 p-2 z-50">
-                <div className="px-3 py-1.5 text-[10px] uppercase font-bold text-slate-400 tracking-wider">
-                  Active Patient Record
-                </div>
-                {profiles.map((p) => (
-                  <button
-                    key={p.id}
-                    onClick={() => {
-                      setActiveProfile(p);
-                      setShowProfileMenu(false);
-                    }}
-                    className={`w-full text-left px-3 py-2 rounded-lg text-xs font-medium flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors ${
-                      activeProfile.id === p.id ? 'bg-teal-50 dark:bg-teal-950/40 text-teal-700 dark:text-teal-400 font-semibold' : 'text-slate-700 dark:text-slate-200'
-                    }`}
-                  >
-                    <div>
-                      <div className="font-semibold text-slate-900 dark:text-slate-100">{p.name}</div>
-                      <div className="text-[10px] text-slate-400 font-normal">
-                        {p.relationship} • Blood Group: {p.bloodGroup}
-                      </div>
+              <div className="absolute right-0 mt-2 w-64 rounded-xl bg-white dark:bg-slate-900 shadow-dropdown border border-slate-200 dark:border-slate-800 p-2 z-50">
+                {currentUser?.role === 'Physician' ? (
+                  <div className="px-3 py-2 border-b border-slate-100 dark:border-slate-800 mb-1">
+                    <div className="text-[10px] uppercase font-bold text-teal-600 dark:text-teal-400 tracking-wider">
+                      Physician Account
                     </div>
-                    {activeProfile.id === p.id && <Check className="h-3.5 w-3.5 text-teal-600 dark:text-teal-400" />}
-                  </button>
-                ))}
+                    <div className="font-bold text-slate-900 dark:text-white text-xs mt-0.5">
+                      {currentUser.name}
+                    </div>
+                    <div className="text-[10px] text-slate-400 mt-0.5">
+                      {currentUser.facility || 'Apex Health Clinic'}
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <div className="px-3 py-1.5 text-[10px] uppercase font-bold text-slate-400 tracking-wider">
+                      Active Patient Record
+                    </div>
+                    {profiles.map((p) => (
+                      <button
+                        key={p.id}
+                        onClick={() => {
+                          setActiveProfile(p);
+                          setShowProfileMenu(false);
+                        }}
+                        className={`w-full text-left px-3 py-2 rounded-lg text-xs font-medium flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors ${
+                          activeProfile.id === p.id ? 'bg-teal-50 dark:bg-teal-950/40 text-teal-700 dark:text-teal-400 font-semibold' : 'text-slate-700 dark:text-slate-200'
+                        }`}
+                      >
+                        <div>
+                          <div className="font-semibold text-slate-900 dark:text-slate-100">{p.name}</div>
+                          <div className="text-[10px] text-slate-400 font-normal">
+                            {p.relationship} • Blood Group: {p.bloodGroup}
+                          </div>
+                        </div>
+                        {activeProfile.id === p.id && <Check className="h-3.5 w-3.5 text-teal-600 dark:text-teal-400" />}
+                      </button>
+                    ))}
+                  </>
+                )}
 
                 <div className="pt-2 mt-2 border-t border-slate-100 dark:border-slate-800">
                   <button
