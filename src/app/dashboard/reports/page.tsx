@@ -16,12 +16,16 @@ import { processFileOCR, parseReportFromText } from '@/services/ocrService';
 import { MedicalReport } from '@/types';
 
 export default function ReportsPage() {
-  const { activeProfile, reports, addReport, deleteReport, showToast } = useApp();
+  const { activeProfile, reports, addReport, deleteReport, currentUser, showToast } = useApp();
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [activeReport, setActiveReport] = useState<MedicalReport | null>(reports[0] || null);
   const [editingRawText, setEditingRawText] = useState(false);
   const [rawTextValue, setRawTextValue] = useState(reports[0]?.rawText || '');
+
+  const isDoctor = currentUser?.role === 'Physician';
+  const [doctorNotes, setDoctorNotes] = useState('Patient exhibits elevated fasting glucose (142 mg/dL) and mild HbA1c elevation. Recommend dietary adjustment and follow-up lipid panel in 4 weeks.');
+  const [isSignedOff, setIsSignedOff] = useState(false);
 
   const handleFileUpload = async (file: File) => {
     setIsProcessing(true);
@@ -40,34 +44,42 @@ export default function ReportsPage() {
     }
   };
 
-  const loadDemoReport = () => {
-    setIsProcessing(true);
-    setTimeout(() => {
-      const demo = reports[0];
-      if (demo) {
-        setActiveReport(demo);
-        setRawTextValue(demo.rawText);
-      }
-      setIsProcessing(false);
-      showToast('Loaded demo laboratory blood report.');
-    }, 500);
-  };
-
   return (
     <div className="space-y-6">
       {/* Top Banner */}
       <div className="rounded-xl bg-slate-900 p-6 text-white shadow-sm border border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-slate-800 text-teal-400 text-[11px] font-bold uppercase mb-2 border border-slate-700">
-            <FileText className="h-3.5 w-3.5" /> Laboratory OCR Intelligence
+            <FileText className="h-3.5 w-3.5" /> {isDoctor ? 'Physician Review Suite' : 'Laboratory OCR Intelligence'}
           </div>
           <h1 className="text-2xl font-extrabold tracking-tight">
-            Medical Report Analyzer & OCR
+            {isDoctor ? 'Physician Diagnostic & Lab Review Console' : 'Medical Report Analyzer & OCR'}
           </h1>
           <p className="text-xs text-slate-300 mt-1 max-w-xl leading-relaxed">
-            Upload blood work, lipid panels, or imaging summaries (PDF/JPG/PNG). Parses numerical parameters, highlights out-of-range markers, and formats doctor discussion questions.
+            {isDoctor
+              ? 'Review patient lab OCR findings, assess out-of-range biomarkers, record clinical sign-off notes, and issue diagnostic recommendations.'
+              : 'Upload blood work, lipid panels, or imaging summaries (PDF/JPG/PNG). Parses numerical parameters, highlights out-of-range markers, and formats doctor discussion questions.'}
           </p>
         </div>
+
+        {isDoctor && (
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => {
+                setIsSignedOff(true);
+                showToast('Diagnostic report signed off by Dr. Ananya Mehta.');
+              }}
+              className={`px-4 py-2.5 rounded-xl font-bold text-xs shadow-sm transition-all flex items-center gap-2 ${
+                isSignedOff
+                  ? 'bg-emerald-600 text-white cursor-default'
+                  : 'bg-teal-600 hover:bg-teal-700 text-white'
+              }`}
+            >
+              <FileCheck className="h-4 w-4" />
+              <span>{isSignedOff ? 'Signed Off & Verified' : 'Sign Off Diagnostic Report'}</span>
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Main Grid */}
