@@ -38,15 +38,15 @@ export default function FamilyPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="rounded-xl bg-slate-900 p-6 text-white shadow-sm border border-slate-800 flex items-center justify-between flex-wrap gap-4">
+      <div className="rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700 shadow-card p-6 text-white flex items-center justify-between flex-wrap gap-4">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-slate-800 text-teal-400 text-[11px] font-bold uppercase mb-2 border border-slate-700">
+          <span className="chip chip-teal mb-2 inline-flex items-center gap-1">
             <Users className="h-3.5 w-3.5" /> Family Workspace
-          </div>
+          </span>
           <h1 className="text-2xl font-extrabold tracking-tight">
             Family Profile & Dependent Management
           </h1>
-          <p className="text-xs text-slate-300 mt-1 max-w-xl leading-relaxed">
+          <p className="text-sm text-slate-400 mt-1 max-w-xl leading-relaxed">
             Manage separate medical records, medication timelines, and emergency contacts for parents, spouse, and dependents.
           </p>
         </div>

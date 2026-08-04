@@ -93,15 +93,15 @@ export default function SymptomsPage() {
   return (
     <div className="space-y-6">
       {/* Top Banner */}
-      <div className="rounded-xl bg-slate-900 p-6 text-white shadow-sm border border-slate-800 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div className="rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700 shadow-card p-6 text-white flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-slate-800 text-teal-400 text-[11px] font-bold uppercase mb-2 border border-slate-700">
+          <span className="chip chip-teal mb-2 inline-flex items-center gap-1">
             <Stethoscope className="h-3.5 w-3.5" /> Clinical Triage Protocol
-          </div>
+          </span>
           <h1 className="text-2xl font-extrabold tracking-tight">
             Symptom Assessment & Guidance
           </h1>
-          <p className="text-xs text-slate-300 mt-1 max-w-xl leading-relaxed">
+          <p className="text-sm text-slate-400 mt-1 max-w-xl leading-relaxed">
             Evaluated for patient <span className="font-bold text-teal-400">{activeProfile.name}</span>. Receive preliminary clinical guidance, severity grading, and next steps.
           </p>
         </div>

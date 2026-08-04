@@ -44,15 +44,15 @@ export default function WellnessPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="rounded-xl bg-slate-900 p-6 text-white shadow-sm border border-slate-800 flex items-center justify-between flex-wrap gap-4">
+      <div className="rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700 shadow-card p-6 text-white flex items-center justify-between flex-wrap gap-4">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-slate-800 text-teal-400 text-[11px] font-bold uppercase mb-2 border border-slate-700">
-            <HeartPulse className="h-3.5 w-3.5" /> Supportive Care & Vitals
-          </div>
+          <span className="chip chip-teal mb-2 inline-flex items-center gap-1">
+            <HeartPulse className="h-3 w-3" /> Supportive Care & Vitals
+          </span>
           <h1 className="text-2xl font-extrabold tracking-tight">
             Daily Wellness & Mindfulness
           </h1>
-          <p className="text-xs text-slate-300 mt-1 max-w-xl leading-relaxed">
+          <p className="text-sm text-slate-400 mt-1 max-w-xl leading-relaxed">
             Supportive, non-clinical wellness tools for hydration tracking, sleep hygiene, and guided breathing exercises.
           </p>
         </div>
@@ -60,7 +60,7 @@ export default function WellnessPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* Hydration Card */}
-        <div className="rounded-xl bg-white dark:bg-slate-900 p-6 shadow-sm border border-slate-200 dark:border-slate-800 space-y-4">
+        <div className="rounded-xl bg-white dark:bg-slate-900 p-6 shadow-card border border-slate-200 dark:border-slate-800 space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="p-2 rounded-xl bg-teal-50 dark:bg-teal-950/60 text-teal-600 dark:text-teal-400">
@@ -89,7 +89,7 @@ export default function WellnessPage() {
         </div>
 
         {/* Sleep Card */}
-        <div className="rounded-xl bg-white dark:bg-slate-900 p-6 shadow-sm border border-slate-200 dark:border-slate-800 space-y-4">
+        <div className="rounded-xl bg-white dark:bg-slate-900 p-6 shadow-card border border-slate-200 dark:border-slate-800 space-y-4">
           <div className="flex items-center gap-2">
             <div className="p-2 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400">
               <Moon className="h-5 w-5" />

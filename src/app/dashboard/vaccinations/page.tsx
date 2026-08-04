@@ -38,13 +38,16 @@ export default function VaccinationsPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="rounded-2xl bg-gradient-to-r from-navy-900 via-teal-800 to-navy-900 p-6 text-white shadow-lg flex items-center justify-between">
+      <div className="rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700 shadow-card p-6 text-white flex items-center justify-between flex-wrap gap-4">
         <div>
+          <span className="chip chip-teal mb-2 inline-flex items-center gap-1">
+            <Syringe className="h-3 w-3" /> Immunization Registry
+          </span>
           <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
             Family Immunization & Vaccination Tracker
           </h1>
-          <p className="text-sm text-slate-200 mt-1 max-w-xl">
-            Track booster dates and immunization certificates for <span className="font-bold text-teal-300">{activeProfile.name}</span>.
+          <p className="text-sm text-slate-400 mt-1 max-w-xl">
+            Track booster dates and immunization certificates for <span className="font-bold text-teal-400">{activeProfile.name}</span>.
           </p>
         </div>
 

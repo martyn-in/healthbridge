@@ -47,15 +47,15 @@ export default function ReportsPage() {
   return (
     <div className="space-y-6">
       {/* Top Banner */}
-      <div className="rounded-xl bg-slate-900 p-6 text-white shadow-sm border border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div className="rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700 shadow-card p-6 text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-slate-800 text-teal-400 text-[11px] font-bold uppercase mb-2 border border-slate-700">
+          <span className="chip chip-teal mb-2 inline-flex items-center gap-1">
             <FileText className="h-3.5 w-3.5" /> {isDoctor ? 'Physician Review Suite' : 'Laboratory OCR Intelligence'}
-          </div>
+          </span>
           <h1 className="text-2xl font-extrabold tracking-tight">
             {isDoctor ? 'Physician Diagnostic & Lab Review Console' : 'Medical Report Analyzer & OCR'}
           </h1>
-          <p className="text-xs text-slate-300 mt-1 max-w-xl leading-relaxed">
+          <p className="text-sm text-slate-400 mt-1 max-w-xl leading-relaxed">
             {isDoctor
               ? 'Review patient lab OCR findings, assess out-of-range biomarkers, record clinical sign-off notes, and issue diagnostic recommendations.'
               : 'Upload blood work, lipid panels, or imaging summaries (PDF/JPG/PNG). Parses numerical parameters, highlights out-of-range markers, and formats doctor discussion questions.'}
