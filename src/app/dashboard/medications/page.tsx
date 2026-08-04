@@ -65,15 +65,15 @@ export default function MedicationsPage() {
   return (
     <div className="space-y-6">
       {/* Top Banner */}
-      <div className="rounded-xl bg-slate-900 p-6 text-white shadow-sm border border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div className="rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700 shadow-card p-6 text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-slate-800 text-teal-400 text-[11px] font-bold uppercase mb-2 border border-slate-700">
-            <Pill className="h-3.5 w-3.5" /> Medication Management
-          </div>
+          <span className="chip chip-teal mb-2 inline-flex items-center gap-1">
+            <Pill className="h-3 w-3" /> Medication Management
+          </span>
           <h1 className="text-2xl font-extrabold tracking-tight">
             Medication Schedule & Compliance
           </h1>
-          <p className="text-xs text-slate-300 mt-1 max-w-xl leading-relaxed">
+          <p className="text-sm text-slate-400 mt-1 max-w-xl leading-relaxed">
             Track daily dosages for patient <span className="font-bold text-teal-400">{activeProfile.name}</span>. Receive automated refill alerts and log verified adherence histories.
           </p>
         </div>
@@ -88,14 +88,10 @@ export default function MedicationsPage() {
 
       {/* Adherence & Progress Summary Header */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="rounded-xl bg-white dark:bg-slate-900 p-5 shadow-sm border border-slate-200 dark:border-slate-800 flex items-center justify-between">
+        <div className="rounded-xl bg-white dark:bg-slate-900 p-5 shadow-card border border-slate-200 dark:border-slate-800 flex items-center justify-between">
           <div>
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-              Adherence Rate
-            </span>
-            <div className="text-2xl font-extrabold text-teal-600 dark:text-teal-400 mt-1">
-              {adherencePercentage}%
-            </div>
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Adherence Rate</span>
+            <div className="text-2xl font-extrabold text-teal-600 dark:text-teal-400 mt-1">{adherencePercentage}%</div>
             <span className="text-[11px] text-slate-500">Weekly compliance index</span>
           </div>
           <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-teal-50 dark:bg-teal-950/50 text-teal-600 dark:text-teal-400 font-extrabold text-sm border border-teal-200 dark:border-teal-800">
@@ -103,55 +99,45 @@ export default function MedicationsPage() {
           </div>
         </div>
 
-        <div className="rounded-xl bg-white dark:bg-slate-900 p-5 shadow-sm border border-slate-200 dark:border-slate-800 flex items-center justify-between">
+        <div className="rounded-xl bg-white dark:bg-slate-900 p-5 shadow-card border border-slate-200 dark:border-slate-800 flex items-center justify-between">
           <div>
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-              Active Prescriptions
-            </span>
-            <div className="text-2xl font-extrabold text-slate-900 dark:text-white mt-1">
-              {filteredMeds.length}
-            </div>
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Active Prescriptions</span>
+            <div className="text-2xl font-extrabold text-slate-900 dark:text-white mt-1">{filteredMeds.length}</div>
             <span className="text-[11px] text-slate-500">In patient cabinet</span>
           </div>
-          <div className="p-3 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
             <Pill className="h-5 w-5" />
           </div>
         </div>
 
-        <div className="rounded-xl bg-white dark:bg-slate-900 p-5 shadow-sm border border-slate-200 dark:border-slate-800 flex items-center justify-between">
+        <div className="rounded-xl bg-white dark:bg-slate-900 p-5 shadow-card border border-slate-200 dark:border-slate-800 flex items-center justify-between">
           <div>
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-              Reminder System
-            </span>
-            <div className="text-xs font-bold text-emerald-600 dark:text-emerald-400 mt-1 flex items-center gap-1">
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Reminder System</span>
+            <div className="text-sm font-bold text-emerald-600 dark:text-emerald-400 mt-1 flex items-center gap-1">
               <CheckCircle2 className="h-4 w-4" /> Active & Synced
             </div>
-            <button
-              onClick={() => showToast('Browser notification test signal sent.')}
-              className="text-[11px] text-teal-600 dark:text-teal-400 hover:underline mt-1 block font-semibold"
-            >
+            <button onClick={() => showToast('Browser notification test signal sent.')} className="text-[11px] text-teal-600 dark:text-teal-400 hover:underline mt-1 block font-semibold">
               Test Notification
             </button>
           </div>
-          <div className="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
             <Bell className="h-5 w-5" />
           </div>
         </div>
       </div>
 
       {/* Today Timeline */}
-      <div className="rounded-xl bg-white dark:bg-slate-900 p-6 shadow-sm border border-slate-200 dark:border-slate-800 space-y-6">
-        <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
+      <div className="rounded-xl bg-white dark:bg-slate-900 shadow-card border border-slate-200 dark:border-slate-800 overflow-hidden">
+        <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 px-6 py-4">
           <div>
-            <h3 className="text-base font-bold text-slate-900 dark:text-white">
-              Today's Medication Schedule
-            </h3>
-            <p className="text-xs text-slate-500">
+            <h3 className="text-sm font-bold text-slate-900 dark:text-white">Today's Medication Schedule</h3>
+            <p className="text-xs text-slate-500 mt-0.5">
               {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
             </p>
           </div>
         </div>
 
+        <div className="p-5">
         {filteredMeds.length > 0 ? (
           <div className="space-y-3">
             {filteredMeds.map((med) => {
@@ -235,12 +221,15 @@ export default function MedicationsPage() {
             </button>
           </div>
         )}
+        </div>
       </div>
 
       {/* Add Medication Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-sm">
-          <div className="w-full max-w-md rounded-xl bg-white dark:bg-slate-900 p-6 shadow-dropdown border border-slate-200 dark:border-slate-800 space-y-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-md">
+          <div className="w-full max-w-md rounded-2xl bg-white dark:bg-slate-900 shadow-modal border border-slate-200 dark:border-slate-800 overflow-hidden animate-fade-in-up">
+          <div className="h-1 w-full bg-teal-600" />
+          <div className="p-6 space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
               <h3 className="text-sm font-bold text-slate-900 dark:text-white">Add New Medication</h3>
               <button onClick={() => setShowAddModal(false)} className="text-slate-400 hover:text-slate-600 text-xs">✕</button>
@@ -319,6 +308,7 @@ export default function MedicationsPage() {
                 </button>
               </div>
             </form>
+          </div>
           </div>
         </div>
       )}
