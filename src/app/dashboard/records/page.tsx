@@ -177,7 +177,6 @@ export default function HealthRecordsPage() {
         <DigitalHealthCardModal
           isOpen={isQrModalOpen}
           onClose={() => setIsQrModalOpen(false)}
-          profile={activeProfile}
         />
       )}
 
