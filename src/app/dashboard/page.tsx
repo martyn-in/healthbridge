@@ -30,6 +30,7 @@ import { useRouter } from 'next/navigation';
 
 export default function DashboardOverviewPage() {
   const {
+    currentUser,
     activeProfile,
     profiles,
     setActiveProfile,
@@ -74,34 +75,48 @@ export default function DashboardOverviewPage() {
     setIsEditingProfile(false);
   };
 
+  const isDoctor = currentUser?.role === 'Physician';
+
   return (
     <div className="space-y-6">
-      {/* Top Clinical Greeting & Emergency Banner */}
+      {/* Top Clinical Greeting Banner */}
       <div className="rounded-xl bg-slate-900 text-white p-6 shadow-sm border border-slate-800 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 text-xs text-slate-400 font-semibold mb-1">
             <span>{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</span>
             <span>•</span>
             <span className="bg-teal-950/80 px-2.5 py-0.5 rounded-full text-teal-300 border border-teal-800/80 font-bold">
-              Patient: {activeProfile.name}
+              {isDoctor ? `Physician: ${currentUser?.name}` : `Patient: ${activeProfile.name}`}
             </span>
           </div>
           <h1 className="text-2xl font-extrabold tracking-tight text-white">
-            Clinical Health Workspace
+            {isDoctor ? 'Doctor Clinical Command Workspace' : 'Patient Health Workspace'}
           </h1>
           <p className="text-xs text-slate-300 mt-1 max-w-xl leading-relaxed">
-            Real-time health management platform. Access symptom triage, lab report OCR parsing, digitized prescriptions, and family records.
+            {isDoctor
+              ? 'Review patient lab OCR findings, triage red-flag alerts, verify digital prescriptions, and manage consultation appointments.'
+              : 'Real-time health management platform. Access symptom triage, lab report OCR parsing, digitized prescriptions, and family records.'}
           </p>
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
-          <button
-            onClick={triggerSos}
-            className="px-4 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs tracking-wider uppercase shadow-sm transition-all active:scale-95 flex items-center gap-2"
-          >
-            <ShieldAlert className="h-4 w-4" />
-            <span>{t(language, 'emergencySos')}</span>
-          </button>
+          {isDoctor ? (
+            <Link
+              href="/dashboard/prescriptions"
+              className="px-4 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs shadow-sm transition-all flex items-center gap-2"
+            >
+              <ScanLine className="h-4 w-4" />
+              <span>Issue Digital Prescription</span>
+            </Link>
+          ) : (
+            <button
+              onClick={triggerSos}
+              className="px-4 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs tracking-wider uppercase shadow-sm transition-all flex items-center gap-2"
+            >
+              <ShieldAlert className="h-4 w-4" />
+              <span>{t(language, 'emergencySos')}</span>
+            </button>
+          )}
         </div>
       </div>
 
