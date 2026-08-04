@@ -69,8 +69,8 @@ export const EmergencySosModal: React.FC = () => {
           <h2 className="text-2xl font-black tracking-wide uppercase">
             {t(language, 'emergencySos')}
           </h2>
-          <p className="text-xs text-red-100 mt-1">
-            Demo Mode Notice: No real emergency services dispatch sent.
+          <p className="text-xs text-red-100 mt-1 font-medium">
+            Critical Emergency Trauma & Medical Responder Protocol
           </p>
         </div>
 

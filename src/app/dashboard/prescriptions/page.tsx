@@ -68,13 +68,6 @@ export default function PrescriptionsPage() {
             Scan doctor prescriptions to extract medication names, strengths, dosage frequency, and food instructions to automatically generate reminder schedules.
           </p>
         </div>
-
-        <button
-          onClick={loadDemoPrescription}
-          className="px-4 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs shadow-sm transition-colors flex items-center gap-2 shrink-0"
-        >
-          <FileCheck className="h-4 w-4" /> Load Sample Rx
-        </button>
       </div>
 
       {/* Main Grid */}

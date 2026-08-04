@@ -68,13 +68,6 @@ export default function ReportsPage() {
             Upload blood work, lipid panels, or imaging summaries (PDF/JPG/PNG). Parses numerical parameters, highlights out-of-range markers, and formats doctor discussion questions.
           </p>
         </div>
-
-        <button
-          onClick={loadDemoReport}
-          className="px-4 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs shadow-sm transition-colors flex items-center gap-2 shrink-0"
-        >
-          <FileCheck className="h-4 w-4" /> Load Sample Report
-        </button>
       </div>
 
       {/* Main Grid */}

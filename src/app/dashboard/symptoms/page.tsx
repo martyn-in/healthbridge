@@ -168,7 +168,7 @@ export default function SymptomsPage() {
 
           <div>
             <span className="text-[11px] font-bold text-slate-400 uppercase block mb-2">
-              Common Presets (Click to evaluate):
+              Frequent Symptom Suggestions:
             </span>
             <div className="flex flex-wrap gap-2">
               <button
