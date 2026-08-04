@@ -51,6 +51,19 @@ export const Sidebar: React.FC = () => {
     { name: 'Clinical Settings', path: '/dashboard/settings', icon: Settings },
   ];
 
+  const adminPrimaryNav = [
+    { name: 'Hospital Command Center', path: '/dashboard', icon: LayoutDashboard },
+    { name: 'Doctor Management', path: '/dashboard/clinic-admin', icon: Users },
+    { name: 'Hospital Management', path: '/dashboard/super-admin', icon: Building2 },
+    { name: 'Appointments & Schedule', path: '/dashboard/appointments', icon: Calendar },
+  ];
+
+  const adminSecondaryNav = [
+    { name: 'Departments & Staffing', path: '/dashboard/receptionist', icon: Stethoscope },
+    { name: 'Analytics & Audits', path: '/dashboard/reports', icon: FileSpreadsheet },
+    { name: 'Administrative Settings', path: '/dashboard/settings', icon: Settings },
+  ];
+
   const patientPrimaryNav = [
     { name: t(language, 'navSymptoms'), path: '/dashboard/symptoms', icon: Stethoscope },
     { name: t(language, 'navReports'), path: '/dashboard/reports', icon: FileText },
@@ -70,8 +83,8 @@ export const Sidebar: React.FC = () => {
     { name: t(language, 'navSettings'), path: '/dashboard/settings', icon: Settings },
   ];
 
-  const primaryNav = isDoctor ? doctorPrimaryNav : patientPrimaryNav;
-  const secondaryNav = isDoctor ? doctorSecondaryNav : patientSecondaryNav;
+  const primaryNav = isDoctor ? doctorPrimaryNav : isAdmin ? adminPrimaryNav : patientPrimaryNav;
+  const secondaryNav = isDoctor ? doctorSecondaryNav : isAdmin ? adminSecondaryNav : patientSecondaryNav;
 
   const roleColor = isDoctor
     ? 'bg-cyan-50 text-cyan-700 border-cyan-200 dark:bg-cyan-950/40 dark:text-cyan-300 dark:border-cyan-800'
@@ -183,11 +196,24 @@ export const Sidebar: React.FC = () => {
 
       {/* Mobile Bottom Navigation Bar */}
       <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/96 dark:bg-slate-900/96 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 px-2 py-2 flex justify-around items-center safe-area-pb">
-        {[
-          { href: '/dashboard', label: isDoctor ? 'Clinical' : 'Overview', icon: LayoutDashboard },
-          { href: '/dashboard/reports', label: 'Reports', icon: FileText },
-          { href: '/dashboard/assistant', label: 'AI Assistant', icon: Bot },
-        ].map(({ href, label, icon: Icon }) => {
+        {(isAdmin
+          ? [
+              { href: '/dashboard', label: 'Command', icon: LayoutDashboard },
+              { href: '/dashboard/clinic-admin', label: 'Doctors', icon: Users },
+              { href: '/dashboard/super-admin', label: 'Wards', icon: Building2 },
+            ]
+          : isDoctor
+          ? [
+              { href: '/dashboard', label: 'Clinical', icon: LayoutDashboard },
+              { href: '/dashboard/reports', label: 'Reports', icon: FileText },
+              { href: '/dashboard/assistant', label: 'AI Assistant', icon: Bot },
+            ]
+          : [
+              { href: '/dashboard/symptoms', label: 'Symptoms', icon: Stethoscope },
+              { href: '/dashboard/reports', label: 'Reports', icon: FileText },
+              { href: '/dashboard/assistant', label: 'AI Assistant', icon: Bot },
+            ]
+        ).map(({ href, label, icon: Icon }) => {
           const active = pathname === href;
           return (
             <Link

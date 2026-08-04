@@ -27,6 +27,9 @@ import {
   Moon,
   Zap,
   TrendingUp,
+  Building2,
+  FileSpreadsheet,
+  UserCheck,
   X,
   Save,
 } from 'lucide-react';
@@ -82,6 +85,7 @@ export default function DashboardOverviewPage() {
   };
 
   const isDoctor = currentUser?.role === 'Physician';
+  const isAdmin = currentUser?.role === 'Admin';
 
   // ─── Clinical Modules ────────────────────────────────
   const clinicalModules = [
@@ -154,7 +158,233 @@ export default function DashboardOverviewPage() {
     },
   ];
 
-  const modules = isDoctor ? doctorModules : clinicalModules;
+  const adminModules = [
+    {
+      href: '/dashboard/clinic-admin',
+      icon: Users,
+      label: 'Doctor Roster Control',
+      sub: 'Physician Registry & Availability',
+      color: 'text-teal-600 dark:text-teal-400',
+      bg: 'bg-teal-50 dark:bg-teal-950/50',
+    },
+    {
+      href: '/dashboard/super-admin',
+      icon: Building2,
+      label: 'Hospital & Wards Management',
+      sub: 'Bed Registry & Admissions',
+      color: 'text-violet-600 dark:text-violet-400',
+      bg: 'bg-violet-50 dark:bg-violet-950/50',
+    },
+    {
+      href: '/dashboard/receptionist',
+      icon: Stethoscope,
+      label: 'Clinical Departments',
+      sub: 'Staff Rotations & Shift Logs',
+      color: 'text-blue-600 dark:text-blue-400',
+      bg: 'bg-blue-50 dark:bg-blue-950/50',
+    },
+    {
+      href: '/dashboard/appointments',
+      icon: Calendar,
+      label: 'Appointments Registry',
+      sub: 'Consolidated Consultation Logs',
+      color: 'text-amber-650 dark:text-amber-400',
+      bg: 'bg-amber-50 dark:bg-amber-950/50',
+    },
+  ];
+
+  const modules = isDoctor ? doctorModules : isAdmin ? adminModules : clinicalModules;
+
+  if (isAdmin) {
+    return (
+      <div className="space-y-6 pb-8">
+        {/* Greeting Banner */}
+        <div className="rounded-2xl overflow-hidden shadow-card border border-slate-800 bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800 animate-fade-in-up">
+          <div className="p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-5">
+            <div className="space-y-2">
+              <div className="flex items-center gap-2.5 flex-wrap">
+                <span className="text-[11px] font-semibold text-slate-400">
+                  {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
+                </span>
+                <span className="chip chip-teal">
+                  Administrator: {currentUser?.name || 'Hospital Admin'}
+                </span>
+              </div>
+              <h1 className="text-2xl font-extrabold tracking-tight text-white animate-fade-in-up">
+                Hospital Command Center & Administration
+              </h1>
+              <p className="text-sm text-slate-400 max-w-xl leading-relaxed">
+                Oversee clinical department staffing, configure operational hospital bed registries, adjust physician rosters, and audit scheduling queues.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-3 shrink-0">
+              <Link
+                href="/dashboard/clinic-admin"
+                className="px-5 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs shadow-md transition-all flex items-center gap-2 active:scale-95"
+              >
+                <Users className="h-4 w-4" />
+                <span>Manage Doctors</span>
+              </Link>
+            </div>
+          </div>
+          <div className="h-1 w-full bg-gradient-to-r from-teal-500 via-cyan-500 to-blue-500 opacity-60" />
+        </div>
+
+        {/* Analytics Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="rounded-xl bg-white dark:bg-slate-900 p-5 shadow-card border border-slate-200 dark:border-slate-800 flex items-center justify-between">
+            <div>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Bed Occupancy</span>
+              <div className="text-2xl font-extrabold text-slate-900 dark:text-white mt-1">84% Filled</div>
+              <span className="text-[11px] text-slate-500">18/110 beds available</span>
+            </div>
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-teal-50 dark:bg-teal-950/40 text-teal-600 dark:text-teal-400 border border-teal-200 dark:border-teal-800">
+              <Building2 className="h-5 w-5" />
+            </div>
+          </div>
+
+          <div className="rounded-xl bg-white dark:bg-slate-900 p-5 shadow-card border border-slate-200 dark:border-slate-800 flex items-center justify-between">
+            <div>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Active Roster</span>
+              <div className="text-2xl font-extrabold text-slate-900 dark:text-white mt-1">14 Doctors</div>
+              <span className="text-[11px] text-slate-500">3 on call standby</span>
+            </div>
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800">
+              <Users className="h-5 w-5" />
+            </div>
+          </div>
+
+          <div className="rounded-xl bg-white dark:bg-slate-900 p-5 shadow-card border border-slate-200 dark:border-slate-800 flex items-center justify-between">
+            <div>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Consultations Today</span>
+              <div className="text-2xl font-extrabold text-slate-900 dark:text-white mt-1">42 Scheduled</div>
+              <span className="text-[11px] text-slate-500">12 sessions completed</span>
+            </div>
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-50 dark:bg-violet-950/40 text-violet-600 dark:text-violet-400 border border-violet-200 dark:border-violet-800">
+              <Calendar className="h-5 w-5" />
+            </div>
+          </div>
+
+          <div className="rounded-xl bg-white dark:bg-slate-900 p-5 shadow-card border border-slate-200 dark:border-slate-800 flex items-center justify-between">
+            <div>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Operations Status</span>
+              <div className="text-sm font-bold text-emerald-600 dark:text-emerald-400 mt-2 flex items-center gap-1">
+                <CheckCircle2 className="h-4 w-4 text-emerald-500" /> HIPAA Compliant
+              </div>
+              <span className="text-[11px] text-slate-500">All modules synced</span>
+            </div>
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
+              <HeartPulse className="h-5 w-5" />
+            </div>
+          </div>
+        </div>
+
+        {/* Action Modules */}
+        <div>
+          <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3">
+            Administrative Modules
+          </h3>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            {adminModules.map((mod) => {
+              const Icon = mod.icon;
+              return (
+                <Link
+                  key={mod.href}
+                  href={mod.href}
+                  className="group p-5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-card card-hover space-y-3"
+                >
+                  <div className={`w-10 h-10 rounded-xl ${mod.bg} ${mod.color} flex items-center justify-center transition-transform group-hover:scale-105`}>
+                    <Icon className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-slate-900 dark:text-white leading-tight">{mod.label}</h4>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">{mod.sub}</p>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Hospital Wards / Bed Occupancy and Doctor Shifts */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Bed Allocation */}
+          <div className="lg:col-span-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-card overflow-hidden">
+            <div className="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+              <div>
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                  <Building2 className="h-4 w-4 text-teal-600 dark:text-teal-400" />
+                  Active Bed Registry & Occupancy
+                </h3>
+                <span className="text-[11px] text-slate-500 block mt-0.5">Live facility ward census</span>
+              </div>
+              <Link href="/dashboard/super-admin" className="text-xs font-bold text-teal-650 dark:text-teal-400 hover:underline">
+                Manage Beds
+              </Link>
+            </div>
+            <div className="p-5 space-y-4">
+              {[
+                { name: 'Intensive Care Unit (ICU)', total: 20, occupied: 18, color: 'bg-red-500' },
+                { name: 'Emergency Wing', total: 25, occupied: 21, color: 'bg-orange-500' },
+                { name: 'Cardiology Ward', total: 15, occupied: 11, color: 'bg-teal-500' },
+                { name: 'Pediatric Care', total: 20, occupied: 15, color: 'bg-blue-500' },
+                { name: 'General Medicine Ward', total: 30, occupied: 27, color: 'bg-slate-500' },
+              ].map((ward) => {
+                const percent = Math.round((ward.occupied / ward.total) * 100);
+                return (
+                  <div key={ward.name} className="space-y-1.5">
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="font-bold text-slate-800 dark:text-slate-200">{ward.name}</span>
+                      <span className="text-slate-500 font-semibold">{ward.occupied} / {ward.total} Beds ({percent}%)</span>
+                    </div>
+                    <div className="w-full bg-slate-100 dark:bg-slate-800 h-2.5 rounded-full overflow-hidden">
+                      <div className={`h-full ${ward.color} rounded-full`} style={{ width: `${percent}%` }} />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Active Physicians Roster */}
+          <div className="rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-card overflow-hidden">
+            <div className="px-5 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+              <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 flex items-center gap-1.5">
+                <UserCheck className="h-3.5 w-3.5 text-teal-600 dark:text-teal-400" /> Shift Roster Quick-Check
+              </h3>
+              <Link href="/dashboard/clinic-admin" className="text-xs font-bold text-teal-650 dark:text-teal-400 hover:underline">
+                Manage
+              </Link>
+            </div>
+            <div className="p-4 space-y-3">
+              {[
+                { name: 'Dr. Ananya Mehta', spec: 'General Medicine', dept: 'OPD-1', status: 'On Duty' },
+                { name: 'Dr. S. N. Roy', spec: 'Endocrinology', dept: 'Cardio Wing', status: 'In Consultation' },
+                { name: 'Dr. V. K. Gupta', spec: 'Cardiology', dept: 'ICU', status: 'On Duty' },
+                { name: 'Dr. Rajesh Kumar', spec: 'Pediatrics', dept: 'Pediatric Care', status: 'Off Duty' },
+              ].map((doc, idx) => (
+                <div
+                  key={idx}
+                  className="p-3 rounded-xl bg-slate-50 dark:bg-slate-850 border border-slate-200/50 dark:border-slate-750 flex items-center justify-between text-xs"
+                >
+                  <div>
+                    <span className="font-bold text-slate-800 dark:text-white block">{doc.name}</span>
+                    <span className="text-[10px] text-slate-500 block mt-0.5">{doc.spec} • {doc.dept}</span>
+                  </div>
+                  <span className={`chip text-[9px] ${
+                    doc.status === 'On Duty' ? 'chip-green' : doc.status === 'In Consultation' ? 'chip-teal' : 'chip-amber'
+                  }`}>
+                    {doc.status}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 pb-8">
@@ -167,24 +397,42 @@ export default function DashboardOverviewPage() {
                 {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
               </span>
               <span className="chip chip-teal">
-                {isDoctor ? `Physician: ${currentUser?.name}` : `Patient: ${activeProfile.name}`}
+                {isAdmin
+                  ? `Administrator: ${currentUser?.name || 'Hospital Admin'}`
+                  : isDoctor
+                  ? `Physician: ${currentUser?.name}`
+                  : `Patient: ${activeProfile.name}`}
               </span>
             </div>
             <h1 className="text-2xl font-extrabold tracking-tight text-white">
-              {isDoctor ? 'Doctor Clinical Command Workspace' : 'Patient Health Workspace'}
+              {isAdmin
+                ? 'Hospital Command Center & Administration'
+                : isDoctor
+                ? 'Doctor Clinical Command Workspace'
+                : 'Patient Health Workspace'}
             </h1>
             <p className="text-sm text-slate-400 max-w-xl leading-relaxed">
-              {isDoctor
+              {isAdmin
+                ? 'Oversee clinical department staffing, configure operational hospital bed registries, adjust physician rosters, and audit scheduling queues.'
+                : isDoctor
                 ? 'Review patient lab OCR findings, triage red-flag alerts, verify digital prescriptions, and manage consultation appointments.'
                 : 'Real-time health management platform. Access symptom triage, lab report OCR parsing, digitized prescriptions, and family records.'}
             </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-3 shrink-0">
-            {isDoctor ? (
+            {isAdmin ? (
+              <Link
+                href="/dashboard/clinic-admin"
+                className="px-5 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs shadow-md transition-all flex items-center gap-2 active:scale-95"
+              >
+                <Users className="h-4 w-4" />
+                <span>Manage Doctors</span>
+              </Link>
+            ) : isDoctor ? (
               <Link
                 href="/dashboard/prescriptions"
-                className="px-5 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs shadow-md transition-all flex items-center gap-2 active:scale-95"
+                className="px-5 py-2.5 rounded-xl bg-teal-650 hover:bg-teal-700 text-white font-bold text-xs shadow-md transition-all flex items-center gap-2 active:scale-95"
               >
                 <ScanLine className="h-4 w-4" />
                 <span>Issue Digital Prescription</span>
