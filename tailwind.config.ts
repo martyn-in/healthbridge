@@ -47,10 +47,10 @@ const config: Config = {
         '2xl': '24px',
       },
       boxShadow: {
-        'soft': '0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.03)',
-        'card': '0 10px 30px -5px rgba(15, 23, 42, 0.08)',
-        'glow': '0 0 25px -5px rgba(13, 148, 136, 0.3)',
-        'emergency-glow': '0 0 25px -3px rgba(220, 38, 38, 0.4)',
+        'subtle': '0 1px 2px 0 rgba(15, 23, 42, 0.04)',
+        'soft': '0 4px 16px -2px rgba(15, 23, 42, 0.04), 0 2px 4px -1px rgba(15, 23, 42, 0.02)',
+        'card': '0 8px 24px -4px rgba(15, 23, 42, 0.06)',
+        'dropdown': '0 12px 32px -4px rgba(15, 23, 42, 0.12)',
       }
     },
   },
