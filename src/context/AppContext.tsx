@@ -36,15 +36,6 @@ import {
   seedSampleReports,
 } from '@/services/demoData';
 
-export interface UserSession {
-  email: string;
-  name: string;
-  role: 'Patient' | 'Physician' | 'Admin';
-  avatarInitials: string;
-  facility?: string;
-  authenticatedAt: string;
-}
-
 interface AppContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
@@ -53,12 +44,6 @@ interface AppContextType {
   isJudgeDemo: boolean;
   setIsJudgeDemo: (val: boolean) => void;
   
-  // Real Authentication Session
-  currentUser: UserSession | null;
-  isAuthenticated: boolean;
-  login: (session: UserSession) => void;
-  logout: () => void;
-
   // Real User Profiles
   activeProfile: FamilyMember;
   setActiveProfile: (prof: FamilyMember) => void;
@@ -130,19 +115,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [darkMode, setDarkMode] = useState<boolean>(false);
   const [isJudgeDemo, setIsJudgeDemo] = useState<boolean>(false);
   
-  // Real User Session State
-  const defaultSession: UserSession = {
-    email: 'aarav.sharma@healthbridge.ai',
-    name: 'Aarav Sharma',
-    role: 'Patient',
-    avatarInitials: 'AS',
-    facility: 'Primary Health Account',
-    authenticatedAt: new Date().toISOString(),
-  };
-
-  const [currentUser, setCurrentUser] = useState<UserSession | null>(defaultSession);
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
-  
   // Real User Data Stores
   const [profiles, setProfiles] = useState<FamilyMember[]>(emptyProfiles);
   const [activeProfile, setActiveProfile] = useState<FamilyMember>(emptyProfiles[0]);
@@ -188,24 +160,67 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   };
 
-  // Auto request browser location on load
+  // LocalStorage initialization
   useEffect(() => {
-    if (typeof window !== 'undefined' && navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          const lat = pos.coords.latitude;
-          const lng = pos.coords.longitude;
-          setUserLocation({ lat, lng });
-          fetchAddressForCoordinates(lat, lng);
-        },
-        (err) => {
-          console.warn("GPS location fallback:", err);
-          setUserLocation({ lat: 28.5672, lng: 77.2100 });
-          setUserAddress('New Delhi, India');
+    if (typeof window !== 'undefined') {
+      try {
+        const savedProfiles = localStorage.getItem('hb_profiles');
+        if (savedProfiles) {
+          const parsed = JSON.parse(savedProfiles);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            setProfiles(parsed);
+            setActiveProfile(parsed[0]);
+          }
         }
-      );
+        const savedMeds = localStorage.getItem('hb_medications');
+        if (savedMeds) setMedications(JSON.parse(savedMeds));
+
+        const savedApts = localStorage.getItem('hb_appointments');
+        if (savedApts) setAppointments(JSON.parse(savedApts));
+
+        const savedRecords = localStorage.getItem('hb_records');
+        if (savedRecords) setHealthRecords(JSON.parse(savedRecords));
+
+        const savedVaccines = localStorage.getItem('hb_vaccinations');
+        if (savedVaccines) setVaccinations(JSON.parse(savedVaccines));
+      } catch (err) {
+        console.warn('LocalStorage load error:', err);
+      }
     }
   }, []);
+
+  // LocalStorage sync effects
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem('hb_profiles', JSON.stringify(profiles));
+      } catch (e) {}
+    }
+  }, [profiles]);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem('hb_medications', JSON.stringify(medications));
+      } catch (e) {}
+    }
+  }, [medications]);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem('hb_appointments', JSON.stringify(appointments));
+      } catch (e) {}
+    }
+  }, [appointments]);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem('hb_records', JSON.stringify(healthRecords));
+      } catch (e) {}
+    }
+  }, [healthRecords]);
 
   // Theme Sync
   useEffect(() => {
@@ -464,29 +479,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const loadSamplePresets = () => {
-    setProfiles(seedSampleProfiles);
-    setActiveProfile(seedSampleProfiles[0]);
-    setReports(seedSampleReports);
-    setMedications(seedSampleMedications);
-    showToast('Loaded sample reference records.');
-  };
-
-  const login = (session: UserSession) => {
-    setCurrentUser(session);
-    setIsAuthenticated(true);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('healthbridge_session', JSON.stringify(session));
-    }
-    showToast(`Authenticated as ${session.name} (${session.role})`);
-  };
-
-  const logout = () => {
-    setCurrentUser(null);
-    setIsAuthenticated(false);
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('healthbridge_session');
-    }
-    showToast('Signed out of HealthBridge AI platform.');
+    clearAllDataToFreshState();
   };
 
   return (
@@ -498,10 +491,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setDarkMode,
         isJudgeDemo,
         setIsJudgeDemo,
-        currentUser,
-        isAuthenticated,
-        login,
-        logout,
         activeProfile,
         setActiveProfile,
         profiles,

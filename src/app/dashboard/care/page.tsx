@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useState } from 'react';
 import {
   MapPin,
@@ -34,89 +33,118 @@ export default function CareDiscoveryPage() {
   );
 
   const categories = ['All', 'Hospital', 'Clinic', 'Pharmacy', 'Diagnostic', 'Emergency'];
+  
+  const hasEmergency = facilities.some(f => f.isEmergencyAvailable);
+
+  const getTypeColor = (type: string, isEmergency: boolean) => {
+    if (isEmergency) return { bg: '#FFF0F3', text: '#FF3366', border: 'rgba(255,51,102,0.2)' };
+    if (type === 'Hospital') return { bg: '#F0F6FF', text: '#0066FF', border: 'rgba(0,102,255,0.2)' };
+    if (type === 'Clinic') return { bg: '#F0FDF8', text: '#00D4AA', border: 'rgba(0,212,170,0.2)' };
+    if (type === 'Pharmacy') return { bg: '#FFF8F0', text: '#FF9500', border: 'rgba(255,149,0,0.2)' };
+    return { bg: '#F3F5F8', text: '#7C5CFC', border: 'rgba(124,92,252,0.2)' };
+  };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 relative">
+      {hasEmergency && (
+        <div className="sticky top-0 z-10 flex items-center justify-between gap-3 px-4 py-3 rounded-2xl bg-white/80 backdrop-blur-md border border-[#FF3366]/30 shadow-[0_4px_16px_rgba(255,51,102,0.15)] anim-fade-up">
+          <div className="flex items-center gap-2">
+            <span className="relative flex h-3 w-3">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF3366] opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-[#FF3366]"></span>
+            </span>
+            <span className="text-sm font-bold text-[#FF3366]">Nearby Emergency Facilities Available</span>
+          </div>
+          <button onClick={() => setCategory('Emergency')} className="text-xs font-bold px-3 py-1 rounded-full bg-[#FF3366]/10 text-[#FF3366] hover:bg-[#FF3366]/20 transition-colors">
+            View ERs
+          </button>
+        </div>
+      )}
+
       {/* Top Banner */}
-      <div className="rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700 shadow-card p-6 text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div>
-          <span className="chip chip-teal mb-2 inline-flex items-center gap-1">
-            <MapPin className="h-3.5 w-3.5" /> Care & Emergency Locator
-          </span>
-          <h1 className="text-2xl font-extrabold tracking-tight">
-            Nearby Healthcare & Hospital Discovery
+      <div className="frosted-card rounded-3xl p-6 relative overflow-hidden flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 anim-fade-up">
+        <div className="absolute inset-0 grid-bg opacity-30 pointer-events-none" />
+        <div className="relative z-10 flex flex-col items-start">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="h-10 w-10 rounded-full bg-gradient-to-br from-[#0066FF] to-[#00C2FF] flex items-center justify-center text-white shadow-md">
+              <MapPin className="h-5 w-5" />
+            </div>
+            <span className="px-3 py-1 rounded-full bg-white/60 border border-white text-xs font-semibold text-[#0066FF] flex items-center gap-1.5 shadow-sm backdrop-blur-md">
+              <Compass className="h-3.5 w-3.5" />
+              {userAddress}
+            </span>
+          </div>
+          
+          <h1 className="text-2xl font-extrabold tracking-tight text-[#0D1B2A]">
+            Nearby Healthcare
           </h1>
-          <p className="text-sm text-slate-400 mt-1 max-w-xl leading-relaxed">
+          <p className="text-sm text-[#9BAABF] mt-1 max-w-xl leading-relaxed font-medium">
             Find 24/7 emergency trauma centers, verified hospitals, neighborhood pharmacies, and diagnostic laboratories.
           </p>
-
-          <div className="mt-3 inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-slate-800 border border-slate-700 text-xs font-semibold text-teal-400">
-            <Compass className="h-3.5 w-3.5 shrink-0" />
-            <span>Current Location: <strong className="text-white">{userAddress}</strong></span>
-          </div>
         </div>
 
-        <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+        <div className="relative z-10 flex items-center gap-3 flex-wrap sm:flex-nowrap">
           <button
             onClick={requestUserLocation}
-            className="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs border border-slate-700 transition-all flex items-center gap-1.5"
+            className="pill-btn pill-btn-ghost text-xs flex items-center gap-1.5 bg-white/50 border border-white"
           >
-            <Compass className="h-4 w-4 text-teal-400" /> Refresh GPS
+            <Compass className="h-4 w-4" style={{ color: '#0066FF' }} /> Refresh GPS
           </button>
           <button
             onClick={triggerSos}
-            className="px-4 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs shadow-sm transition-all flex items-center gap-1.5"
+            className="pill-btn text-xs text-white shadow-md flex items-center gap-1.5"
+            style={{ background: '#FF3366', boxShadow: '0 4px 12px rgba(255,51,102,0.3)' }}
           >
-            <ShieldAlert className="h-4 w-4" /> Trigger SOS Protocol
+            <ShieldAlert className="h-4 w-4" /> SOS
           </button>
         </div>
       </div>
 
       {/* Filter Toolbar & View Toggle */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+      <div className="frosted-card rounded-2xl p-3 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-sm anim-fade-up delay-100">
         {/* Search */}
         <div className="relative flex-1 w-full">
-          <Search className="absolute left-3.5 top-2.5 h-4 w-4 text-slate-400" />
+          <Search className="absolute left-3.5 top-2.5 h-4 w-4 text-[#9BAABF]" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder={`Search hospital name, area near ${userAddress}...`}
-            className="w-full pl-10 pr-4 py-2 text-xs font-medium rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700 outline-none"
+            className="w-full pl-10 pr-4 py-2 text-xs font-medium rounded-xl bg-white/50 border border-white/60 text-[#0D1B2A] placeholder-[#9BAABF] focus:bg-white outline-none transition-all focus:border-[#0066FF]/30 focus:shadow-[0_0_0_2px_rgba(0,102,255,0.1)]"
           />
         </div>
 
         {/* Category Pills */}
-        <div className="flex items-center gap-1 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0">
+        <div className="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0 scrollbar-hide">
           {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => setCategory(cat)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors ${
+              className={`px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all ${
                 category === cat
-                  ? 'bg-teal-600 text-white'
-                  : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200'
+                  ? 'bg-[#0066FF] text-white shadow-md'
+                  : 'bg-white/40 text-[#9BAABF] hover:bg-white/80 hover:text-[#0D1B2A]'
               }`}
             >
-              {cat === 'Emergency' ? '24/7 ER Trauma' : cat}
+              {cat === 'Emergency' ? '24/7 ER' : cat}
             </button>
           ))}
         </div>
 
         {/* Map / List Toggle */}
-        <div className="flex items-center bg-slate-100 dark:bg-slate-800 p-1 rounded-xl shrink-0">
+        <div className="flex items-center bg-slate-200/50 p-1 rounded-xl shrink-0 backdrop-blur-sm border border-white/40">
           <button
             onClick={() => setViewMode('list')}
-            className={`flex items-center gap-1 px-3 py-1 rounded-lg text-xs font-bold transition-colors ${
-              viewMode === 'list' ? 'bg-white dark:bg-slate-900 text-teal-600 dark:text-teal-400 shadow-sm' : 'text-slate-500'
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+              viewMode === 'list' ? 'bg-white text-[#0066FF] shadow-sm' : 'text-[#9BAABF] hover:text-[#0D1B2A]'
             }`}
           >
             <List className="h-3.5 w-3.5" /> List
           </button>
           <button
             onClick={() => setViewMode('map')}
-            className={`flex items-center gap-1 px-3 py-1 rounded-lg text-xs font-bold transition-colors ${
-              viewMode === 'map' ? 'bg-white dark:bg-slate-900 text-teal-600 dark:text-teal-400 shadow-sm' : 'text-slate-500'
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+              viewMode === 'map' ? 'bg-white text-[#0066FF] shadow-sm' : 'text-[#9BAABF] hover:text-[#0D1B2A]'
             }`}
           >
             <MapIcon className="h-3.5 w-3.5" /> Map
@@ -127,90 +155,104 @@ export default function CareDiscoveryPage() {
       {/* Main Facilities View */}
       {viewMode === 'list' ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {facilities.map((fac) => (
-            <div
-              key={fac.id}
-              className="rounded-xl bg-white dark:bg-slate-900 p-5 shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col justify-between space-y-4 hover:border-teal-500/40 transition-all"
-            >
-              <div className="space-y-2">
-                <div className="flex items-start justify-between">
-                  <span
-                    className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
-                      fac.isEmergencyAvailable
-                        ? 'bg-red-50 text-red-700 dark:bg-red-950/60 dark:text-red-300 border border-red-200 dark:border-red-800'
-                        : 'bg-teal-50 text-teal-800 dark:bg-teal-950/60 dark:text-teal-300 border border-teal-200 dark:border-teal-800'
-                    }`}
+          {facilities.map((fac, idx) => {
+            const colors = getTypeColor(fac.type, fac.isEmergencyAvailable);
+            const delay = Math.min(100 + idx * 100, 700);
+            
+            return (
+              <div
+                key={fac.id}
+                className={`neu-card card-lift p-5 rounded-3xl flex flex-col justify-between space-y-4 anim-fade-up delay-${delay}`}
+              >
+                <div className="space-y-3">
+                  <div className="flex items-start justify-between">
+                    <span
+                      className="px-3 py-1 rounded-full text-[10px] font-extrabold flex items-center gap-1"
+                      style={{ backgroundColor: colors.bg, color: colors.text, border: `1px solid ${colors.border}` }}
+                    >
+                      {fac.isEmergencyAvailable && <div className="h-1.5 w-1.5 rounded-full animate-pulse" style={{ backgroundColor: colors.text }} />}
+                      {fac.type}
+                    </span>
+
+                    <span className="px-2.5 py-1 rounded-full bg-white/70 backdrop-blur-md border border-white text-[10px] font-mono font-bold text-[#0D1B2A] shadow-sm flex items-center gap-1">
+                      <Navigation className="h-3 w-3" style={{ color: '#0066FF' }}/>
+                      {fac.distanceKm} km
+                    </span>
+                  </div>
+
+                  <h3 className="text-sm font-extrabold text-[#0D1B2A] flex items-center gap-2">
+                    <div className="p-1.5 rounded-lg bg-blue-50">
+                      <Building2 className="h-4 w-4" style={{ color: '#0066FF' }} />
+                    </div>
+                    {fac.name}
+                  </h3>
+
+                  <p className="text-xs font-medium text-[#9BAABF] line-clamp-2 leading-relaxed flex items-start gap-1.5">
+                    <MapPin className="h-3.5 w-3.5 shrink-0 mt-0.5 opacity-70" />
+                    {fac.address}
+                  </p>
+
+                  <div className="flex items-center gap-3 text-xs font-semibold pt-1">
+                    <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-50" style={{ color: '#FF9500' }}>
+                      <Star className="h-3.5 w-3.5 fill-current" /> {fac.rating}
+                    </span>
+                    <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100 text-[#0D1B2A]">
+                      <Clock className="h-3.5 w-3.5 text-[#9BAABF]" /> {fac.openHours}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Action buttons */}
+                <div className="flex gap-3 pt-4 border-t border-[#9BAABF]/10">
+                  <a
+                    href={`tel:${fac.phone}`}
+                    className="flex-1 pill-btn pill-btn-ghost text-xs flex items-center justify-center gap-1.5"
                   >
-                    {fac.type}
-                  </span>
+                    <PhoneCall className="h-3.5 w-3.5" style={{ color: '#00D4AA' }} /> Call
+                  </a>
 
-                  <span className="text-xs font-mono font-bold text-slate-600 dark:text-slate-300">
-                    {fac.distanceKm} km
-                  </span>
-                </div>
-
-                <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                  <Building2 className="h-4 w-4 text-teal-600 dark:text-teal-400 shrink-0" />
-                  <span>{fac.name}</span>
-                </h3>
-
-                <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed">
-                  {fac.address}
-                </p>
-
-                <div className="flex items-center gap-3 text-xs text-slate-600 dark:text-slate-300 pt-1">
-                  <span className="flex items-center gap-1 text-amber-600 font-bold">
-                    <Star className="h-3.5 w-3.5 fill-amber-500 text-amber-500" /> {fac.rating}
-                  </span>
-                  <span>•</span>
-                  <span className="flex items-center gap-1 text-slate-500">
-                    <Clock className="h-3.5 w-3.5" /> {fac.openHours}
-                  </span>
+                  <a
+                    href={`https://maps.google.com/?q=${encodeURIComponent(fac.name + ' ' + fac.address)}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex-1 pill-btn pill-btn-primary text-xs flex items-center justify-center gap-1.5"
+                  >
+                    <Navigation className="h-3.5 w-3.5" /> Navigate
+                  </a>
                 </div>
               </div>
-
-              {/* Action buttons */}
-              <div className="flex gap-2 pt-3 border-t border-slate-100 dark:border-slate-800">
-                <a
-                  href={`tel:${fac.phone}`}
-                  className="flex-1 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors"
-                >
-                  <PhoneCall className="h-3.5 w-3.5 text-teal-600 dark:text-teal-400" /> Call
-                </a>
-
-                <a
-                  href={`https://maps.google.com/?q=${encodeURIComponent(fac.name + ' ' + fac.address)}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex-1 py-2 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-colors"
-                >
-                  <Navigation className="h-3.5 w-3.5" /> Navigate
-                </a>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       ) : (
         /* Map Preview View */
-        <div className="rounded-xl bg-slate-900 p-6 text-white text-center space-y-4 border border-slate-800">
-          <div className="max-w-md mx-auto space-y-2">
-            <Compass className="h-10 w-10 text-teal-400 mx-auto" />
-            <h3 className="text-base font-bold">Interactive Geographic Map View</h3>
-            <p className="text-xs text-slate-300 leading-relaxed">
-              Showing {facilities.length} healthcare facilities within 10 km radius of <span className="font-bold text-teal-400">{userAddress}</span>.
+        <div className="frosted-card rounded-3xl p-8 text-center space-y-6 anim-fade-up">
+          <div className="max-w-md mx-auto space-y-3 relative z-10">
+            <div className="h-16 w-16 mx-auto rounded-full bg-blue-50 flex items-center justify-center shadow-inner border border-blue-100/50">
+               <Compass className="h-8 w-8" style={{ color: '#0066FF' }} />
+            </div>
+            <h3 className="text-lg font-extrabold text-[#0D1B2A]">Geographic Map View</h3>
+            <p className="text-sm font-medium text-[#9BAABF] leading-relaxed">
+              Showing {facilities.length} healthcare facilities within 10 km radius of <span className="font-bold" style={{ color: '#0066FF' }}>{userAddress}</span>.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-left pt-4">
-            {facilities.slice(0, 6).map((fac) => (
-              <div key={fac.id} className="p-3.5 rounded-xl bg-slate-800 border border-slate-700 text-xs space-y-1">
-                <div className="font-bold text-white flex items-center justify-between">
-                  <span>{fac.name}</span>
-                  <span className="text-teal-400 font-mono text-[10px]">{fac.distanceKm} km</span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-left pt-6 border-t border-[#9BAABF]/10 relative z-10">
+            {facilities.slice(0, 6).map((fac) => {
+               const colors = getTypeColor(fac.type, fac.isEmergencyAvailable);
+               return (
+                <div key={fac.id} className="p-4 rounded-2xl bg-white/60 border border-white shadow-sm hover:shadow-md transition-shadow text-xs space-y-2 backdrop-blur-md">
+                  <div className="font-extrabold text-[#0D1B2A] flex items-center justify-between">
+                    <span className="truncate pr-2">{fac.name}</span>
+                    <span className="font-mono font-bold px-2 py-0.5 rounded bg-blue-50 shrink-0" style={{ color: '#0066FF' }}>{fac.distanceKm} km</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="px-2 py-0.5 rounded-md text-[10px] font-bold" style={{ backgroundColor: colors.bg, color: colors.text }}>{fac.type}</span>
+                    <span className="font-medium text-[#9BAABF]">{fac.phone}</span>
+                  </div>
                 </div>
-                <div className="text-[11px] text-slate-400">{fac.type} • {fac.phone}</div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}

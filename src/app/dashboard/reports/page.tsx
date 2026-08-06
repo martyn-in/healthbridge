@@ -8,24 +8,24 @@ import {
   Trash2,
   HelpCircle,
   FileCheck,
-  Info,
-  Edit3,
+  ScanLine,
+  Bot,
+  Activity,
+  CloudLightning,
+  ChevronRight,
+  AlertCircle
 } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
 import { processFileOCR, parseReportFromText } from '@/services/ocrService';
 import { MedicalReport } from '@/types';
 
 export default function ReportsPage() {
-  const { activeProfile, reports, addReport, deleteReport, currentUser, showToast } = useApp();
+  const { activeProfile, reports, addReport, deleteReport, showToast } = useApp();
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [activeReport, setActiveReport] = useState<MedicalReport | null>(reports[0] || null);
   const [editingRawText, setEditingRawText] = useState(false);
   const [rawTextValue, setRawTextValue] = useState(reports[0]?.rawText || '');
-
-  const isDoctor = currentUser?.role === 'Physician';
-  const [doctorNotes, setDoctorNotes] = useState('Patient exhibits elevated fasting glucose (142 mg/dL) and mild HbA1c elevation. Recommend dietary adjustment and follow-up lipid panel in 4 weeks.');
-  const [isSignedOff, setIsSignedOff] = useState(false);
 
   const handleFileUpload = async (file: File) => {
     setIsProcessing(true);
@@ -45,57 +45,73 @@ export default function ReportsPage() {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Top Banner */}
-      <div className="rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700 shadow-card p-6 text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div>
-          <span className="chip chip-teal mb-2 inline-flex items-center gap-1">
-            <FileText className="h-3.5 w-3.5" /> {isDoctor ? 'Physician Review Suite' : 'Laboratory OCR Intelligence'}
-          </span>
-          <h1 className="text-2xl font-extrabold tracking-tight">
-            {isDoctor ? 'Physician Diagnostic & Lab Review Console' : 'Medical Report Analyzer & OCR'}
-          </h1>
-          <p className="text-sm text-slate-400 mt-1 max-w-xl leading-relaxed">
-            {isDoctor
-              ? 'Review patient lab OCR findings, assess out-of-range biomarkers, record clinical sign-off notes, and issue diagnostic recommendations.'
-              : 'Upload blood work, lipid panels, or imaging summaries (PDF/JPG/PNG). Parses numerical parameters, highlights out-of-range markers, and formats doctor discussion questions.'}
-          </p>
-        </div>
-
-        {isDoctor && (
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => {
-                setIsSignedOff(true);
-                showToast('Diagnostic report signed off by Dr. Ananya Mehta.');
-              }}
-              className={`px-4 py-2.5 rounded-xl font-bold text-xs shadow-sm transition-all flex items-center gap-2 ${
-                isSignedOff
-                  ? 'bg-emerald-600 text-white cursor-default'
-                  : 'bg-teal-600 hover:bg-teal-700 text-white'
-              }`}
+    <div className="space-y-8 font-sans pb-12">
+      {/* Top Banner - Hero Header */}
+      <div className="frosted-card rounded-3xl p-8 relative overflow-hidden anim-fade-up">
+        <div className="absolute inset-0 bg-grid-slate-200/50 [mask-image:linear-gradient(0deg,transparent,black)] pointer-events-none" />
+        
+        <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <div className="flex items-center gap-5">
+            <div 
+              className="p-4 rounded-2xl neu-card flex items-center justify-center"
+              style={{ background: 'rgba(255,255,255,0.8)' }}
             >
-              <FileCheck className="h-4 w-4" />
-              <span>{isSignedOff ? 'Signed Off & Verified' : 'Sign Off Diagnostic Report'}</span>
-            </button>
+              <ScanLine className="h-8 w-8" style={{ color: '#7C5CFC' }} />
+            </div>
+            <div className="space-y-2">
+              <div 
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold shadow-sm"
+                style={{ background: 'rgba(124, 92, 252, 0.1)', color: '#7C5CFC' }}
+              >
+                <Activity className="h-3.5 w-3.5" /> AI-Powered OCR
+              </div>
+              <h1 className="text-3xl font-black" style={{ color: '#0D1B2A' }}>
+                Lab Report Analyzer
+              </h1>
+              <p className="text-sm font-medium max-w-xl leading-relaxed" style={{ color: '#9BAABF' }}>
+                Upload blood work or lab panels to instantly parse parameters, highlight out-of-range markers, and generate personalized doctor discussion points.
+              </p>
+            </div>
           </div>
-        )}
+
+          <label className="pill-btn pill-btn-primary flex items-center gap-2 shrink-0 card-lift cursor-pointer">
+            <Upload className="h-4 w-4" /> Upload Report
+            <input type="file" accept=".pdf,image/*" className="hidden" onChange={(e) => e.target.files?.[0] && handleFileUpload(e.target.files[0])} />
+          </label>
+        </div>
       </div>
 
-      {/* Main Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left Column: File Dropzone & List */}
-        <div className="space-y-6">
-          {/* File Upload Box */}
-          <div className="rounded-xl bg-white dark:bg-slate-900 p-6 shadow-sm border border-slate-200 dark:border-slate-800 text-center space-y-4">
-            <h3 className="text-sm font-bold text-slate-900 dark:text-white">Upload New Document</h3>
-            
-            <label className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl bg-slate-50/50 dark:bg-slate-800/40 hover:bg-slate-100/50 dark:hover:bg-slate-800/80 transition-colors cursor-pointer">
-              <Upload className="h-7 w-7 text-teal-600 dark:text-teal-400 mb-2" />
-              <span className="text-xs font-semibold text-slate-800 dark:text-slate-200">
-                Drop PDF, JPG, or PNG here
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        {/* Left Column: Upload & History */}
+        <div className="lg:col-span-4 space-y-8">
+          
+          {/* Upload Zone */}
+          <div 
+            className="frosted-card rounded-3xl p-8 text-center space-y-5 transition-all anim-slide-right delay-100"
+            style={{ 
+              border: '2px dashed rgba(0,102,255,0.25)', 
+              background: 'rgba(255, 255, 255, 0.6)'
+            }}
+          >
+            <label className="flex flex-col items-center justify-center cursor-pointer group">
+              <div 
+                className="h-16 w-16 rounded-full flex items-center justify-center mb-4 transition-transform group-hover:scale-110"
+                style={{ background: 'rgba(0,102,255,0.1)', color: '#0066FF' }}
+              >
+                <CloudLightning className="h-8 w-8" />
+              </div>
+              <span className="text-base font-bold mb-1" style={{ color: '#0D1B2A' }}>
+                Drag & Drop Report
               </span>
-              <span className="text-[10px] text-slate-400 mt-1">Maximum file size: 10 MB</span>
+              <span className="text-xs font-medium mb-5" style={{ color: '#9BAABF' }}>
+                Supports PDF, JPG, PNG up to 10MB
+              </span>
+              
+              <div className="pill-btn pill-btn-primary">
+                Choose File
+              </div>
+              
               <input
                 type="file"
                 accept=".pdf,.jpg,.jpeg,.png"
@@ -109,197 +125,222 @@ export default function ReportsPage() {
             </label>
 
             {isProcessing && (
-              <div className="p-3 bg-teal-50 dark:bg-teal-950/60 rounded-xl text-xs font-semibold text-teal-800 dark:text-teal-300 border border-teal-200 dark:border-teal-800">
-                Parsing document text and evaluating laboratory reference ranges...
+              <div className="neu-card rounded-2xl p-4 mt-4 overflow-hidden relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full animate-[shimmer_1.5s_infinite]" />
+                <div className="flex flex-col items-center gap-2 relative z-10">
+                  <div className="text-xs font-bold" style={{ color: '#0066FF' }}>Processing Document...</div>
+                  <div className="flex gap-2">
+                    <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-blue-100 text-blue-700">Extracting</span>
+                    <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-amber-100 text-amber-700 animate-pulse">Parsing</span>
+                  </div>
+                </div>
               </div>
             )}
           </div>
 
-          {/* Stored Reports List */}
-          <div className="rounded-xl bg-white dark:bg-slate-900 p-5 shadow-sm border border-slate-200 dark:border-slate-800 space-y-3">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">
-              Parsed Reports ({reports.length})
-            </h3>
+          {/* Report History */}
+          <div className="frosted-card rounded-3xl p-6 space-y-4 anim-slide-right delay-200">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-xs font-bold uppercase tracking-wider" style={{ color: '#9BAABF' }}>
+                Report History ({reports.length})
+              </h3>
+            </div>
 
-            <div className="space-y-2">
-              {reports.map((rep) => (
+            <div className="space-y-3">
+              {reports.map((rep, idx) => (
                 <div
                   key={rep.id}
                   onClick={() => {
                     setActiveReport(rep);
                     setRawTextValue(rep.rawText);
                   }}
-                  className={`p-3 rounded-xl border text-xs font-medium cursor-pointer transition-all flex items-center justify-between ${
-                    activeReport?.id === rep.id
-                      ? 'bg-teal-50 dark:bg-teal-950/40 border-teal-500/80 text-teal-900 dark:text-teal-300 font-bold shadow-sm'
-                      : 'bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100'
+                  className={`neu-card rounded-2xl p-4 cursor-pointer transition-all card-lift flex flex-col gap-3 ${
+                    activeReport?.id === rep.id ? 'ring-2 ring-blue-500/50' : ''
                   }`}
+                  style={{ background: activeReport?.id === rep.id ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.7)' }}
                 >
-                  <div className="flex items-center gap-2.5 truncate">
-                    <FileText className="h-4 w-4 text-teal-600 dark:text-teal-400 shrink-0" />
-                    <div className="truncate">
-                      <div className="truncate font-semibold">{rep.fileName}</div>
-                      <div className="text-[10px] text-slate-400 font-normal">
-                        {rep.labName} • {rep.uploadedAt}
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center gap-3">
+                      <div 
+                        className="h-10 w-10 rounded-full flex items-center justify-center shrink-0"
+                        style={{ background: 'rgba(124, 92, 252, 0.1)', color: '#7C5CFC' }}
+                      >
+                        <FileText className="h-5 w-5" />
+                      </div>
+                      <div className="overflow-hidden">
+                        <div className="text-sm font-bold truncate" style={{ color: '#0D1B2A' }}>
+                          {rep.fileName}
+                        </div>
+                        <div className="text-[11px] font-medium mt-0.5" style={{ color: '#9BAABF' }}>
+                          {rep.uploadedAt}
+                        </div>
                       </div>
                     </div>
+                    
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        deleteReport(rep.id);
+                        if (activeReport?.id === rep.id) {
+                          setActiveReport(null);
+                        }
+                        showToast('Report deleted.');
+                      }}
+                      className="p-1.5 hover:bg-red-50 rounded-lg transition-colors"
+                      style={{ color: '#FF3366' }}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
                   </div>
-
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      deleteReport(rep.id);
-                      if (activeReport?.id === rep.id) {
-                        setActiveReport(null);
-                      }
-                      showToast('Report deleted.');
-                    }}
-                    className="p-1 text-slate-400 hover:text-red-500 rounded"
-                  >
-                    <Trash2 className="h-3.5 w-3.5" />
-                  </button>
+                  
+                  {rep.summary && (
+                    <div className="text-[11px] font-medium line-clamp-2 pl-13" style={{ color: '#9BAABF', marginLeft: '52px' }}>
+                      {rep.summary.substring(0, 80)}...
+                    </div>
+                  )}
                 </div>
               ))}
+              
+              {reports.length === 0 && (
+                <div className="text-center py-6 text-sm font-medium" style={{ color: '#9BAABF' }}>
+                  No reports parsed yet.
+                </div>
+              )}
             </div>
           </div>
         </div>
 
-        {/* Right Column: Parsed Laboratory Parameter Table */}
-        <div className="lg:col-span-2 space-y-6">
+        {/* Right Column: Report Details */}
+        <div className="lg:col-span-8 space-y-8">
           {activeReport ? (
-            <div className="space-y-6">
-              {/* Report Header Card */}
-              <div className="rounded-xl bg-white dark:bg-slate-900 p-6 shadow-sm border border-slate-200 dark:border-slate-800 space-y-3">
-                <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
-                  <div>
-                    <h2 className="text-base font-bold text-slate-900 dark:text-white">
-                      {activeReport.fileName}
-                    </h2>
-                    <span className="text-xs text-slate-500">
-                      {activeReport.labName} • Analyzed on {activeReport.uploadedAt}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center gap-2">
+            <div className="space-y-8 anim-fade-up delay-200">
+              
+              {/* AI Summary Card */}
+              <div className="frosted-card rounded-3xl p-8 shadow-sm relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-8 opacity-5">
+                  <Bot className="w-32 h-32" />
+                </div>
+                
+                <div className="relative z-10 space-y-6">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2.5 rounded-xl bg-blue-50">
+                        <Bot className="h-5 w-5" style={{ color: '#0066FF' }} />
+                      </div>
+                      <h2 className="text-lg font-bold" style={{ color: '#0D1B2A' }}>AI Clinical Summary</h2>
+                    </div>
+                    
                     <button
                       onClick={() => window.print()}
-                      className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-semibold hover:bg-slate-200"
+                      className="pill-btn pill-btn-ghost flex items-center gap-2 text-xs"
                     >
-                      <Download className="h-3.5 w-3.5 inline mr-1" /> Export Summary
+                      <Download className="h-4 w-4" /> Download PDF
                     </button>
                   </div>
-                </div>
-
-                <div className="p-3 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 leading-relaxed font-medium">
-                  <span className="font-bold text-slate-900 dark:text-white mr-1.5">Clinical Summary:</span>
-                  {activeReport.summary}
-                </div>
-              </div>
-
-              {/* Parsed Lab Parameters Table */}
-              <div className="rounded-xl bg-white dark:bg-slate-900 p-6 shadow-sm border border-slate-200 dark:border-slate-800 space-y-4">
-                <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center justify-between">
-                  <span>Extracted Parameters & Reference Ranges</span>
-                  <span className="text-xs font-normal text-slate-500">
-                    {activeReport.extractedValues.filter((p) => p.status !== 'Normal').length} flagged out of range
-                  </span>
-                </h3>
-
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left text-xs">
-                    <thead>
-                      <tr className="border-b border-slate-200 dark:border-slate-800 text-slate-400 font-bold uppercase text-[10px]">
-                        <th className="py-2.5 px-3">Test Parameter</th>
-                        <th className="py-2.5 px-3">Observed Value</th>
-                        <th className="py-2.5 px-3">Reference Range</th>
-                        <th className="py-2.5 px-3">Status</th>
-                        <th className="py-2.5 px-3">Simple Meaning</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                      {activeReport.extractedValues.map((param, i) => (
-                        <tr key={i} className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
-                          <td className="py-3 px-3 font-semibold text-slate-900 dark:text-white">
-                            {param.parameter}
-                          </td>
-                          <td className="py-3 px-3 font-mono font-semibold text-slate-800 dark:text-slate-200">
-                            {param.value} {param.unit}
-                          </td>
-                          <td className="py-3 px-3 text-slate-500">
-                            {param.referenceRange}
-                          </td>
-                          <td className="py-3 px-3">
-                            {param.status === 'Normal' ? (
-                              <span className="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 font-bold text-[10px] border border-emerald-200 dark:border-emerald-800">
-                                Normal
-                              </span>
-                            ) : (
-                              <span className="px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 font-bold text-[10px] border border-amber-200 dark:border-amber-800">
-                                {param.status}
-                              </span>
-                            )}
-                          </td>
-                          <td className="py-3 px-3 text-slate-600 dark:text-slate-400 max-w-xs leading-relaxed">
-                            {param.explanation}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                  
+                  <div className="p-5 neu-card rounded-2xl text-sm font-medium leading-relaxed" style={{ color: '#0D1B2A' }}>
+                    {activeReport.summary}
+                  </div>
+                  
+                  {/* Actionable Chips */}
+                  <div className="flex flex-wrap gap-2">
+                    {activeReport.questionsForDoctor.slice(0, 3).map((q, i) => (
+                      <div key={i} className="px-4 py-2 rounded-full text-[11px] font-bold shadow-sm flex items-center gap-2" style={{ background: 'rgba(255,255,255,0.9)', color: '#0066FF', border: '1px solid rgba(0,102,255,0.1)' }}>
+                        <HelpCircle className="h-3.5 w-3.5" />
+                        {q.substring(0, 45)}{q.length > 45 ? '...' : ''}
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
 
-              {/* Questions for Your Doctor */}
-              <div className="rounded-xl bg-white dark:bg-slate-900 p-6 shadow-sm border border-slate-200 dark:border-slate-800 space-y-3">
-                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
-                  <HelpCircle className="h-4 w-4 text-teal-600 dark:text-teal-400" /> Formulated Doctor Consultation Questions
-                </h3>
-                <ul className="space-y-2 text-xs text-slate-700 dark:text-slate-300">
+              {/* Extracted Metrics Grid */}
+              <div className="space-y-4">
+                <div className="flex items-center justify-between px-2">
+                  <h3 className="text-base font-bold" style={{ color: '#0D1B2A' }}>
+                    Extracted Biomarkers
+                  </h3>
+                  <div className="flex items-center gap-2 text-xs font-bold">
+                    <span className="dot-crimson w-2 h-2 rounded-full inline-block"></span>
+                    <span style={{ color: '#9BAABF' }}>
+                      {activeReport.extractedValues.filter((p) => p.status !== 'Normal').length} Abnormal
+                    </span>
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+                  {activeReport.extractedValues.map((param, i) => {
+                    const isNormal = param.status === 'Normal';
+                    const statusColor = isNormal ? '#00C875' : param.status === 'High' ? '#FF3366' : '#FF9500';
+                    const statusBg = isNormal ? 'rgba(0, 200, 117, 0.1)' : param.status === 'High' ? 'rgba(255, 51, 102, 0.1)' : 'rgba(255, 149, 0, 0.1)';
+                    
+                    return (
+                      <div key={i} className="neu-card rounded-2xl p-5 space-y-3 card-lift bg-white/60">
+                        <div className="flex items-start justify-between">
+                          <h4 className="font-bold text-sm" style={{ color: '#0D1B2A' }}>{param.parameter}</h4>
+                          <span 
+                            className="px-2.5 py-1 rounded-full text-[10px] font-extrabold"
+                            style={{ backgroundColor: statusBg, color: statusColor }}
+                          >
+                            {param.status}
+                          </span>
+                        </div>
+                        
+                        <div className="flex items-baseline gap-1.5">
+                          <span className="text-2xl font-black" style={{ color: '#0066FF' }}>{param.value}</span>
+                          <span className="text-xs font-bold" style={{ color: '#9BAABF' }}>{param.unit}</span>
+                        </div>
+                        
+                        <div className="pt-3 border-t border-slate-200/50 flex justify-between items-center">
+                          <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: '#9BAABF' }}>Ref Range</span>
+                          <span className="text-xs font-medium" style={{ color: '#0D1B2A' }}>{param.referenceRange}</span>
+                        </div>
+                        
+                        <div className="text-[11px] font-medium leading-tight mt-2" style={{ color: '#9BAABF' }}>
+                          {param.explanation}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+              
+              {/* Doctor Questions List */}
+              <div className="frosted-card rounded-3xl p-6 space-y-4">
+                <div className="flex items-center gap-2">
+                  <div className="p-2 rounded-xl" style={{ background: 'rgba(124, 92, 252, 0.1)' }}>
+                    <HelpCircle className="h-5 w-5" style={{ color: '#7C5CFC' }} />
+                  </div>
+                  <h3 className="text-base font-bold" style={{ color: '#0D1B2A' }}>
+                    Questions to Ask Your Doctor
+                  </h3>
+                </div>
+                
+                <div className="space-y-3">
                   {activeReport.questionsForDoctor.map((q, i) => (
-                    <li key={i} className="flex items-start gap-2 bg-slate-50 dark:bg-slate-800/50 p-2.5 rounded-lg border border-slate-100 dark:border-slate-700">
-                      <span className="font-bold text-teal-600">{i + 1}.</span>
-                      <span>{q}</span>
-                    </li>
+                    <div key={i} className="neu-card rounded-2xl p-4 flex gap-4 items-start bg-white/40">
+                      <div className="h-6 w-6 rounded-full flex items-center justify-center shrink-0 font-bold text-xs shadow-sm" style={{ background: '#7C5CFC', color: 'white' }}>
+                        {i + 1}
+                      </div>
+                      <p className="text-sm font-medium pt-0.5 leading-relaxed" style={{ color: '#0D1B2A' }}>
+                        {q}
+                      </p>
+                    </div>
                   ))}
-                </ul>
-              </div>
-
-              {/* Editable Raw Document Text */}
-              <div className="rounded-xl bg-white dark:bg-slate-900 p-6 shadow-sm border border-slate-200 dark:border-slate-800 space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                    Extracted Document OCR Text
-                  </span>
-                  <button
-                    onClick={() => setEditingRawText(!editingRawText)}
-                    className="text-xs font-semibold text-teal-600 dark:text-teal-400 flex items-center gap-1"
-                  >
-                    <Edit3 className="h-3.5 w-3.5" /> {editingRawText ? 'Done' : 'Edit OCR Text'}
-                  </button>
                 </div>
-
-                {editingRawText ? (
-                  <textarea
-                    rows={6}
-                    value={rawTextValue}
-                    onChange={(e) => setRawTextValue(e.target.value)}
-                    className="w-full rounded-xl bg-slate-50 dark:bg-slate-800 p-3 text-xs font-mono text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 outline-none"
-                  />
-                ) : (
-                  <pre className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 text-[11px] font-mono text-slate-700 dark:text-slate-300 overflow-x-auto whitespace-pre-wrap">
-                    {rawTextValue || activeReport.rawText}
-                  </pre>
-                )}
               </div>
+
             </div>
           ) : (
-            <div className="p-12 text-center rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-3">
-              <FileText className="h-10 w-10 text-slate-400 mx-auto" />
-              <h3 className="text-sm font-bold text-slate-700 dark:text-slate-300">
+            <div className="frosted-card rounded-3xl p-16 text-center space-y-4 h-full flex flex-col items-center justify-center anim-fade-up delay-200 min-h-[400px]">
+              <div className="h-24 w-24 rounded-full neu-card flex items-center justify-center mb-4">
+                <ScanLine className="h-10 w-10 opacity-20" />
+              </div>
+              <h3 className="text-xl font-bold" style={{ color: '#0D1B2A' }}>
                 No Report Selected
               </h3>
-              <p className="text-xs text-slate-500 max-w-sm mx-auto">
-                Upload a laboratory report or click "Load Sample Report" to view parsed clinical parameters.
+              <p className="text-sm font-medium max-w-sm mx-auto" style={{ color: '#9BAABF' }}>
+                Upload a laboratory report or select an existing one to view AI-parsed clinical parameters and insights.
               </p>
             </div>
           )}

@@ -4,229 +4,168 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-  LayoutDashboard,
-  Stethoscope,
-  FileText,
-  ScanLine,
-  Pill,
-  MapPin,
-  FolderHeart,
-  Calendar,
-  Users,
-  Syringe,
-  Bot,
-  HeartPulse,
-  Settings,
-  Activity,
-  UserCheck,
-  Building2,
-  FileSpreadsheet,
-  LogOut,
+  LayoutDashboard, Stethoscope, FileText, ScanLine, Pill,
+  MapPin, FolderHeart, Calendar, Users, Syringe, Bot,
+  HeartPulse, Settings, Activity, ChevronRight, Zap,
 } from 'lucide-react';
 import { Logo } from './Logo';
 import { useApp } from '@/context/AppContext';
 import { t } from '@/lib/i18n';
-import { useRouter } from 'next/navigation';
 
 export const Sidebar: React.FC = () => {
   const pathname = usePathname();
-  const { language, currentUser, logout } = useApp();
-  const router = useRouter();
+  const { language, activeProfile } = useApp();
 
-  const isDoctor = currentUser?.role === 'Physician';
-  const isAdmin = currentUser?.role === 'Admin';
-
-  // Role-specific navigation arrays
-  const doctorPrimaryNav = [
-    { name: 'Physician Command Center', path: '/dashboard', icon: LayoutDashboard },
-    { name: 'Patient Lab OCR Reviews', path: '/dashboard/reports', icon: FileText },
-    { name: 'Prescription Generator', path: '/dashboard/prescriptions', icon: ScanLine },
-    { name: 'Consultation Schedule', path: '/dashboard/appointments', icon: Calendar },
-    { name: 'Clinical Decision Support', path: '/dashboard/assistant', icon: Bot },
+  const clinicalNav = [
+    { name: t(language, 'navSymptoms'),      path: '/dashboard/symptoms',      icon: Stethoscope, color: '#FF3366', bg: 'rgba(255,51,102,0.12)' },
+    { name: t(language, 'navReports'),       path: '/dashboard/reports',       icon: FileText,    color: '#7C5CFC', bg: 'rgba(124,92,252,0.12)' },
+    { name: t(language, 'navPrescriptions'), path: '/dashboard/prescriptions', icon: ScanLine,    color: '#0066FF', bg: 'rgba(0,102,255,0.12)' },
+    { name: t(language, 'navMeds'),          path: '/dashboard/medications',   icon: Pill,        color: '#FF9500', bg: 'rgba(255,149,0,0.12)' },
+    { name: t(language, 'navCare'),          path: '/dashboard/care',          icon: MapPin,      color: '#00D4AA', bg: 'rgba(0,212,170,0.12)' },
   ];
 
-  const doctorSecondaryNav = [
-    { name: 'Patient Directory', path: '/dashboard/family', icon: Users },
-    { name: 'Hospital & Clinic Network', path: '/dashboard/care', icon: MapPin },
-    { name: 'Clinical Settings', path: '/dashboard/settings', icon: Settings },
+  const managementNav = [
+    { name: t(language, 'navHome'),         path: '/dashboard',                icon: LayoutDashboard, color: '#0066FF', bg: 'rgba(0,102,255,0.12)' },
+    { name: t(language, 'navRecords'),      path: '/dashboard/records',        icon: FolderHeart,     color: '#7C5CFC', bg: 'rgba(124,92,252,0.12)' },
+    { name: t(language, 'navAppointments'), path: '/dashboard/appointments',   icon: Calendar,        color: '#FF9500', bg: 'rgba(255,149,0,0.12)' },
+    { name: t(language, 'navFamily'),       path: '/dashboard/family',         icon: Users,           color: '#00D4AA', bg: 'rgba(0,212,170,0.12)' },
+    { name: t(language, 'navVaccines'),     path: '/dashboard/vaccinations',   icon: Syringe,         color: '#FF3366', bg: 'rgba(255,51,102,0.12)' },
+    { name: t(language, 'navAssistant'),    path: '/dashboard/assistant',      icon: Bot,             color: '#0066FF', bg: 'rgba(0,102,255,0.12)' },
+    { name: t(language, 'navWellness'),     path: '/dashboard/wellness',       icon: HeartPulse,      color: '#00C875', bg: 'rgba(0,200,117,0.12)' },
+    { name: t(language, 'navSettings'),     path: '/dashboard/settings',       icon: Settings,        color: '#8896A7', bg: 'rgba(136,150,167,0.12)' },
   ];
 
-  const adminPrimaryNav = [
-    { name: 'Hospital Command Center', path: '/dashboard', icon: LayoutDashboard },
-    { name: 'Doctor Management', path: '/dashboard/clinic-admin', icon: Users },
-    { name: 'Hospital Management', path: '/dashboard/super-admin', icon: Building2 },
-    { name: 'Appointments & Schedule', path: '/dashboard/appointments', icon: Calendar },
-  ];
-
-  const adminSecondaryNav = [
-    { name: 'Departments & Staffing', path: '/dashboard/receptionist', icon: Stethoscope },
-    { name: 'Analytics & Audits', path: '/dashboard/reports', icon: FileSpreadsheet },
-    { name: 'Administrative Settings', path: '/dashboard/settings', icon: Settings },
-  ];
-
-  const patientPrimaryNav = [
-    { name: t(language, 'navSymptoms'), path: '/dashboard/symptoms', icon: Stethoscope },
-    { name: t(language, 'navReports'), path: '/dashboard/reports', icon: FileText },
-    { name: t(language, 'navPrescriptions'), path: '/dashboard/prescriptions', icon: ScanLine },
-    { name: t(language, 'navMeds'), path: '/dashboard/medications', icon: Pill },
-    { name: t(language, 'navCare'), path: '/dashboard/care', icon: MapPin },
-  ];
-
-  const patientSecondaryNav = [
-    { name: t(language, 'navHome'), path: '/dashboard', icon: LayoutDashboard },
-    { name: t(language, 'navRecords'), path: '/dashboard/records', icon: FolderHeart },
-    { name: t(language, 'navAppointments'), path: '/dashboard/appointments', icon: Calendar },
-    { name: t(language, 'navFamily'), path: '/dashboard/family', icon: Users },
-    { name: t(language, 'navVaccines'), path: '/dashboard/vaccinations', icon: Syringe },
-    { name: t(language, 'navAssistant'), path: '/dashboard/assistant', icon: Bot },
-    { name: t(language, 'navWellness'), path: '/dashboard/wellness', icon: HeartPulse },
-    { name: t(language, 'navSettings'), path: '/dashboard/settings', icon: Settings },
-  ];
-
-  const primaryNav = isDoctor ? doctorPrimaryNav : isAdmin ? adminPrimaryNav : patientPrimaryNav;
-  const secondaryNav = isDoctor ? doctorSecondaryNav : isAdmin ? adminSecondaryNav : patientSecondaryNav;
-
-  const roleColor = isDoctor
-    ? 'bg-cyan-50 text-cyan-700 border-cyan-200 dark:bg-cyan-950/40 dark:text-cyan-300 dark:border-cyan-800'
-    : isAdmin
-    ? 'bg-violet-50 text-violet-700 border-violet-200 dark:bg-violet-950/40 dark:text-violet-300 dark:border-violet-800'
-    : 'bg-teal-50 text-teal-700 border-teal-200 dark:bg-teal-950/40 dark:text-teal-300 dark:border-teal-800';
-
-  const NavItem = ({ item, secondary = false }: { item: any; secondary?: boolean }) => {
+  const NavItem = ({ item }: { item: typeof clinicalNav[0] }) => {
     const Icon = item.icon;
     const isActive = pathname === item.path;
     return (
       <Link
-        key={item.path}
         href={item.path}
-        className={`group relative flex items-center gap-2.5 px-3 py-2 rounded-xl text-[13px] font-medium transition-all duration-150 ${
-          isActive
-            ? secondary
-              ? 'bg-slate-100 dark:bg-slate-800/80 text-slate-900 dark:text-slate-100 font-semibold border border-slate-200 dark:border-slate-700 nav-active-accent'
-              : 'bg-teal-50 dark:bg-teal-950/50 text-teal-700 dark:text-teal-300 font-semibold border border-teal-200/80 dark:border-teal-800/60 nav-active-accent'
-            : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100/80 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-slate-100 border border-transparent'
-        }`}
+        className="group flex items-center justify-between px-3 py-2.5 rounded-2xl text-[12px] font-semibold transition-all duration-200"
+        style={{
+          background: isActive ? item.bg : 'transparent',
+          color: isActive ? item.color : '#4A5568',
+          border: isActive ? `1px solid ${item.color}25` : '1px solid transparent',
+          boxShadow: isActive ? `0 2px 8px ${item.color}18` : 'none',
+        }}
       >
-        <Icon
-          className={`h-4 w-4 shrink-0 transition-colors ${
-            isActive
-              ? secondary
-                ? 'text-slate-600 dark:text-slate-300'
-                : 'text-teal-600 dark:text-teal-400'
-              : 'text-slate-400 dark:text-slate-500 group-hover:text-slate-600 dark:group-hover:text-slate-300'
-          }`}
-        />
-        <span className="truncate">{item.name}</span>
+        <div className="flex items-center gap-2.5">
+          <div className="w-7 h-7 rounded-xl flex items-center justify-center transition-all"
+            style={{
+              background: isActive ? item.bg : 'transparent',
+              color: isActive ? item.color : '#8896A7',
+            }}>
+            <Icon className="h-3.5 w-3.5" />
+          </div>
+          <span>{item.name}</span>
+        </div>
+        {isActive && <ChevronRight className="h-3 w-3 opacity-60" />}
       </Link>
     );
   };
 
   return (
     <>
-      {/* Desktop Left Sidebar */}
-      <aside className="hidden lg:flex flex-col w-64 border-r border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-slate-900 h-screen sticky top-0 shrink-0 z-20 transition-colors">
-        {/* Top Logo Area */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100 dark:border-slate-800/80">
+      {/* ── DESKTOP SIDEBAR ─────────────────────────────────────── */}
+      <aside
+        className="hidden lg:flex flex-col w-64 h-screen sticky top-0 shrink-0 z-20"
+        style={{
+          background: 'rgba(255,255,255,0.80)',
+          backdropFilter: 'blur(24px)',
+          WebkitBackdropFilter: 'blur(24px)',
+          borderRight: '1px solid rgba(200,215,235,0.50)',
+          boxShadow: '4px 0 24px rgba(10,20,60,0.05)',
+        }}
+      >
+        {/* Logo */}
+        <div className="p-5 border-b" style={{ borderColor: 'rgba(200,215,235,0.40)' }}>
           <Link href="/">
-            <Logo size="md" />
+            <div className="flex items-center gap-2.5">
+              <div className="w-9 h-9 rounded-xl flex items-center justify-center"
+                style={{ background: 'linear-gradient(135deg, #0066FF 0%, #00C2FF 100%)', boxShadow: '0 4px 12px rgba(0,102,255,0.30)' }}>
+                {/* Heart icon */}
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
+                  <path d="M12 21.593c-5.63-5.539-11-10.297-11-14.402 0-3.791 3.068-5.191 5.281-5.191 1.312 0 4.151.501 5.719 4.457 1.59-3.968 4.464-4.447 5.726-4.447 2.54 0 5.274 1.621 5.274 5.181 0 4.069-5.136 8.625-11 14.402z"/>
+                </svg>
+              </div>
+              <div>
+                <div className="text-[14px] font-black tracking-tight" style={{ color: '#0D1B2A' }}>HealthBridge</div>
+                <div className="text-[9px] font-bold uppercase tracking-widest" style={{ color: '#9BAABF' }}>Clinical AI</div>
+              </div>
+            </div>
           </Link>
-          <span className={`chip text-[10px] uppercase font-extrabold tracking-wide border ${roleColor}`}>
-            {currentUser?.role || 'Patient'}
-          </span>
         </div>
 
-        {/* Scrollable Navigation */}
-        <div className="flex-1 overflow-y-auto px-3 py-4 space-y-6">
-          {/* Section 1 — Primary */}
-          <div className="space-y-1">
-            <div className="flex items-center gap-1.5 px-3 mb-3">
-              <Activity className="h-3 w-3 text-teal-500 dark:text-teal-400" />
-              <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
-                {isDoctor ? 'Physician Workspaces' : 'Clinical Workflows'}
-              </span>
+        {/* Scrollable Nav */}
+        <div className="flex-1 overflow-y-auto py-4 px-3 space-y-5">
+          {/* Clinical Tools */}
+          <div>
+            <div className="flex items-center gap-1.5 px-3 mb-2">
+              <Activity className="h-2.5 w-2.5" style={{ color: '#0066FF' }} />
+              <span className="text-[9px] font-bold uppercase tracking-wider" style={{ color: '#9BAABF' }}>Clinical Tools</span>
             </div>
-            {primaryNav.map((item) => (
-              <NavItem key={item.path} item={item} />
-            ))}
+            <div className="space-y-0.5">
+              {clinicalNav.map(item => <NavItem key={item.path} item={item} />)}
+            </div>
           </div>
 
-          {/* Divider */}
-          <div className="h-px bg-slate-100 dark:bg-slate-800 mx-1" />
-
-          {/* Section 2 — Secondary */}
-          <div className="space-y-1">
-            <div className="px-3 mb-3">
-              <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
-                {isDoctor ? 'Clinical Operations' : 'Patient Workspace'}
-              </span>
+          {/* Patient Workspace */}
+          <div>
+            <div className="px-3 mb-2">
+              <span className="text-[9px] font-bold uppercase tracking-wider" style={{ color: '#9BAABF' }}>Patient Workspace</span>
             </div>
-            {secondaryNav.map((item) => (
-              <NavItem key={item.path} item={item} secondary />
-            ))}
+            <div className="space-y-0.5">
+              {managementNav.map(item => <NavItem key={item.path} item={item} />)}
+            </div>
           </div>
         </div>
 
-        {/* Bottom Identity Card */}
-        <div className="border-t border-slate-100 dark:border-slate-800 px-3 py-3">
-          <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-teal-500 to-teal-700 text-white font-bold text-xs shrink-0">
-              {currentUser?.avatarInitials || '?'}
+        {/* Patient Profile Card at bottom */}
+        <div className="p-3 border-t" style={{ borderColor: 'rgba(200,215,235,0.40)' }}>
+          <Link href="/dashboard/settings" title="Click to edit your profile details" className="p-3 rounded-2xl flex items-center gap-3 hover:bg-[#0066FF]/10 transition-colors cursor-pointer"
+            style={{ background: 'rgba(0,102,255,0.06)', border: '1px solid rgba(0,102,255,0.12)' }}>
+            <div className="w-8 h-8 rounded-xl flex items-center justify-center font-black text-white text-sm shrink-0"
+              style={{ background: 'linear-gradient(135deg, #0066FF, #7C5CFC)', boxShadow: '0 3px 8px rgba(0,102,255,0.30)' }}>
+              {activeProfile.name.charAt(0)}
             </div>
             <div className="flex-1 min-w-0">
-              <div className="text-xs font-semibold text-slate-900 dark:text-white truncate">
-                {currentUser?.name || 'Guest'}
-              </div>
-              <div className="text-[10px] text-slate-400 dark:text-slate-500 truncate">
-                {currentUser?.email || ''}
+              <div className="text-[11px] font-extrabold truncate" style={{ color: '#0D1B2A' }}>{activeProfile.name}</div>
+              <div className="text-[9px] font-medium" style={{ color: '#9BAABF' }}>
+                {activeProfile.relationship} · {activeProfile.bloodGroup}
               </div>
             </div>
-            <button
-              onClick={() => {
-                logout();
-                router.push('/');
-              }}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors"
-              title="Sign Out"
-            >
-              <LogOut className="h-3.5 w-3.5" />
-            </button>
-          </div>
+            <div className="w-2 h-2 rounded-full shrink-0" style={{ background: '#00C875', boxShadow: '0 0 0 2px rgba(0,200,117,0.25)' }} />
+          </Link>
         </div>
       </aside>
 
-      {/* Mobile Bottom Navigation Bar */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/96 dark:bg-slate-900/96 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 px-2 py-2 flex justify-around items-center safe-area-pb">
-        {(isAdmin
-          ? [
-              { href: '/dashboard', label: 'Command', icon: LayoutDashboard },
-              { href: '/dashboard/clinic-admin', label: 'Doctors', icon: Users },
-              { href: '/dashboard/super-admin', label: 'Wards', icon: Building2 },
-            ]
-          : isDoctor
-          ? [
-              { href: '/dashboard', label: 'Clinical', icon: LayoutDashboard },
-              { href: '/dashboard/reports', label: 'Reports', icon: FileText },
-              { href: '/dashboard/assistant', label: 'AI Assistant', icon: Bot },
-            ]
-          : [
-              { href: '/dashboard/symptoms', label: 'Symptoms', icon: Stethoscope },
-              { href: '/dashboard/reports', label: 'Reports', icon: FileText },
-              { href: '/dashboard/assistant', label: 'AI Assistant', icon: Bot },
-            ]
-        ).map(({ href, label, icon: Icon }) => {
-          const active = pathname === href;
+      {/* ── MOBILE BOTTOM NAV ───────────────────────────────────── */}
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 flex justify-around items-center px-2 py-2"
+        style={{
+          background: 'rgba(255,255,255,0.92)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          borderTop: '1px solid rgba(200,215,235,0.50)',
+          boxShadow: '0 -4px 24px rgba(10,20,60,0.08)',
+        }}>
+        {[
+          { href: '/dashboard',            icon: LayoutDashboard, label: 'Overview' },
+          { href: '/dashboard/symptoms',   icon: Stethoscope,     label: 'Symptoms' },
+          { href: '/dashboard/assistant',  icon: Bot,             label: 'AI Chat' },
+          { href: '/dashboard/medications',icon: Pill,            label: 'Meds' },
+          { href: '/dashboard/records',    icon: FolderHeart,     label: 'Records' },
+        ].map(item => {
+          const Icon = item.icon;
+          const isActive = pathname === item.href;
           return (
-            <Link
-              key={href}
-              href={href}
-              className={`flex flex-col items-center gap-1 px-4 py-1.5 rounded-xl transition-all text-[10px] font-semibold ${
-                active
-                  ? 'text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-950/30'
-                  : 'text-slate-500 dark:text-slate-400'
-              }`}
-            >
-              <Icon className={`h-4.5 w-4.5 ${active ? 'text-teal-600 dark:text-teal-400' : ''}`} />
-              <span>{label}</span>
+            <Link key={item.href} href={item.href}
+              className="flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-2xl transition-all"
+              style={{
+                background: isActive ? 'rgba(0,102,255,0.10)' : 'transparent',
+                color: isActive ? '#0066FF' : '#8896A7',
+              }}>
+              <Icon className="h-4.5 w-4.5" style={{ width: 18, height: 18 }} />
+              <span className="text-[9px] font-bold">{item.label}</span>
             </Link>
           );
         })}

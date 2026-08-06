@@ -32,36 +32,33 @@ export const DigitalHealthCardModal: React.FC<{ isOpen: boolean; onClose: () => 
   });
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-md">
-      <div className="w-full max-w-md overflow-hidden rounded-2xl bg-white dark:bg-slate-900 shadow-modal border border-slate-200 dark:border-slate-800 animate-fade-in-up">
-        {/* Top Accent Strip */}
-        <div className="h-1 w-full bg-teal-600" />
-
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="w-full max-w-md overflow-hidden rounded-2xl bg-white dark:bg-slate-900 shadow-2xl border border-slate-200 dark:border-slate-800">
         {/* Header */}
-        <div className="px-6 py-4 bg-slate-50 dark:bg-slate-900/50 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+        <div className="bg-gradient-to-r from-navy-900 via-navy-700 to-teal-700 p-5 text-white flex items-center justify-between">
           <Logo size="sm" />
           <button
             onClick={onClose}
-            className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            className="rounded-full bg-white/10 p-1.5 hover:bg-white/20 transition-colors"
           >
-            <X className="h-4 w-4" />
+            <X className="h-5 w-5" />
           </button>
         </div>
 
-        <div className="p-6 space-y-5">
+        <div className="p-6 space-y-6">
           {/* Card Preview */}
-          <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-slate-900 to-slate-850 p-5 text-white shadow-card space-y-4 border border-slate-700">
+          <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-slate-900 to-navy-900 p-5 text-white shadow-lg space-y-4 border border-teal-500/30">
             <div className="flex items-start justify-between">
               <div>
-                <span className="text-[10px] tracking-widest text-teal-400 font-extrabold uppercase block mb-1">
+                <span className="text-[10px] tracking-widest text-teal-400 font-bold uppercase">
                   Emergency Digital Health Pass
                 </span>
-                <h3 className="text-lg font-bold text-white leading-tight">{activeProfile.name}</h3>
-                <p className="text-xs text-slate-400 mt-1">
+                <h3 className="text-xl font-bold">{activeProfile.name}</h3>
+                <p className="text-xs text-slate-300">
                   {activeProfile.age} yrs • {activeProfile.gender}
                 </p>
               </div>
-              <div className="rounded-lg bg-teal-500/10 px-2.5 py-1 text-xs font-bold text-teal-400 border border-teal-500/20">
+              <div className="rounded-lg bg-teal-500/20 px-2.5 py-1 text-xs font-bold text-teal-300 border border-teal-500/40">
                 {activeProfile.bloodGroup}
               </div>
             </div>
@@ -69,16 +66,16 @@ export const DigitalHealthCardModal: React.FC<{ isOpen: boolean; onClose: () => 
             {/* QR Code Container */}
             <div className="flex items-center justify-center bg-white p-3 rounded-lg shadow-inner">
               {qrSharingEnabled ? (
-                <QRCodeSVG value={qrPayload} size={140} level="M" />
+                <QRCodeSVG value={qrPayload} size={150} level="M" />
               ) : (
-                <div className="flex flex-col items-center justify-center h-[140px] w-[140px] bg-slate-50 text-slate-400 rounded">
-                  <Lock className="h-8 w-8 text-red-500 mb-1" />
+                <div className="flex flex-col items-center justify-center h-[150px] w-[150px] bg-slate-100 text-slate-400 rounded">
+                  <Lock className="h-10 w-10 text-red-500 mb-1" />
                   <span className="text-[10px] font-bold text-red-600">QR DISABLED</span>
                 </div>
               )}
             </div>
 
-            <p className="text-[11px] text-center text-slate-400 leading-normal">
+            <p className="text-[11px] text-center text-slate-300">
               {qrSharingEnabled
                 ? 'Scan with camera in an emergency to access limited medical pass.'
                 : 'QR code access is currently disabled.'}
@@ -86,56 +83,56 @@ export const DigitalHealthCardModal: React.FC<{ isOpen: boolean; onClose: () => 
           </div>
 
           {/* QR Safety Controls */}
-          <div className="space-y-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 p-4 border border-slate-200 dark:border-slate-700/60">
+          <div className="space-y-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 p-4 border border-slate-200 dark:border-slate-700">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
-                <Shield className="h-4 w-4 text-teal-500" /> QR Access Status
+              <span className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                <Shield className="h-4 w-4 text-teal-600" /> QR Access Status
               </span>
               <button
                 onClick={() => {
                   setQrSharingEnabled(!qrSharingEnabled);
                   showToast(qrSharingEnabled ? 'QR Access Disabled' : 'QR Access Enabled');
                 }}
-                className={`px-3 py-1 text-[11px] font-bold rounded-lg transition-colors ${
+                className={`px-3 py-1 text-xs font-bold rounded-lg transition-colors ${
                   qrSharingEnabled
-                    ? 'bg-red-50 dark:bg-red-950/40 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-900/50'
-                    : 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-900/50'
+                    ? 'bg-red-100 text-red-700 hover:bg-red-200'
+                    : 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200'
                 }`}
               >
-                {qrSharingEnabled ? 'Disable Access' : 'Enable Access'}
+                {qrSharingEnabled ? 'Disable QR Access' : 'Enable QR Access'}
               </button>
             </div>
 
-            <div className="space-y-2 text-xs text-slate-600 dark:text-slate-400 pt-2 border-t border-slate-200 dark:border-slate-700">
-              <span className="font-semibold text-slate-900 dark:text-white block mb-1">
+            <div className="space-y-2 text-xs text-slate-600 dark:text-slate-300 pt-2 border-t border-slate-200 dark:border-slate-700">
+              <span className="font-semibold text-slate-900 dark:text-white block">
                 Information Shared on QR Code:
               </span>
-              <label className="flex items-center gap-2.5 cursor-pointer">
+              <label className="flex items-center gap-2 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={shareBloodGroup}
                   onChange={(e) => setShareBloodGroup(e.target.checked)}
-                  className="rounded text-teal-600 focus:ring-teal-500/20"
+                  className="rounded text-teal-600"
                 />
-                <span>Blood Group ({activeProfile.bloodGroup})</span>
+                Blood Group ({activeProfile.bloodGroup})
               </label>
-              <label className="flex items-center gap-2.5 cursor-pointer">
+              <label className="flex items-center gap-2 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={shareAllergies}
                   onChange={(e) => setShareAllergies(e.target.checked)}
-                  className="rounded text-teal-600 focus:ring-teal-500/20"
+                  className="rounded text-teal-600"
                 />
-                <span>Allergies ({activeProfile.allergies.join(', ') || 'None'})</span>
+                Allergies ({activeProfile.allergies.join(', ') || 'None'})
               </label>
-              <label className="flex items-center gap-2.5 cursor-pointer">
+              <label className="flex items-center gap-2 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={shareContacts}
                   onChange={(e) => setShareContacts(e.target.checked)}
-                  className="rounded text-teal-600 focus:ring-teal-500/20"
+                  className="rounded text-teal-600"
                 />
-                <span>Emergency Contact Phone</span>
+                Emergency Contact Phone
               </label>
             </div>
           </div>
@@ -146,13 +143,13 @@ export const DigitalHealthCardModal: React.FC<{ isOpen: boolean; onClose: () => 
                 showToast('Health Card downloaded as PNG.');
                 onClose();
               }}
-              className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-teal-600 text-white text-xs font-bold hover:bg-teal-700 active:scale-[0.98] transition-all"
+              className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-teal-600 text-white text-sm font-semibold hover:bg-teal-700 transition-colors"
             >
               <Download className="h-4 w-4" /> Download Card
             </button>
             <button
               onClick={onClose}
-              className="px-5 py-3 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+              className="px-4 py-2.5 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-sm font-semibold hover:bg-slate-300 transition-colors"
             >
               Close
             </button>

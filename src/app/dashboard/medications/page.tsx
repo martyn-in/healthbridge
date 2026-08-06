@@ -4,17 +4,13 @@ import React, { useState } from 'react';
 import {
   Pill,
   CheckCircle2,
-  XCircle,
-  Clock,
   Plus,
-  Calendar as CalendarIcon,
-  RotateCcw,
   Bell,
   Trash2,
 } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
 import { Medication } from '@/types';
-import { t } from '@/lib/i18n';
+import { Card3D } from '@/components/3d/Card3D';
 
 export default function MedicationsPage() {
   const {
@@ -63,83 +59,107 @@ export default function MedicationsPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 font-sans">
       {/* Top Banner */}
-      <div className="rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700 shadow-card p-6 text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div>
-          <span className="chip chip-teal mb-2 inline-flex items-center gap-1">
-            <Pill className="h-3 w-3" /> Medication Management
-          </span>
-          <h1 className="text-2xl font-extrabold tracking-tight">
-            Medication Schedule & Compliance
-          </h1>
-          <p className="text-sm text-slate-400 mt-1 max-w-xl leading-relaxed">
-            Track daily dosages for patient <span className="font-bold text-teal-400">{activeProfile.name}</span>. Receive automated refill alerts and log verified adherence histories.
-          </p>
-        </div>
+      <Card3D depth={10}>
+        <div className="p-6 rounded-3xl frosted-card space-y-4 anim-fade-up">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="space-y-2">
+              <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-white/80 text-[11px] font-bold shadow-sm" style={{ color: '#FF9500' }}>
+                <Pill className="h-3.5 w-3.5" /> Medication Management
+              </div>
+              <h1 className="text-2xl font-black text-slate-900">
+                Medication Schedule
+              </h1>
+              <p className="text-xs font-medium text-slate-600 max-w-xl leading-relaxed">
+                Track daily dosages for patient <span className="font-extrabold text-slate-900">{activeProfile.name}</span>. Receive automated refill alerts and log verified adherence histories.
+              </p>
+            </div>
 
-        <button
-          onClick={() => setShowAddModal(true)}
-          className="px-4 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs shadow-sm transition-colors flex items-center gap-2 shrink-0"
-        >
-          <Plus className="h-4 w-4" /> Add Medication
-        </button>
-      </div>
+            <button
+              onClick={() => setShowAddModal(true)}
+              className="pill-btn pill-btn-primary flex items-center gap-2 shrink-0 card-lift"
+              style={{ backgroundColor: '#0066FF' }}
+            >
+              <Plus className="h-4 w-4" /> Add Medication
+            </button>
+          </div>
+        </div>
+      </Card3D>
 
       {/* Adherence & Progress Summary Header */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="rounded-xl bg-white dark:bg-slate-900 p-5 shadow-card border border-slate-200 dark:border-slate-800 flex items-center justify-between">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 anim-fade-up delay-100">
+        <div className="rounded-3xl neu-card p-5 flex items-center justify-between card-lift transition-all">
           <div>
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Adherence Rate</span>
-            <div className="text-2xl font-extrabold text-teal-600 dark:text-teal-400 mt-1">{adherencePercentage}%</div>
-            <span className="text-[11px] text-slate-500">Weekly compliance index</span>
-          </div>
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-teal-50 dark:bg-teal-950/50 text-teal-600 dark:text-teal-400 font-extrabold text-sm border border-teal-200 dark:border-teal-800">
-            {adherencePercentage}%
-          </div>
-        </div>
-
-        <div className="rounded-xl bg-white dark:bg-slate-900 p-5 shadow-card border border-slate-200 dark:border-slate-800 flex items-center justify-between">
-          <div>
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Active Prescriptions</span>
-            <div className="text-2xl font-extrabold text-slate-900 dark:text-white mt-1">{filteredMeds.length}</div>
-            <span className="text-[11px] text-slate-500">In patient cabinet</span>
-          </div>
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
-            <Pill className="h-5 w-5" />
-          </div>
-        </div>
-
-        <div className="rounded-xl bg-white dark:bg-slate-900 p-5 shadow-card border border-slate-200 dark:border-slate-800 flex items-center justify-between">
-          <div>
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Reminder System</span>
-            <div className="text-sm font-bold text-emerald-600 dark:text-emerald-400 mt-1 flex items-center gap-1">
-              <CheckCircle2 className="h-4 w-4" /> Active & Synced
+            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+              Adherence Rate
+            </span>
+            <div className="text-2xl font-black mt-1" style={{ color: '#00C875' }}>
+              {adherencePercentage}%
             </div>
-            <button onClick={() => showToast('Browser notification test signal sent.')} className="text-[11px] text-teal-600 dark:text-teal-400 hover:underline mt-1 block font-semibold">
+            <span className="text-[11px] font-semibold text-slate-400">Weekly compliance index</span>
+          </div>
+          <div className="w-16 h-10">
+            <svg viewBox="0 0 100 30" className="w-full h-full overflow-visible">
+              <path d="M0,20 Q20,5 40,25 T80,10 T100,15" fill="none" stroke="#00C875" strokeWidth="3" className="sparkline-path" strokeLinecap="round" />
+            </svg>
+          </div>
+        </div>
+
+        <div className="rounded-3xl neu-card p-5 flex items-center justify-between card-lift transition-all">
+          <div>
+            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+              Active Prescriptions
+            </span>
+            <div className="text-2xl font-black text-slate-900 mt-1">
+              {filteredMeds.length}
+            </div>
+            <span className="text-[11px] font-semibold text-slate-400">In patient cabinet</span>
+          </div>
+          <div className="w-16 h-10">
+            <svg viewBox="0 0 100 30" className="w-full h-full overflow-visible">
+              <path d="M0,15 Q25,25 50,15 T100,5" fill="none" stroke="#0066FF" strokeWidth="3" className="sparkline-path" strokeLinecap="round" />
+            </svg>
+          </div>
+        </div>
+
+        <div className="rounded-3xl neu-card p-5 flex items-center justify-between card-lift transition-all">
+          <div>
+            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+              Reminder System
+            </span>
+            <div className="text-xs font-extrabold mt-1 flex items-center gap-1" style={{ color: '#00C875' }}>
+              <CheckCircle2 className="h-4 w-4" /> <span className="dot-live mr-1 block h-2 w-2 rounded-full" style={{ backgroundColor: '#00C875' }}></span> Active
+            </div>
+            <button
+              onClick={() => showToast('Browser notification test signal sent.')}
+              className="text-[11px] hover:underline mt-1 block font-bold"
+              style={{ color: '#0066FF' }}
+            >
               Test Notification
             </button>
           </div>
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
-            <Bell className="h-5 w-5" />
+          <div className="p-3 rounded-2xl bg-white shadow-inner text-slate-600">
+            <Bell className="h-5 w-5" style={{ color: '#FF9500' }} />
           </div>
         </div>
       </div>
 
       {/* Today Timeline */}
-      <div className="rounded-xl bg-white dark:bg-slate-900 shadow-card border border-slate-200 dark:border-slate-800 overflow-hidden">
-        <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 px-6 py-4">
+      <div className="rounded-3xl frosted-card p-6 space-y-6 anim-fade-up delay-200">
+        <div className="flex items-center justify-between border-b border-slate-200/50 pb-4">
           <div>
-            <h3 className="text-sm font-bold text-slate-900 dark:text-white">Today's Medication Schedule</h3>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <h3 className="text-base font-extrabold text-slate-900">
+              Today's Schedule
+            </h3>
+            <p className="text-xs font-medium text-slate-500">
               {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
             </p>
           </div>
         </div>
 
-        <div className="p-5">
         {filteredMeds.length > 0 ? (
-          <div className="space-y-3">
+          <div className="space-y-4">
             {filteredMeds.map((med) => {
               const todayLog = medicationLogs.find(
                 (l) => l.medicationId === med.id && l.date === new Date().toISOString().split('T')[0]
@@ -149,44 +169,48 @@ export default function MedicationsPage() {
               return (
                 <div
                   key={med.id}
-                  className={`p-4 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs transition-all ${
+                  className={`p-4 rounded-2xl frosted-card flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs transition-all card-lift ${
                     status === 'taken'
-                      ? 'bg-emerald-50/50 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-800/60'
-                      : status === 'skipped'
-                      ? 'bg-slate-100 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700 opacity-60'
-                      : 'bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700'
+                      ? 'border-l-4 border-l-[#00C875]'
+                      : 'border-l-4 border-l-[#FF9500]'
                   }`}
                 >
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2">
-                      <span className="font-bold text-slate-900 dark:text-white text-sm">
-                        {med.name}
-                      </span>
-                      <span className="px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-700 font-semibold text-[10px] text-slate-700 dark:text-slate-300">
-                        {med.dosage}
-                      </span>
+                  <div className="flex items-start gap-4">
+                    <div className="p-3 rounded-xl shadow-sm flex items-center justify-center shrink-0" style={{ backgroundColor: 'rgba(255, 149, 0, 0.1)', color: '#FF9500' }}>
+                      <Pill className="h-5 w-5" />
                     </div>
-                    <p className="text-slate-500 text-xs">
-                      {med.instructions} • {med.beforeAfterFood} | Scheduled: {med.scheduleTimes.join(', ')}
-                    </p>
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="font-extrabold text-slate-900 text-sm">
+                          {med.name}
+                        </span>
+                        <span className="px-2.5 py-0.5 rounded-full bg-white font-bold text-[10px] text-slate-700 shadow-sm border border-slate-100">
+                          {med.dosage}
+                        </span>
+                      </div>
+                      <p className="text-slate-500 text-xs font-medium">
+                        {med.instructions} • {med.beforeAfterFood} | Scheduled: {med.scheduleTimes.join(', ')}
+                      </p>
+                    </div>
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 shrink-0">
                     {status === 'taken' ? (
-                      <span className="px-3 py-1.5 rounded-lg bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 font-bold text-xs flex items-center gap-1">
-                        <CheckCircle2 className="h-4 w-4 text-emerald-600" /> Dose Logged
+                      <span className="px-3.5 py-1.5 rounded-full font-extrabold text-xs flex items-center gap-1 shadow-sm" style={{ backgroundColor: 'rgba(0, 200, 117, 0.1)', color: '#00C875' }}>
+                        <CheckCircle2 className="h-4 w-4" /> Dose Logged
                       </span>
                     ) : (
                       <>
                         <button
                           onClick={() => logMedicationStatus(med.id, 'taken')}
-                          className="px-3.5 py-1.5 rounded-lg bg-teal-600 text-white font-bold hover:bg-teal-700 transition-colors"
+                          className="pill-btn pill-btn-primary"
+                          style={{ backgroundColor: '#0066FF' }}
                         >
                           Mark Taken
                         </button>
                         <button
                           onClick={() => logMedicationStatus(med.id, 'skipped')}
-                          className="px-3 py-1.5 rounded-lg bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 font-semibold hover:bg-slate-300"
+                          className="pill-btn pill-btn-ghost"
                         >
                           Skip
                         </button>
@@ -198,7 +222,7 @@ export default function MedicationsPage() {
                         deleteMedication(med.id);
                         showToast('Medication removed from cabinet.');
                       }}
-                      className="p-1.5 text-slate-400 hover:text-red-500 rounded"
+                      className="p-2 text-slate-400 hover:text-[#FF3366] rounded-full transition-colors"
                     >
                       <Trash2 className="h-4 w-4" />
                     </button>
@@ -208,36 +232,39 @@ export default function MedicationsPage() {
             })}
           </div>
         ) : (
-          <div className="p-12 text-center bg-slate-50 dark:bg-slate-800/40 rounded-xl space-y-3">
-            <Pill className="h-10 w-10 text-slate-400 mx-auto" />
-            <h3 className="text-sm font-bold text-slate-700 dark:text-slate-300">
+          <div className="p-12 text-center rounded-3xl space-y-3 frosted-card border border-dashed border-slate-300">
+            <div className="w-16 h-16 mx-auto rounded-full flex items-center justify-center shadow-inner bg-white">
+               <Pill className="h-8 w-8 text-slate-400" />
+            </div>
+            <h3 className="text-sm font-bold text-slate-700">
               No Active Medications Scheduled
             </h3>
             <button
               onClick={() => setShowAddModal(true)}
-              className="px-4 py-2 rounded-xl bg-teal-600 text-white text-xs font-bold inline-flex items-center gap-1.5"
+              className="pill-btn pill-btn-primary inline-flex items-center gap-1.5 mx-auto card-lift"
+              style={{ backgroundColor: '#0066FF' }}
             >
               <Plus className="h-4 w-4" /> Add Medication
             </button>
           </div>
         )}
-        </div>
       </div>
 
       {/* Add Medication Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-md">
-          <div className="w-full max-w-md rounded-2xl bg-white dark:bg-slate-900 shadow-modal border border-slate-200 dark:border-slate-800 overflow-hidden animate-fade-in-up">
-          <div className="h-1 w-full bg-teal-600" />
-          <div className="p-6 space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
-              <h3 className="text-sm font-bold text-slate-900 dark:text-white">Add New Medication</h3>
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          style={{ backgroundColor: 'rgba(10,20,60,0.30)', backdropFilter: 'blur(16px)' }}
+        >
+          <div className="w-full max-w-md rounded-3xl frosted-card bg-white/80 p-6 shadow-2xl space-y-4 font-sans anim-fade-up">
+            <div className="flex items-center justify-between border-b border-slate-200/50 pb-3">
+              <h3 className="text-sm font-extrabold text-slate-900">Add New Medication</h3>
               <button onClick={() => setShowAddModal(false)} className="text-slate-400 hover:text-slate-600 text-xs">✕</button>
             </div>
 
-            <form onSubmit={handleAddSubmit} className="space-y-3 text-xs">
+            <form onSubmit={handleAddSubmit} className="space-y-4 text-xs">
               <div>
-                <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                <label className="block font-bold text-slate-700 mb-1.5">
                   Medication Name:
                 </label>
                 <input
@@ -246,44 +273,44 @@ export default function MedicationsPage() {
                   value={newMedName}
                   onChange={(e) => setNewMedName(e.target.value)}
                   placeholder="e.g. Amoxicillin, Metformin..."
-                  className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700 font-semibold outline-none"
+                  className="w-full p-3 rounded-2xl bg-white/50 text-slate-900 border border-slate-200/50 font-bold outline-none focus:border-[#0066FF] shadow-inner"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Strength/Dosage:</label>
+                  <label className="block font-bold text-slate-700 mb-1.5">Strength/Dosage:</label>
                   <input
                     type="text"
                     value={newMedDosage}
                     onChange={(e) => setNewMedDosage(e.target.value)}
                     placeholder="e.g. 500mg, 10ml"
-                    className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700 font-medium outline-none"
+                    className="w-full p-3 rounded-2xl bg-white/50 text-slate-900 border border-slate-200/50 font-medium outline-none shadow-inner focus:border-[#0066FF]"
                   />
                 </div>
                 <div>
-                  <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Time Slot:</label>
+                  <label className="block font-bold text-slate-700 mb-1.5">Time Slot:</label>
                   <input
                     type="time"
                     value={newMedTime}
                     onChange={(e) => setNewMedTime(e.target.value)}
-                    className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700 font-medium outline-none"
+                    className="w-full p-3 rounded-2xl bg-white/50 text-slate-900 border border-slate-200/50 font-medium outline-none shadow-inner focus:border-[#0066FF]"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Food Timing:</label>
+                <label className="block font-bold text-slate-700 mb-1.5">Food Timing:</label>
                 <div className="flex gap-2">
                   {(['Before Food', 'After Food'] as const).map((opt) => (
                     <button
                       type="button"
                       key={opt}
                       onClick={() => setNewMedFood(opt)}
-                      className={`flex-1 py-2 rounded-xl text-xs font-semibold border ${
+                      className={`flex-1 py-2.5 rounded-full text-xs font-bold transition-all shadow-sm ${
                         newMedFood === opt
-                          ? 'bg-teal-600 text-white border-teal-700'
-                          : 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700'
+                          ? 'bg-[#0066FF] text-white border-transparent'
+                          : 'bg-white/50 text-slate-700 border border-slate-200/50 hover:bg-white'
                       }`}
                     >
                       {opt}
@@ -292,23 +319,23 @@ export default function MedicationsPage() {
                 </div>
               </div>
 
-              <div className="flex gap-2 pt-3">
+              <div className="flex gap-3 pt-4">
                 <button
                   type="button"
                   onClick={() => setShowAddModal(false)}
-                  className="flex-1 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold"
+                  className="flex-1 pill-btn pill-btn-ghost"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 py-2.5 rounded-xl bg-teal-600 text-white font-bold hover:bg-teal-700"
+                  className="flex-1 pill-btn pill-btn-primary"
+                  style={{ backgroundColor: '#0066FF' }}
                 >
                   Save Medication
                 </button>
               </div>
             </form>
-          </div>
           </div>
         </div>
       )}

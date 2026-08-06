@@ -50,7 +50,7 @@ export function getFacilitiesForUserLocation(userLat: number, userLng: number, u
     },
     {
       id: 'real-fac-3',
-      name: `Apollo Pharmacy 24x7`,
+      name: `${userCity} Community Pharmacy 24x7`,
       type: 'Pharmacy',
       address: `Station Road, ${userCity}`,
       distanceKm: calculateDistanceKm(userLat, userLng, userLat + 0.003, userLng - 0.004),
