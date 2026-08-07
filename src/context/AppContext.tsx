@@ -183,11 +183,35 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
         const savedVaccines = localStorage.getItem('hb_vaccinations');
         if (savedVaccines) setVaccinations(JSON.parse(savedVaccines));
+
+        const savedTheme = localStorage.getItem('hb_theme');
+        if (savedTheme === 'dark') {
+          setDarkMode(true);
+          document.documentElement.classList.add('dark');
+        } else {
+          setDarkMode(false);
+          document.documentElement.classList.remove('dark');
+        }
       } catch (err) {
         console.warn('LocalStorage load error:', err);
       }
     }
   }, []);
+
+  const handleSetDarkMode = (val: boolean) => {
+    setDarkMode(val);
+    if (typeof window !== 'undefined') {
+      if (val) {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('hb_theme', 'dark');
+        showToast('Dark Mode Enabled');
+      } else {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('hb_theme', 'light');
+        showToast('Light Mode Enabled');
+      }
+    }
+  };
 
   // LocalStorage sync effects
   useEffect(() => {
@@ -522,7 +546,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         language,
         setLanguage,
         darkMode,
-        setDarkMode,
+        setDarkMode: handleSetDarkMode,
         isJudgeDemo,
         setIsJudgeDemo,
         activeProfile,

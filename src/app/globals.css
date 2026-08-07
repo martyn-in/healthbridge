@@ -3,7 +3,7 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
-/* ─── DESIGN TOKENS (IMAGE 1 SOFT LAVENDER & VIOLET PALETTE) ─────────────── */
+/* ─── LIGHT MODE TOKENS (IMAGE 1 SOFT PALETTE) ─────────────────────────── */
 :root {
   --bg-base:                #F2EFFE;
   --bg-surface:             #E8E3FF;
@@ -20,7 +20,7 @@
   --accent-lavender-dark:   #DED8FF;
   --accent-crimson:         #FF3366;
 
-  --border-subtle:          rgba(110, 86, 207, 0.08);
+  --border-subtle:          rgba(110, 86, 207, 0.10);
   --border-card:            rgba(255, 255, 255, 0.95);
   --shadow-sm:              0 2px 10px rgba(110, 86, 207, 0.03);
   --shadow-md:              0 8px 30px rgba(110, 86, 207, 0.05);
@@ -28,6 +28,30 @@
 
   --radius-card:            24px;
   --radius-pill:            999px;
+}
+
+/* ─── DARK MODE TOKENS (SLEEK CHARCOAL & DEEP VIOLET PALETTE) ───────────── */
+.dark, html.dark {
+  --bg-base:                #0F0D15;
+  --bg-surface:             #181523;
+  --bg-card:                #1E1A2B;
+  --bg-card-subtle:         #28233A;
+
+  --text-primary:           #F6F5FA;
+  --text-secondary:         #A8A4BA;
+  --text-muted:             #77738A;
+
+  --accent-purple:          #8C73FF;
+  --accent-violet:          #9D8CFF;
+  --accent-lavender:        #2E2744;
+  --accent-lavender-dark:   #3E365E;
+  --accent-crimson:         #FF4D7D;
+
+  --border-subtle:          rgba(255, 255, 255, 0.10);
+  --border-card:            rgba(255, 255, 255, 0.12);
+  --shadow-sm:              0 2px 10px rgba(0, 0, 0, 0.25);
+  --shadow-md:              0 8px 30px rgba(0, 0, 0, 0.40);
+  --shadow-lg:              0 20px 50px rgba(0, 0, 0, 0.60);
 }
 
 /* ─── RESET & BASE ────────────────────────────────────────────────── */
@@ -42,22 +66,24 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* ─── CUSTOM SCROLLBAR ────────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb {
-  background: rgba(110, 86, 207, 0.20);
+  background: rgba(140, 115, 255, 0.25);
   border-radius: 10px;
 }
-::-webkit-scrollbar-thumb:hover { background: rgba(110, 86, 207, 0.35); }
+::-webkit-scrollbar-thumb:hover { background: rgba(140, 115, 255, 0.45); }
 
 /* ─── SOFT CARDS & UTILITIES ────────────────────────────────────── */
 .soft-card {
-  background: #FFFFFF;
-  border: 1px solid rgba(110, 86, 207, 0.08);
-  box-shadow: 0 8px 30px rgba(110, 86, 207, 0.04);
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-md);
+  color: var(--text-primary);
 }
 
 .pill-btn {
@@ -73,23 +99,23 @@ body {
 }
 
 .pill-btn-primary {
-  background: #6E56CF;
+  background: var(--accent-purple);
   color: #FFFFFF;
   box-shadow: 0 4px 16px rgba(110, 86, 207, 0.25);
 }
 
 .pill-btn-primary:hover {
-  background: #5E46BF;
+  filter: brightness(1.1);
   transform: translateY(-1px);
 }
 
 .pill-btn-ghost {
-  background: #E8E3FF;
-  color: #6E56CF;
+  background: var(--accent-lavender);
+  color: var(--accent-purple);
 }
 
 .pill-btn-ghost:hover {
-  background: #DED8FF;
+  background: var(--accent-lavender-dark);
 }
 
 /* Floating animation */

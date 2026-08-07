@@ -15,6 +15,8 @@ import {
   Bot,
   FileText,
   TrendingUp,
+  Sun,
+  Moon,
 } from "lucide-react";
 import { useApp } from "@/context/AppContext";
 import { Logo } from "./Logo";
@@ -26,6 +28,8 @@ export const Header: React.FC<{ onOpenHealthCard?: () => void }> = ({ onOpenHeal
   const {
     language,
     setLanguage,
+    darkMode,
+    setDarkMode,
     activeProfile,
     profiles,
     setActiveProfile,
@@ -130,10 +134,23 @@ export const Header: React.FC<{ onOpenHealthCard?: () => void }> = ({ onOpenHeal
             <span>{t(language, "emergencySos")}</span>
           </button>
 
+          {/* Light / Dark Mode Toggle Button */}
+          <button
+            onClick={() => setDarkMode(!darkMode)}
+            className="p-2 rounded-full bg-white dark:bg-[#1E1A2B] border border-[#6E56CF]/10 shadow-sm text-[#78758A] dark:text-[#A8A4BA] hover:text-[#6E56CF] dark:hover:text-[#8C73FF] transition-all hover:scale-105"
+            title={darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+          >
+            {darkMode ? (
+              <Sun className="h-4 w-4 text-amber-400" />
+            ) : (
+              <Moon className="h-4 w-4 text-[#6E56CF]" />
+            )}
+          </button>
+
           {/* Quick Settings Icon */}
           <Link
             href="/dashboard/settings"
-            className="p-2 rounded-full bg-white border border-[#6E56CF]/10 shadow-sm text-[#78758A] hover:text-[#6E56CF] hover:bg-[#E8E3FF]/40 transition-all hover:scale-105"
+            className="p-2 rounded-full bg-white dark:bg-[#1E1A2B] border border-[#6E56CF]/10 shadow-sm text-[#78758A] dark:text-[#A8A4BA] hover:text-[#6E56CF] dark:hover:text-[#8C73FF] transition-all hover:scale-105"
             title="Settings"
           >
             <Settings className="h-4 w-4" />
