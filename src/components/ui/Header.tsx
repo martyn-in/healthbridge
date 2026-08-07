@@ -67,10 +67,10 @@ export const Header: React.FC<{ onOpenHealthCard?: () => void }> = ({ onOpenHeal
     <header
       className="sticky top-0 z-40 font-sans transition-colors duration-300"
       style={{
-        background: darkMode ? "rgba(24, 24, 29, 0.90)" : "rgba(242, 239, 254, 0.88)",
-        backdropFilter: "blur(20px)",
-        WebkitBackdropFilter: "blur(20px)",
-        borderBottom: darkMode ? "1px solid rgba(255, 255, 255, 0.08)" : "1px solid rgba(110, 86, 207, 0.08)",
+        background: darkMode ? "rgba(24, 24, 29, 0.75)" : "rgba(255, 255, 255, 0.72)",
+        backdropFilter: "blur(28px) saturate(180%)",
+        WebkitBackdropFilter: "blur(28px) saturate(180%)",
+        borderBottom: darkMode ? "1px solid rgba(255, 255, 255, 0.12)" : "1px solid rgba(110, 86, 207, 0.14)",
       }}
     >
       {toastMessage && (

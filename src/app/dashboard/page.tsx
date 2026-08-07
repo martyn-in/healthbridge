@@ -51,7 +51,7 @@ function HealthImprovementChart() {
         <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-full overflow-visible" preserveAspectRatio="none">
           <defs>
             <linearGradient id="softPurpleGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#6E56CF" stopOpacity="0.18" />
+              <stop offset="0%" stopColor="#6E56CF" stopOpacity="0.22" />
               <stop offset="100%" stopColor="#6E56CF" stopOpacity="0.0" />
             </linearGradient>
           </defs>
@@ -102,21 +102,20 @@ function HealthImprovementChart() {
               top: `${(activePt.y / height) * 100 - 10}%`,
             }}
           >
-            <div className="bg-[#6E56CF] text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-lg flex flex-col items-center whitespace-nowrap">
+            <div className="px-3 py-1 rounded-full text-xs font-bold text-white shadow-md flex items-center gap-1 bg-[#6E56CF]">
               <span>{activePt.val}% Health Sync</span>
-              <span className="text-[8px] opacity-80">Live Telemetry</span>
             </div>
           </div>
         )}
       </div>
 
-      <div className="flex justify-between items-center px-3 mt-2 text-[11px] font-bold text-[#6B677E]">
+      <div className="flex justify-between items-center pt-2 px-4 border-t border-[#6E56CF]/10">
         {days.map((day, idx) => (
           <span
             key={day}
             onClick={() => setSelectedPoint(idx)}
-            className={`cursor-pointer transition-colors ${
-              idx === selectedPoint ? 'text-[#6E56CF] font-extrabold' : 'hover:text-[#1E1B2E]'
+            className={`text-[10px] font-extrabold cursor-pointer transition-colors ${
+              idx === selectedPoint ? 'text-[#6E56CF]' : 'text-[#6B677E]'
             }`}
           >
             {day}
@@ -130,24 +129,21 @@ function HealthImprovementChart() {
 export default function DashboardPage() {
   const { activeProfile, reports, appointments, wellness, adherencePercentage } = useApp();
 
-  const activeAppointments = appointments.filter(a => a.status === 'Upcoming');
+  const activeAppointments = appointments.filter((a) => a.status === 'Upcoming');
   const upcomingAppointment = activeAppointments[0];
 
   return (
     <div className="space-y-6 pb-12 font-sans selection:bg-[#E8E3FF] selection:text-[#6E56CF]">
-      
       {/* ── TOP MAIN GRID ── */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-
-        {/* ── LEFT HERO AREA ── */}
-        <div className="lg:col-span-7 bg-white rounded-3xl p-7 relative overflow-hidden border border-[#6E56CF]/10 shadow-sm flex flex-col justify-between min-h-[380px]">
-          
+        {/* ── LEFT HERO AREA (FROSTED GLASS CARD) ── */}
+        <div className="lg:col-span-7 frosted-glass rounded-3xl p-7 relative overflow-hidden flex flex-col justify-between min-h-[380px]">
           {/* Editorial Headline */}
           <div className="relative z-10 max-w-md">
-            <h1 className="text-3xl sm:text-4xl font-light text-[#1E1B2E] leading-tight tracking-tight">
+            <h1 className="text-3xl sm:text-4xl font-light text-[var(--text-primary)] leading-tight tracking-tight">
               Hello, <span className="font-extrabold">{activeProfile?.name || 'User'} 👋</span>
             </h1>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#1E1B2E] leading-tight tracking-tight mt-1">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-[var(--text-primary)] leading-tight tracking-tight mt-1">
               How are you feeling today?
             </h2>
           </div>
@@ -159,7 +155,7 @@ export default function DashboardPage() {
                 className="absolute w-56 h-56 rounded-full blur-3xl opacity-40 animate-pulse"
                 style={{ background: 'radial-gradient(circle, #E8E3FF 0%, #B9ACFF 100%)' }}
               />
-              
+
               <svg viewBox="0 0 200 200" className="w-48 h-48 relative z-10 drop-shadow-md animate-float">
                 <defs>
                   <linearGradient id="softOrganGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -180,66 +176,75 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* 3 REAL METRIC CARDS */}
+          {/* 3 REAL METRIC EMBEDDED SUB-PANELS */}
           <div className="relative z-10 grid grid-cols-1 sm:grid-cols-3 gap-3 mt-8">
-            
-            <div className="bg-[#F8F7FF]/90 backdrop-blur-md rounded-2xl p-4 border border-[#6E56CF]/10 shadow-sm transition-all hover:translate-y-[-2px]">
-              <div className="flex items-center justify-between text-[#6B677E] text-xs font-semibold mb-2">
+            <div className="glass-subpanel p-4 transition-all hover:translate-y-[-2px]">
+              <div className="flex items-center justify-between text-[var(--text-secondary)] text-xs font-semibold mb-2">
                 <span>Adherence Score</span>
-                <Target className="h-4 w-4 text-[#6E56CF]" />
+                <Target className="h-4 w-4 text-[#6E56CF] dark:text-[#8C73FF]" />
               </div>
-              <div className="text-[10px] text-[#6B677E] font-medium">Status: <span className="text-[#1E1B2E] font-bold">Active</span></div>
-              <div className="text-2xl font-black text-[#1E1B2E] mt-1">{adherencePercentage > 0 ? `${adherencePercentage}%` : '100%'}</div>
+              <div className="text-[10px] text-[var(--text-secondary)] font-medium">
+                Status: <span className="text-[var(--text-primary)] font-bold">Active</span>
+              </div>
+              <div className="text-2xl font-black text-[var(--text-primary)] mt-1">
+                {adherencePercentage > 0 ? `${adherencePercentage}%` : '100%'}
+              </div>
             </div>
 
-            <div className="bg-[#F8F7FF]/90 backdrop-blur-md rounded-2xl p-4 border border-[#6E56CF]/10 shadow-sm transition-all hover:translate-y-[-2px]">
-              <div className="flex items-center justify-between text-[#6B677E] text-xs font-semibold mb-2">
+            <div className="glass-subpanel p-4 transition-all hover:translate-y-[-2px]">
+              <div className="flex items-center justify-between text-[var(--text-secondary)] text-xs font-semibold mb-2">
                 <span>Daily Hydration</span>
-                <Brain className="h-4 w-4 text-[#6E56CF]" />
+                <Brain className="h-4 w-4 text-[#6E56CF] dark:text-[#8C73FF]" />
               </div>
-              <div className="text-[10px] text-[#6B677E] font-medium">Goal: <span className="text-[#1E1B2E] font-bold">{wellness?.waterGoalMl || 2500} ml</span></div>
-              <div className="text-2xl font-black text-[#1E1B2E] mt-1">{wellness?.waterIntakeMl || 0} <span className="text-xs font-medium text-[#6B677E]">ml</span></div>
+              <div className="text-[10px] text-[var(--text-secondary)] font-medium">
+                Goal: <span className="text-[var(--text-primary)] font-bold">{wellness?.waterGoalMl || 2500} ml</span>
+              </div>
+              <div className="text-2xl font-black text-[var(--text-primary)] mt-1">
+                {wellness?.waterIntakeMl || 0} <span className="text-xs font-medium text-[var(--text-secondary)]">ml</span>
+              </div>
             </div>
 
-            <div className="bg-[#F8F7FF]/90 backdrop-blur-md rounded-2xl p-4 border border-[#6E56CF]/10 shadow-sm transition-all hover:translate-y-[-2px]">
-              <div className="flex items-center justify-between text-[#6B677E] text-xs font-semibold mb-2">
+            <div className="glass-subpanel p-4 transition-all hover:translate-y-[-2px]">
+              <div className="flex items-center justify-between text-[var(--text-secondary)] text-xs font-semibold mb-2">
                 <span>Mindfulness</span>
-                <Zap className="h-4 w-4 text-[#6E56CF]" />
+                <Zap className="h-4 w-4 text-[#6E56CF] dark:text-[#8C73FF]" />
               </div>
-              <div className="text-[10px] text-[#6B677E] font-medium">Recorded Today</div>
-              <div className="text-2xl font-black text-[#1E1B2E] mt-1">{wellness?.mindfulMinutes || 0} <span className="text-xs font-medium text-[#6B677E]">mins</span></div>
+              <div className="text-[10px] text-[var(--text-secondary)] font-medium">Recorded Today</div>
+              <div className="text-2xl font-black text-[var(--text-primary)] mt-1">
+                {wellness?.mindfulMinutes || 0} <span className="text-xs font-medium text-[var(--text-secondary)]">mins</span>
+              </div>
             </div>
-
           </div>
         </div>
 
-        {/* ── RIGHT PRIMARY ANALYTICS PANEL ── */}
-        <div className="lg:col-span-5 bg-white rounded-3xl p-7 border border-[#6E56CF]/10 shadow-sm flex flex-col justify-between">
+        {/* ── RIGHT PRIMARY ANALYTICS PANEL (FROSTED GLASS CARD) ── */}
+        <div className="lg:col-span-5 frosted-glass rounded-3xl p-7 flex flex-col justify-between">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h3 className="text-xl font-bold text-[#1E1B2E]">Health Improvement</h3>
-              <p className="text-xs font-semibold text-[#6B677E] mt-0.5">This week</p>
+              <h3 className="text-xl font-bold text-[var(--text-primary)]">Health Improvement</h3>
+              <p className="text-xs font-semibold text-[var(--text-secondary)] mt-0.5">This week</p>
             </div>
-            
-            <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-[#F8F7FF] border border-[#6E56CF]/10 text-[#1E1B2E] hover:bg-[#E8E3FF]/50 transition-all">
+
+            <button className="glass-pill flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-[var(--text-primary)] hover:bg-[#E8E3FF]/50 transition-all">
               <span>Week</span>
-              <ChevronDown className="h-3.5 w-3.5 text-[#6B677E]" />
+              <ChevronDown className="h-3.5 w-3.5 text-[var(--text-secondary)]" />
             </button>
           </div>
 
           <HealthImprovementChart />
         </div>
-
       </div>
 
       {/* ── LOWER 3-CARD GRID (REPORTS + UPCOMING APPOINTMENT + ACTIVE PATH) ── */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-
         {/* ── CARD 1: REPORTS LIST ── */}
-        <div className="lg:col-span-5 bg-white rounded-3xl p-6 border border-[#6E56CF]/10 shadow-sm space-y-4">
+        <div className="lg:col-span-5 frosted-glass rounded-3xl p-6 space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-lg font-bold text-[#1E1B2E]">Reports</h3>
-            <Link href="/dashboard/reports" className="flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-[#E8E3FF] text-[#6E56CF] hover:bg-[#DED8FF]">
+            <h3 className="text-lg font-bold text-[var(--text-primary)]">Reports</h3>
+            <Link
+              href="/dashboard/reports"
+              className="flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-[#E8E3FF] dark:bg-[#2D2845] text-[#6E56CF] dark:text-[#8C73FF] hover:opacity-90"
+            >
               <Plus className="h-3 w-3" />
               <span>Upload Report</span>
             </Link>
@@ -250,22 +255,22 @@ export default function DashboardPage() {
               {reports.slice(0, 3).map((report) => (
                 <div
                   key={report.id}
-                  className="flex items-center justify-between p-3.5 rounded-2xl bg-[#F8F7FF] border border-[#6E56CF]/10 hover:bg-[#E8E3FF]/40 transition-all"
+                  className="flex items-center justify-between p-3.5 glass-subpanel transition-all"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-[#E8E3FF] text-[#6E56CF] flex items-center justify-center shrink-0">
+                    <div className="w-10 h-10 rounded-xl bg-[#E8E3FF] dark:bg-[#2D2845] text-[#6E56CF] dark:text-[#8C73FF] flex items-center justify-center shrink-0">
                       <FileText className="h-5 w-5" />
                     </div>
                     <div>
-                      <h4 className="text-xs font-bold text-[#1E1B2E]">{report.fileName}</h4>
-                      <p className="text-[10px] font-semibold text-[#6B677E]">{report.uploadedAt || report.testDate}</p>
+                      <h4 className="text-xs font-bold text-[var(--text-primary)]">{report.fileName}</h4>
+                      <p className="text-[10px] font-semibold text-[var(--text-secondary)]">{report.uploadedAt || report.testDate}</p>
                     </div>
                   </div>
 
                   <a
                     href={report.fileUrl || '#'}
                     download
-                    className="w-8 h-8 rounded-full bg-white border border-[#6E56CF]/10 flex items-center justify-center text-[#6E56CF] hover:bg-[#6E56CF] hover:text-white transition-all shadow-sm"
+                    className="w-8 h-8 rounded-full glass-pill flex items-center justify-center text-[#6E56CF] dark:text-[#8C73FF] hover:bg-[#6E56CF] hover:text-white transition-all shadow-sm"
                   >
                     <Download className="h-3.5 w-3.5" />
                   </a>
@@ -273,11 +278,14 @@ export default function DashboardPage() {
               ))}
             </div>
           ) : (
-            <div className="p-8 text-center bg-[#F8F7FF] rounded-2xl border border-dashed border-[#6E56CF]/20">
+            <div className="p-8 text-center glass-subpanel rounded-2xl border-dashed border-[#6E56CF]/20">
               <FileText className="h-8 w-8 mx-auto text-[#6E56CF]/40 mb-2" />
-              <div className="text-xs font-bold text-[#1E1B2E]">No medical reports uploaded</div>
-              <div className="text-[10px] text-[#6B677E] mt-0.5 mb-3">Scan lab reports or diagnostic records to view clinical summaries</div>
-              <Link href="/dashboard/reports" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-[#6E56CF] text-white shadow-sm">
+              <div className="text-xs font-bold text-[var(--text-primary)]">No medical reports uploaded</div>
+              <div className="text-[10px] text-[var(--text-secondary)] mt-0.5 mb-3">Scan lab reports or diagnostic records to view clinical summaries</div>
+              <Link
+                href="/dashboard/reports"
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#6E56CF] text-white shadow-sm hover:bg-[#5E46BF]"
+              >
                 <Plus className="h-3.5 w-3.5" />
                 <span>Upload First Report</span>
               </Link>
@@ -286,12 +294,12 @@ export default function DashboardPage() {
         </div>
 
         {/* ── CARD 2: UPCOMING SESSION ── */}
-        <div className="lg:col-span-3 bg-white rounded-3xl p-6 border border-[#6E56CF]/10 shadow-sm flex flex-col justify-between">
+        <div className="lg:col-span-3 frosted-glass rounded-3xl p-6 flex flex-col justify-between">
           <div className="flex items-center justify-between">
-            <h3 className="text-base font-bold text-[#1E1B2E]">Upcoming Session</h3>
+            <h3 className="text-base font-bold text-[var(--text-primary)]">Upcoming Session</h3>
             <Link
               href="/dashboard/appointments"
-              className="w-8 h-8 rounded-full bg-[#F8F7FF] flex items-center justify-center text-[#6E56CF] hover:bg-[#6E56CF] hover:text-white transition-all"
+              className="w-8 h-8 rounded-full glass-pill flex items-center justify-center text-[#6E56CF] dark:text-[#8C73FF] hover:bg-[#6E56CF] hover:text-white transition-all"
             >
               <ArrowUpRight className="h-4 w-4" />
             </Link>
@@ -300,25 +308,25 @@ export default function DashboardPage() {
           {upcomingAppointment ? (
             <div className="space-y-4 my-2">
               <div>
-                <div className="text-xs font-bold text-[#6B677E] uppercase tracking-wider mb-1">Scheduled</div>
-                <div className="text-2xl font-black text-[#1E1B2E] tracking-tight">{upcomingAppointment.time}</div>
-                <div className="text-xs font-bold text-[#6E56CF]">{upcomingAppointment.date}</div>
+                <div className="text-xs font-bold text-[var(--text-secondary)] uppercase tracking-wider mb-1">Scheduled</div>
+                <div className="text-2xl font-black text-[var(--text-primary)] tracking-tight">{upcomingAppointment.time}</div>
+                <div className="text-xs font-bold text-[#6E56CF] dark:text-[#8C73FF]">{upcomingAppointment.date}</div>
               </div>
-              <div className="p-3.5 rounded-2xl bg-[#E8E3FF] border border-[#6E56CF]/15 flex items-center gap-3">
+              <div className="p-3.5 glass-subpanel flex items-center gap-3">
                 <div className="w-9 h-9 rounded-full bg-[#6E56CF] text-white flex items-center justify-center shrink-0 font-bold text-xs">
                   <Calendar className="h-4 w-4" />
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-[#1E1B2E]">{upcomingAppointment.doctorName}</div>
-                  <div className="text-[10px] text-[#6B677E] font-medium">{upcomingAppointment.specialty}</div>
+                  <div className="text-xs font-bold text-[var(--text-primary)]">{upcomingAppointment.doctorName}</div>
+                  <div className="text-[10px] text-[var(--text-secondary)] font-medium">{upcomingAppointment.specialty}</div>
                 </div>
               </div>
             </div>
           ) : (
-            <div className="my-4 text-center p-4 bg-[#F8F7FF] rounded-2xl border border-dashed border-[#6E56CF]/20">
+            <div className="my-4 text-center p-4 glass-subpanel border-dashed border-[#6E56CF]/20">
               <Calendar className="h-6 w-6 mx-auto text-[#6E56CF]/40 mb-1" />
-              <div className="text-xs font-bold text-[#1E1B2E]">No upcoming session</div>
-              <div className="text-[10px] text-[#6B677E] mt-0.5 mb-2">Book a doctor or specialist consultation</div>
+              <div className="text-xs font-bold text-[var(--text-primary)]">No upcoming session</div>
+              <div className="text-[10px] text-[var(--text-secondary)] mt-0.5 mb-2">Book a doctor or specialist consultation</div>
               <Link href="/dashboard/appointments" className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[11px] font-bold bg-[#6E56CF] text-white">
                 <Plus className="h-3 w-3" />
                 <span>Book Session</span>
@@ -326,27 +334,27 @@ export default function DashboardPage() {
             </div>
           )}
 
-          <Link href="/dashboard/appointments" className="text-center py-2 text-xs font-bold text-[#6E56CF] hover:underline">
+          <Link href="/dashboard/appointments" className="text-center py-2 text-xs font-bold text-[#6E56CF] dark:text-[#8C73FF] hover:underline">
             View All Appointments →
           </Link>
         </div>
 
         {/* ── CARD 3: ACTIVE PATH THIS WEEK ── */}
-        <div className="lg:col-span-4 bg-white rounded-3xl p-6 border border-[#6E56CF]/10 shadow-sm space-y-5">
+        <div className="lg:col-span-4 frosted-glass rounded-3xl p-6 space-y-5">
           <div className="flex items-center justify-between">
-            <h3 className="text-base font-bold text-[#1E1B2E]">Active path this week</h3>
-            <span className="text-2xl font-black text-[#1E1B2E]">{adherencePercentage > 0 ? `${adherencePercentage}%` : '100%'}</span>
+            <h3 className="text-base font-bold text-[var(--text-primary)]">Active path this week</h3>
+            <span className="text-2xl font-black text-[var(--text-primary)]">{adherencePercentage > 0 ? `${adherencePercentage}%` : '100%'}</span>
           </div>
 
           <div className="space-y-4">
             <div className="space-y-1.5">
-              <div className="flex justify-between text-xs font-bold text-[#1E1B2E]">
+              <div className="flex justify-between text-xs font-bold text-[var(--text-primary)]">
                 <span>Medication Adherence</span>
                 <span>{adherencePercentage > 0 ? `${adherencePercentage}%` : '100%'}</span>
               </div>
-              <div className="w-full h-8 bg-[#F8F7FF] rounded-full overflow-hidden p-1 flex items-center">
+              <div className="w-full h-8 glass-subpanel rounded-full overflow-hidden p-1 flex items-center">
                 <div
-                  className="h-full rounded-full transition-all duration-500 flex items-center justify-end pr-2 text-[10px] font-extrabold text-[#6E56CF]"
+                  className="h-full rounded-full transition-all duration-500 flex items-center justify-end pr-2 text-[10px] font-extrabold text-[#6E56CF] dark:text-[#8C73FF]"
                   style={{ width: `${adherencePercentage > 0 ? adherencePercentage : 100}%`, background: '#E8E3FF' }}
                 >
                   {adherencePercentage > 0 ? `${adherencePercentage}%` : '100%'}
@@ -355,11 +363,11 @@ export default function DashboardPage() {
             </div>
 
             <div className="space-y-1.5">
-              <div className="flex justify-between text-xs font-bold text-[#1E1B2E]">
+              <div className="flex justify-between text-xs font-bold text-[var(--text-primary)]">
                 <span>Hydration Tracking</span>
                 <span>{Math.min(100, Math.round(((wellness?.waterIntakeMl || 0) / (wellness?.waterGoalMl || 2500)) * 100))}%</span>
               </div>
-              <div className="w-full h-8 bg-[#F8F7FF] rounded-full overflow-hidden p-1 flex items-center">
+              <div className="w-full h-8 glass-subpanel rounded-full overflow-hidden p-1 flex items-center">
                 <div
                   className="h-full rounded-full transition-all duration-500 flex items-center justify-end pr-2 text-[10px] font-extrabold text-white"
                   style={{
@@ -373,13 +381,13 @@ export default function DashboardPage() {
             </div>
 
             <div className="space-y-1.5">
-              <div className="flex justify-between text-xs font-bold text-[#1E1B2E]">
+              <div className="flex justify-between text-xs font-bold text-[var(--text-primary)]">
                 <span>Daily Steps Goal</span>
                 <span>{Math.min(100, Math.round(((wellness?.steps || 0) / (wellness?.stepGoal || 8000)) * 100))}%</span>
               </div>
-              <div className="w-full h-8 bg-[#F8F7FF] rounded-full overflow-hidden p-1 flex items-center">
+              <div className="w-full h-8 glass-subpanel rounded-full overflow-hidden p-1 flex items-center">
                 <div
-                  className="h-full rounded-full transition-all duration-500 flex items-center justify-end pr-2 text-[10px] font-extrabold text-[#6E56CF]"
+                  className="h-full rounded-full transition-all duration-500 flex items-center justify-end pr-2 text-[10px] font-extrabold text-[#6E56CF] dark:text-[#8C73FF]"
                   style={{
                     width: `${Math.min(100, Math.round(((wellness?.steps || 0) / (wellness?.stepGoal || 8000)) * 100))}%`,
                     background: '#DED8FF',
@@ -389,12 +397,9 @@ export default function DashboardPage() {
                 </div>
               </div>
             </div>
-
           </div>
         </div>
-
       </div>
-
     </div>
   );
 }

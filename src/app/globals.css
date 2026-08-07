@@ -3,12 +3,12 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
-/* ─── DESIGN TOKENS (LIGHT MODE MESH PALETTE) ─────────────────────────── */
+/* ─── DESIGN TOKENS (LIGHT MODE MESH & GLASS PALETTE) ───────────────── */
 :root {
   --bg-base:                #F6F7FE;
-  --bg-surface:             rgba(232, 227, 255, 0.75);
-  --bg-card:                rgba(255, 255, 255, 0.75);
-  --bg-card-subtle:         rgba(248, 247, 255, 0.85);
+  --bg-surface:             rgba(232, 227, 255, 0.70);
+  --bg-card:                rgba(255, 255, 255, 0.72);
+  --bg-card-subtle:         rgba(248, 247, 255, 0.80);
 
   --text-primary:           #1E1B2E;
   --text-secondary:         #6B677E;
@@ -20,22 +20,22 @@
   --accent-lavender-dark:   #DED8FF;
   --accent-crimson:         #FF3366;
 
-  --border-subtle:          rgba(110, 86, 207, 0.12);
+  --border-subtle:          rgba(110, 86, 207, 0.14);
   --border-card:            rgba(255, 255, 255, 0.85);
   --shadow-sm:              0 2px 10px rgba(110, 86, 207, 0.04);
-  --shadow-md:              0 10px 35px rgba(110, 86, 207, 0.06);
-  --shadow-lg:              0 20px 50px rgba(110, 86, 207, 0.09);
+  --shadow-md:              0 14px 38px rgba(110, 86, 207, 0.06);
+  --shadow-lg:              0 24px 60px rgba(110, 86, 207, 0.09);
 
   --radius-card:            24px;
   --radius-pill:            999px;
 }
 
-/* ─── DARK MODE DESIGN TOKENS (PREMIUM DARK OBSIDIAN MESH) ─────────────── */
+/* ─── DARK MODE DESIGN TOKENS (PREMIUM DARK GLASS & MESH) ─────────────── */
 html.dark, .dark {
   --bg-base:                #0C0C10;
-  --bg-surface:             rgba(27, 27, 32, 0.80);
-  --bg-card:                rgba(24, 24, 29, 0.78);
-  --bg-card-subtle:         rgba(35, 35, 42, 0.85);
+  --bg-surface:             rgba(27, 27, 32, 0.75);
+  --bg-card:                rgba(24, 24, 29, 0.75);
+  --bg-card-subtle:         rgba(35, 35, 42, 0.80);
 
   --text-primary:           #F6F6F8;
   --text-secondary:         #A0A0A8;
@@ -47,11 +47,11 @@ html.dark, .dark {
   --accent-lavender-dark:   #3A3458;
   --accent-crimson:         #FF4D79;
 
-  --border-subtle:          rgba(255, 255, 255, 0.10);
-  --border-card:            rgba(255, 255, 255, 0.12);
+  --border-subtle:          rgba(255, 255, 255, 0.12);
+  --border-card:            rgba(255, 255, 255, 0.14);
   --shadow-sm:              0 2px 10px rgba(0, 0, 0, 0.30);
-  --shadow-md:              0 10px 35px rgba(0, 0, 0, 0.45);
-  --shadow-lg:              0 20px 50px rgba(0, 0, 0, 0.60);
+  --shadow-md:              0 16px 45px rgba(0, 0, 0, 0.45);
+  --shadow-lg:              0 25px 65px rgba(0, 0, 0, 0.65);
 }
 
 /* ─── RESET & BASE ────────────────────────────────────────────────── */
@@ -77,13 +77,62 @@ body {
 }
 ::-webkit-scrollbar-thumb:hover { background: rgba(110, 86, 207, 0.40); }
 
-/* ─── FROSTED GLASS PANELS & CARDS ──────────────────────────────── */
-.frosted-glass, .soft-card, .frosted-card {
+/* ─── PREMIUM GLASS PANEL TREATMENT (EXTRACTED FROM REFERENCE IMAGE) ── */
+.frosted-glass, .soft-card, .frosted-card, .glass-panel {
   background: var(--bg-card) !important;
-  backdrop-filter: blur(24px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+  backdrop-filter: blur(28px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(180%) !important;
   border: 1px solid var(--border-subtle) !important;
-  box-shadow: var(--shadow-md) !important;
+  box-shadow: var(--shadow-md), inset 0 1px 0 rgba(255, 255, 255, 0.80) !important;
+  border-radius: var(--radius-card) !important;
+}
+
+html.dark .frosted-glass, html.dark .soft-card, html.dark .frosted-card, html.dark .glass-panel,
+.dark .frosted-glass, .dark .soft-card, .dark .frosted-card, .dark .glass-panel {
+  box-shadow: var(--shadow-md), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Embedded Inner Sub-Panels */
+.glass-subpanel {
+  background: rgba(232, 227, 255, 0.45) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(110, 86, 207, 0.10) !important;
+  border-radius: 20px !important;
+}
+
+html.dark .glass-subpanel, .dark .glass-subpanel {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Floating Glass Pills */
+.glass-pill {
+  background: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(110, 86, 207, 0.15) !important;
+  border-radius: 9999px !important;
+}
+
+html.dark .glass-pill, .dark .glass-pill {
+  background: rgba(35, 35, 42, 0.85) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+
+/* Glass Modals & Dropdowns */
+.glass-modal {
+  background: rgba(255, 255, 255, 0.90) !important;
+  backdrop-filter: blur(32px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(32px) saturate(180%) !important;
+  border: 1px solid rgba(110, 86, 207, 0.16) !important;
+  box-shadow: 0 25px 65px rgba(110, 86, 207, 0.15) !important;
+}
+
+html.dark .glass-modal, .dark .glass-modal {
+  background: rgba(24, 24, 29, 0.90) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  box-shadow: 0 25px 65px rgba(0, 0, 0, 0.65) !important;
 }
 
 /* ─── ANIMATED MESH GRADIENT CONTAINER & BLOBS ────────────────────── */
@@ -100,8 +149,8 @@ body {
 .mesh-blob {
   position: absolute;
   border-radius: 50%;
-  filter: blur(90px);
-  -webkit-filter: blur(90px);
+  filter: blur(95px);
+  -webkit-filter: blur(95px);
   opacity: 0.85;
   will-change: transform;
 }
@@ -114,7 +163,7 @@ body {
   height: 55vw;
   max-width: 750px;
   max-height: 750px;
-  background: radial-gradient(circle, rgba(244, 168, 232, 0.70) 0%, rgba(255, 183, 236, 0.35) 45%, transparent 75%);
+  background: radial-gradient(circle, rgba(244, 168, 232, 0.72) 0%, rgba(255, 183, 236, 0.38) 45%, transparent 75%);
   animation: meshDriftPink 26s ease-in-out infinite;
 }
 
@@ -125,7 +174,7 @@ body {
   height: 60vw;
   max-width: 850px;
   max-height: 850px;
-  background: radial-gradient(circle, rgba(67, 85, 244, 0.70) 0%, rgba(59, 75, 249, 0.40) 45%, transparent 75%);
+  background: radial-gradient(circle, rgba(67, 85, 244, 0.72) 0%, rgba(59, 75, 249, 0.42) 45%, transparent 75%);
   animation: meshDriftBlue 22s ease-in-out infinite;
 }
 
@@ -136,7 +185,7 @@ body {
   height: 50vw;
   max-width: 700px;
   max-height: 700px;
-  background: radial-gradient(circle, rgba(164, 177, 253, 0.70) 0%, rgba(137, 154, 255, 0.38) 45%, transparent 75%);
+  background: radial-gradient(circle, rgba(164, 177, 253, 0.72) 0%, rgba(137, 154, 255, 0.40) 45%, transparent 75%);
   animation: meshDriftLavender 28s ease-in-out infinite;
 }
 
@@ -147,7 +196,7 @@ body {
   height: 45vw;
   max-width: 600px;
   max-height: 600px;
-  background: radial-gradient(circle, rgba(210, 234, 255, 0.65) 0%, rgba(185, 215, 255, 0.30) 45%, transparent 75%);
+  background: radial-gradient(circle, rgba(210, 234, 255, 0.68) 0%, rgba(185, 215, 255, 0.32) 45%, transparent 75%);
   animation: meshDriftCyan 32s ease-in-out infinite;
 }
 

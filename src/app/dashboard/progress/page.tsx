@@ -80,13 +80,13 @@ function MultiSeriesProgressChart() {
         </svg>
 
         <div className="absolute right-0 top-6 flex flex-col gap-3 pointer-events-none">
-          <div className="bg-[#E8E3FF] border border-[#6E56CF]/20 text-[#6E56CF] text-[10px] font-extrabold px-3 py-1 rounded-full shadow-sm">
+          <div className="glass-pill text-[#6E56CF] dark:text-[#8C73FF] text-[10px] font-extrabold px-3 py-1 shadow-sm">
             Mood Balance
           </div>
-          <div className="bg-[#E8E3FF] border border-[#6E56CF]/20 text-[#6E56CF] text-[10px] font-extrabold px-3 py-1 rounded-full shadow-sm">
+          <div className="glass-pill text-[#6E56CF] dark:text-[#8C73FF] text-[10px] font-extrabold px-3 py-1 shadow-sm">
             Stress Level
           </div>
-          <div className="bg-[#E8E3FF] border border-[#6E56CF]/20 text-[#6E56CF] text-[10px] font-extrabold px-3 py-1 rounded-full shadow-sm">
+          <div className="glass-pill text-[#6E56CF] dark:text-[#8C73FF] text-[10px] font-extrabold px-3 py-1 shadow-sm">
             Sleep Quality
           </div>
         </div>
@@ -99,8 +99,8 @@ function MultiSeriesProgressChart() {
               top: `${(ptActive1.y / height) * 100 - 12}%`,
             }}
           >
-            <div className="bg-[#6E56CF] text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-xl flex items-center gap-1">
-              <span>80%+ Imp</span>
+            <div className="bg-[#6E56CF] text-white text-[10px] font-extrabold px-3 py-1 rounded-full shadow-md">
+              80%+ Imp
             </div>
           </div>
         )}
@@ -109,39 +109,39 @@ function MultiSeriesProgressChart() {
   );
 }
 
-/* ─── STEPPED BAR CHART (Image 2 Top Right Panel "Health Progress") ─── */
+/* ─── STEPPED HEALTH PROGRESS BAR CHART (Image 2 Top Right Panel) ─── */
 function SteppedHealthProgressChart() {
   const bars = [
-    { day: 'MON', height: 40 },
-    { day: 'TUE', height: 55 },
-    { day: 'WED', height: 70 },
+    { day: 'MON', height: 40, active: false },
+    { day: 'TUE', height: 60, active: false },
+    { day: 'WED', height: 50, active: false },
     { day: 'THU', height: 95, active: true },
-    { day: 'FRI', height: 50 },
-    { day: 'SAT', height: 60 },
-    { day: 'SUN', height: 30 },
+    { day: 'FRI', height: 75, active: false },
+    { day: 'SAT', height: 65, active: false },
+    { day: 'SUN', height: 80, active: false },
   ];
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-end justify-between h-[180px] pt-6 px-2">
-        {bars.map((bar, idx) => (
-          <div key={idx} className="flex flex-col items-center gap-2 group cursor-pointer">
+    <div className="w-full pt-4">
+      <div className="flex justify-between items-end gap-2 h-[180px] px-2">
+        {bars.map((bar) => (
+          <div key={bar.day} className="flex-1 flex flex-col items-center gap-2 group">
             {bar.active && (
               <div className="bg-[#6E56CF] text-white text-[9px] font-extrabold px-2.5 py-0.5 rounded-full shadow-md animate-bounce">
                 80%+ Imp
               </div>
             )}
-            <div className="w-9 sm:w-11 bg-[#F8F7FF] rounded-2xl p-1 flex items-end h-[130px] border border-[#6E56CF]/10">
+            <div className="w-9 sm:w-11 glass-subpanel rounded-2xl p-1 flex items-end h-[130px]">
               <div
                 className={`w-full rounded-xl transition-all duration-500 ${
                   bar.active
                     ? 'bg-gradient-to-t from-[#6E56CF] to-[#B9ACFF] shadow-md'
-                    : 'bg-gradient-to-t from-[#E8E3FF] to-[#F8F7FF] group-hover:from-[#B9ACFF]'
+                    : 'bg-gradient-to-t from-[#E8E3FF] to-[#F8F7FF] dark:from-[#2D2845] dark:to-[#18181D]'
                 }`}
                 style={{ height: `${bar.height}%` }}
               />
             </div>
-            <span className={`text-[10px] font-bold ${bar.active ? 'text-[#6E56CF] font-black' : 'text-[#6B677E]'}`}>
+            <span className={`text-[10px] font-bold ${bar.active ? 'text-[#6E56CF] dark:text-[#8C73FF] font-black' : 'text-[var(--text-secondary)]'}`}>
               {bar.day}
             </span>
           </div>
@@ -152,30 +152,26 @@ function SteppedHealthProgressChart() {
 }
 
 export default function ProgressPage() {
-  const { activeProfile } = useApp();
-
   return (
     <div className="space-y-8 pb-12 font-sans selection:bg-[#E8E3FF] selection:text-[#6E56CF]">
-      
       {/* ── PAGE HEADER (IMAGE 2 COMPOSITION) ── */}
       <div className="max-w-xl space-y-1">
-        <h1 className="text-3xl sm:text-5xl font-light text-[#1E1B2E] leading-tight tracking-tight">
+        <h1 className="text-3xl sm:text-5xl font-light text-[var(--text-primary)] leading-tight tracking-tight">
           Your <span className="font-extrabold">Personalized</span>
         </h1>
-        <h2 className="text-3xl sm:text-5xl font-extrabold text-[#1E1B2E] leading-tight tracking-tight">
+        <h2 className="text-3xl sm:text-5xl font-extrabold text-[var(--text-primary)] leading-tight tracking-tight">
           Progress and Insights
         </h2>
       </div>
 
-      {/* ── TOP MAIN PANELS (IMAGE 2 EXPLICIT COMPOSITION WITH IMAGE 1 SOFT PALETTE) ── */}
+      {/* ── TOP MAIN PANELS ── */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-
         {/* ── TOP LEFT PANEL: MULTI-SERIES CHART (7 COLS) ── */}
-        <div className="lg:col-span-7 bg-white rounded-3xl p-7 border border-[#6E56CF]/10 shadow-sm space-y-4">
+        <div className="lg:col-span-7 frosted-glass rounded-3xl p-7 space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-xl font-bold text-[#1E1B2E]">Clinical Metrics & Trends</h3>
-              <p className="text-xs font-semibold text-[#6B677E]">Real-time multi-series biometric correlation</p>
+              <h3 className="text-xl font-bold text-[var(--text-primary)]">Clinical Metrics & Trends</h3>
+              <p className="text-xs font-semibold text-[var(--text-secondary)]">Real-time multi-series biometric correlation</p>
             </div>
           </div>
 
@@ -183,33 +179,33 @@ export default function ProgressPage() {
         </div>
 
         {/* ── TOP RIGHT PANEL: HEALTH PROGRESS STEPPED BARS (5 COLS) ── */}
-        <div className="lg:col-span-5 bg-white rounded-3xl p-7 border border-[#6E56CF]/10 shadow-sm flex flex-col justify-between">
+        <div className="lg:col-span-5 frosted-glass rounded-3xl p-7 flex flex-col justify-between">
           <div className="flex items-center justify-between mb-2">
             <div>
-              <h3 className="text-xl font-bold text-[#1E1B2E]">Health Progress</h3>
-              <p className="text-xs font-semibold text-[#6B677E]">This week</p>
+              <h3 className="text-xl font-bold text-[var(--text-primary)]">Health Progress</h3>
+              <p className="text-xs font-semibold text-[var(--text-secondary)]">This week</p>
             </div>
 
-            <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-[#F8F7FF] border border-[#6E56CF]/10 text-[#1E1B2E] hover:bg-[#E8E3FF]/50 transition-all">
+            <button className="glass-pill flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-[var(--text-primary)] hover:bg-[#E8E3FF]/50 transition-all">
               <span>Week</span>
-              <ChevronDown className="h-3.5 w-3.5 text-[#6B677E]" />
+              <ChevronDown className="h-3.5 w-3.5 text-[var(--text-secondary)]" />
             </button>
           </div>
 
           <SteppedHealthProgressChart />
         </div>
-
       </div>
 
       {/* ── LOWER ANALYTICS GRID (IMAGE 2 ASYMMETRICAL 3-CARD COMPOSITION) ── */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-
         {/* ── LOWER CARD 1: MENTAL PROGRESS THIS WEEK (5 COLS) ── */}
-        <div className="lg:col-span-5 bg-white rounded-3xl p-6 border border-[#6E56CF]/10 shadow-sm space-y-4">
+        <div className="lg:col-span-5 frosted-glass rounded-3xl p-6 space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-base font-bold text-[#1E1B2E]">Mental Progress <span className="text-xs font-normal text-[#6B677E]">this week</span></h3>
-            
-            <button className="flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-[#F8F7FF] text-[#1E1B2E]">
+            <h3 className="text-base font-bold text-[var(--text-primary)]">
+              Mental Progress <span className="text-xs font-normal text-[var(--text-secondary)]">this week</span>
+            </h3>
+
+            <button className="glass-pill flex items-center gap-1 px-3 py-1 text-xs font-bold text-[var(--text-primary)]">
               <span>Week</span>
               <ChevronDown className="h-3 w-3" />
             </button>
@@ -236,61 +232,70 @@ export default function ProgressPage() {
         </div>
 
         {/* ── LOWER CARD 2: SESSION DURATION (3 COLS) ── */}
-        <div className="lg:col-span-3 bg-white rounded-3xl p-6 border border-[#6E56CF]/10 shadow-sm flex flex-col justify-between">
+        <div className="lg:col-span-3 frosted-glass rounded-3xl p-6 flex flex-col justify-between">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-base font-bold text-[#1E1B2E]">Session</h3>
-              <p className="text-xs font-semibold text-[#6B677E]">Duration</p>
+              <h3 className="text-base font-bold text-[var(--text-primary)]">Session</h3>
+              <p className="text-xs font-semibold text-[var(--text-secondary)]">Duration</p>
             </div>
-            <div className="w-8 h-8 rounded-full bg-[#F8F7FF] flex items-center justify-center text-[#6E56CF]">
+            <div className="w-8 h-8 rounded-full glass-pill flex items-center justify-center text-[#6E56CF] dark:text-[#8C73FF]">
               <ArrowUpRight className="h-4 w-4" />
             </div>
           </div>
 
           <div className="my-4">
-            <div className="text-3xl font-black text-[#1E1B2E]">4.5 <span className="text-base font-bold text-[#6B677E]">hrs / wk</span></div>
-            <div className="text-xs font-bold text-[#6E56CF] bg-[#E8E3FF] inline-block px-2.5 py-0.5 rounded-full mt-2">
+            <div className="text-3xl sm:text-4xl font-black text-[var(--text-primary)] tracking-tight">
+              4.5 <span className="text-xs font-normal text-[var(--text-secondary)]">hrs / wk</span>
+            </div>
+            <div className="inline-block mt-2 text-[10px] font-extrabold text-[#6E56CF] dark:text-[#8C73FF] bg-[#E8E3FF] dark:bg-[#2D2845] px-2.5 py-1 rounded-full">
               +12% vs last week
             </div>
           </div>
         </div>
 
-        {/* ── LOWER CARD 3: WELLNESS THIS WEEK (4 COLS) ── */}
-        <div className="lg:col-span-4 bg-white rounded-3xl p-6 border border-[#6E56CF]/10 shadow-sm space-y-4">
+        {/* ── LOWER CARD 3: WELLNESS METRICS (4 COLS) ── */}
+        <div className="lg:col-span-4 frosted-glass rounded-3xl p-6 space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-base font-bold text-[#1E1B2E]">Wellness <span className="text-xs font-normal text-[#6B677E]">this week</span></h3>
-            <span className="text-2xl font-black text-[#1E1B2E]">65%</span>
+            <div>
+              <h3 className="text-base font-bold text-[var(--text-primary)]">Wellness</h3>
+              <p className="text-xs font-semibold text-[var(--text-secondary)]">this week</p>
+            </div>
+            <div className="text-2xl font-black text-[var(--text-primary)]">65%</div>
           </div>
 
-          <div className="space-y-3 pt-1">
-            <div className="flex justify-between items-center text-xs font-bold text-[#6B677E]">
-              <span>Patience</span>
-              <span className="text-[#1E1B2E]">78%</span>
-            </div>
-            <div className="w-full h-2.5 bg-[#F8F7FF] rounded-full overflow-hidden">
-              <div className="h-full bg-[#6E56CF] rounded-full" style={{ width: '78%' }} />
-            </div>
-
-            <div className="flex justify-between items-center text-xs font-bold text-[#6B677E]">
-              <span>Energy</span>
-              <span className="text-[#1E1B2E]">85%</span>
-            </div>
-            <div className="w-full h-2.5 bg-[#F8F7FF] rounded-full overflow-hidden">
-              <div className="h-full bg-[#8C73FF] rounded-full" style={{ width: '85%' }} />
+          <div className="space-y-3 pt-2">
+            <div className="space-y-1">
+              <div className="flex justify-between text-[11px] font-bold text-[var(--text-primary)]">
+                <span>Patience</span>
+                <span>78%</span>
+              </div>
+              <div className="w-full h-2.5 glass-subpanel rounded-full overflow-hidden">
+                <div className="h-full bg-[#6E56CF] rounded-full" style={{ width: '78%' }} />
+              </div>
             </div>
 
-            <div className="flex justify-between items-center text-xs font-bold text-[#6B677E]">
-              <span>Focus</span>
-              <span className="text-[#1E1B2E]">62%</span>
+            <div className="space-y-1">
+              <div className="flex justify-between text-[11px] font-bold text-[var(--text-primary)]">
+                <span>Energy</span>
+                <span>85%</span>
+              </div>
+              <div className="w-full h-2.5 glass-subpanel rounded-full overflow-hidden">
+                <div className="h-full bg-[#7C5CFC] rounded-full" style={{ width: '85%' }} />
+              </div>
             </div>
-            <div className="w-full h-2.5 bg-[#F8F7FF] rounded-full overflow-hidden">
-              <div className="h-full bg-[#B9ACFF] rounded-full" style={{ width: '62%' }} />
+
+            <div className="space-y-1">
+              <div className="flex justify-between text-[11px] font-bold text-[var(--text-primary)]">
+                <span>Focus</span>
+                <span>62%</span>
+              </div>
+              <div className="w-full h-2.5 glass-subpanel rounded-full overflow-hidden">
+                <div className="h-full bg-[#B9ACFF] rounded-full" style={{ width: '62%' }} />
+              </div>
             </div>
           </div>
         </div>
-
       </div>
-
     </div>
   );
 }

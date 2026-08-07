@@ -68,9 +68,9 @@ export const Sidebar: React.FC = () => {
   return (
     <>
       {/* ── DESKTOP SIDEBAR (PRISTINE SOFT LIGHT MATCHING RIGHT SIDE) ────────────────── */}
-      <aside className="hidden lg:flex flex-col w-64 h-screen sticky top-0 shrink-0 z-20 bg-white/90 dark:bg-[#18181D]/90 backdrop-blur-xl border-r border-[#6E56CF]/10 dark:border-white/10 shadow-sm">
+      <aside className="hidden lg:flex flex-col w-64 h-screen sticky top-0 shrink-0 z-20 bg-white/72 dark:bg-[#18181D]/75 backdrop-blur-2xl border-r border-[#6E56CF]/14 dark:border-white/12 shadow-sm">
         {/* Logo Header */}
-        <div className="p-5 border-b border-[#6E56CF]/10 dark:border-white/10">
+        <div className="p-5 border-b border-[#6E56CF]/14 dark:border-white/12">
           <Link href="/dashboard">
             <Logo size="md" showText={true} />
           </Link>
