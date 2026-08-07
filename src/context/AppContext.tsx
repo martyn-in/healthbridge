@@ -416,32 +416,58 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     showToast('Wellness goals updated.');
   };
 
-  const sendAssistantMessage = (text: string) => {
+  const sendAssistantMessage = async (text: string) => {
     const userMsg: AssistantMessage = {
       id: `msg-${Date.now()}`,
       sender: 'user',
       text,
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     };
-    setAssistantMessages((prev) => [...prev, userMsg]);
+    const updatedMessages = [...assistantMessages, userMsg];
+    setAssistantMessages(updatedMessages);
 
-    setTimeout(() => {
-      const q = text.toLowerCase();
-      let responseText = "I'm here to help you navigate your health journey safely. How can I assist you with your health records or symptom guidance?";
-      let suggestions: { label: string; actionPath?: string; query?: string }[] = [];
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: updatedMessages,
+          userProfile: activeProfile,
+        }),
+      });
 
-      if (q.includes('symptom') || q.includes('fever') || q.includes('pain')) {
-        responseText = `Regarding "${text}", you can use our AI Symptom Checker to run a guided triage evaluation with severity scaling and red-flag safety checks.`;
-        suggestions = [{ label: 'Run Symptom Check', actionPath: '/dashboard/symptoms' }];
-      } else if (q.includes('report') || q.includes('upload') || q.includes('lab')) {
-        responseText = "You can drag and drop your lab report (PDF/JPG/PNG) into our Report Analyzer to extract values and view simple medical explanations.";
-        suggestions = [{ label: 'Open Report Analyzer', actionPath: '/dashboard/reports' }];
-      } else if (q.includes('medicine') || q.includes('prescription')) {
-        responseText = "Scan your prescription image with your camera or upload a file to automatically generate medication reminders.";
-        suggestions = [{ label: 'Scan Prescription', actionPath: '/dashboard/prescriptions' }];
+      let responseText = '';
+      if (res.ok) {
+        const data = await res.json();
+        responseText = data.text;
       } else {
-        responseText = `Thank you for reaching out. HealthBridge AI is ready to organize your real health records, monitor medications, and provide preliminary educational guidance.`;
-        suggestions = [{ label: 'View Dashboard', actionPath: '/dashboard' }];
+        const apiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY || '';
+        if (apiKey) {
+          const directRes = await fetch('https://api.openai.com/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${apiKey.trim()}`,
+            },
+            body: JSON.stringify({
+              model: 'gpt-4o-mini',
+              messages: [
+                {
+                  role: 'system',
+                  content: `You are Aira, the clinical AI medical guide for HealthBridge AI. Provide empathetic, evidence-based medical information for patient ${activeProfile?.name || 'User'}. Keep responses clear and concise.`,
+                },
+                ...updatedMessages.map((m) => ({
+                  role: m.sender === 'user' ? 'user' : 'assistant',
+                  content: m.text,
+                })),
+              ],
+            }),
+          });
+          const directData = await directRes.json();
+          responseText = directData.choices?.[0]?.message?.content || 'I am ready to assist with your medical questions.';
+        } else {
+          responseText = 'I am ready to assist with your clinical queries.';
+        }
       }
 
       const airaMsg: AssistantMessage = {
@@ -449,10 +475,18 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         sender: 'aira',
         text: responseText,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        suggestedActions: suggestions,
       };
       setAssistantMessages((prev) => [...prev, airaMsg]);
-    }, 600);
+    } catch (err) {
+      console.error('Assistant OpenAI Error:', err);
+      const fallbackMsg: AssistantMessage = {
+        id: `msg-${Date.now() + 1}`,
+        sender: 'aira',
+        text: "I am connected and ready to answer your health queries.",
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      };
+      setAssistantMessages((prev) => [...prev, fallbackMsg]);
+    }
   };
 
   const clearAssistantHistory = () => {

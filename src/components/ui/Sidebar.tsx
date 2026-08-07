@@ -79,21 +79,9 @@ export const Sidebar: React.FC = () => {
         }}
       >
         {/* Logo */}
-        <div className="p-5 border-b" style={{ borderColor: 'rgba(200,215,235,0.40)' }}>
-          <Link href="/">
-            <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl flex items-center justify-center"
-                style={{ background: 'linear-gradient(135deg, #0066FF 0%, #00C2FF 100%)', boxShadow: '0 4px 12px rgba(0,102,255,0.30)' }}>
-                {/* Heart icon */}
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
-                  <path d="M12 21.593c-5.63-5.539-11-10.297-11-14.402 0-3.791 3.068-5.191 5.281-5.191 1.312 0 4.151.501 5.719 4.457 1.59-3.968 4.464-4.447 5.726-4.447 2.54 0 5.274 1.621 5.274 5.181 0 4.069-5.136 8.625-11 14.402z"/>
-                </svg>
-              </div>
-              <div>
-                <div className="text-[14px] font-black tracking-tight" style={{ color: '#0D1B2A' }}>HealthBridge</div>
-                <div className="text-[9px] font-bold uppercase tracking-widest" style={{ color: '#9BAABF' }}>Clinical AI</div>
-              </div>
-            </div>
+        <div className="p-5 border-b border-[#6E56CF]/10">
+          <Link href="/dashboard">
+            <Logo size="md" showText={true} />
           </Link>
         </div>
 
