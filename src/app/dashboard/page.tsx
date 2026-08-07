@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import {
@@ -21,10 +21,11 @@ import {
   Plus,
   Calendar,
   Sparkles,
+  ShieldAlert,
 } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
 
-// ── Vertical Bar Chart Component (Matching Progress Card in Reference Image 1 & 2) ──
+// ── Vertical Bar Chart Component (Matching Reference Image Progress Card) ──
 function ReferenceProgressChart() {
   const bars = [
     { height: 40, missed: 15 },
@@ -80,70 +81,72 @@ export default function DashboardPage() {
   const activeAppointments = appointments.filter((a) => a.status === 'Upcoming');
   const upcomingAppointment = activeAppointments[0];
 
+  const userName = activeProfile?.name ? activeProfile.name.trim() : '';
+
   return (
-    <div className="space-y-6 pb-12 font-sans selection:bg-[#4882FF]/20 selection:text-[#4882FF]">
+    <div className="space-y-6 pb-6 w-full flex-1 flex flex-col font-sans selection:bg-[#4882FF]/20 selection:text-[#4882FF]">
       
       {/* ── TOP REFERENCE GRID (60% LEFT HERO + 40% RIGHT COLUMNS) ── */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch w-full">
         
-        {/* ── LEFT HERO CARD (ADAPTED WITH ANATOMICAL HEART REFERENCE 4) ── */}
+        {/* ── LEFT HERO CARD (DOMINATED BY ANATOMICAL HEART REFERENCE 4) ── */}
         <div
-          className="lg:col-span-7 rounded-[28px] p-7 sm:p-8 relative overflow-hidden text-white flex flex-col justify-between min-h-[460px] border-2 border-[#0D1B2A] shadow-xl"
+          className="lg:col-span-7 rounded-[28px] p-7 sm:p-8 relative overflow-hidden text-white flex flex-col justify-between min-h-[480px] border-2 border-[#0D1B2A] shadow-2xl w-full"
           style={{
             background: 'linear-gradient(135deg, #1E3A8A 0%, #3B82F6 40%, #7C3AED 80%, #0F172A 100%)',
           }}
         >
-          {/* Background Ambient Lighting & Heart Artwork */}
+          {/* Background Ambient Lighting & Glows */}
           <div className="absolute inset-0 pointer-events-none z-0">
-            <div className="absolute -top-20 -right-20 w-96 h-96 rounded-full bg-[#3B82F6]/40 blur-3xl" />
-            <div className="absolute bottom-0 right-1/4 w-80 h-80 rounded-full bg-[#8B5CF6]/40 blur-3xl" />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#0F172A]/90 via-[#0F172A]/60 to-transparent" />
+            <div className="absolute -top-24 -right-24 w-[450px] h-[450px] rounded-full bg-[#3B82F6]/45 blur-3xl" />
+            <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] rounded-full bg-[#8B5CF6]/45 blur-3xl" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#0F172A]/95 via-[#0F172A]/65 to-transparent" />
           </div>
 
-          {/* Integrated Anatomical Heart Image (Reference Image 4) */}
-          <div className="absolute right-0 top-0 bottom-0 w-full sm:w-[55%] pointer-events-none z-0 flex items-center justify-center opacity-85">
+          {/* Integrated Anatomical Heart Image (Fully Covering & Dominating Hero Card) */}
+          <div className="absolute right-0 top-0 bottom-0 w-full sm:w-[65%] pointer-events-none z-0 flex items-center justify-center opacity-90">
             <div className="relative w-full h-full">
               <Image
                 src="/hero_heart.png"
                 alt="Anatomical Glass Heart Telemetry"
                 fill
-                className="object-contain object-right drop-shadow-[0_20px_50px_rgba(59,130,246,0.5)] animate-float"
+                className="object-contain object-right drop-shadow-[0_25px_60px_rgba(59,130,246,0.6)] animate-float"
                 priority
               />
             </div>
           </div>
 
-          {/* Top Hero Controls */}
+          {/* Top Hero Header Bar */}
           <div className="relative z-10 flex items-center justify-between">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] font-extrabold uppercase tracking-wider bg-white/15 backdrop-blur-md border border-white/20 text-white shadow-sm">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[11px] font-extrabold uppercase tracking-wider bg-white/15 backdrop-blur-md border border-white/20 text-white shadow-sm">
               <Activity className="w-3.5 h-3.5 text-cyan-300 animate-pulse" />
-              <span>VITAL SYNC • CARDIAC TELEMETRY</span>
+              <span>HEALTH OVERVIEW • CARDIAC TELEMETRY</span>
             </div>
 
-            <button className="flex items-center gap-1.5 text-xs font-bold text-white/80 hover:text-white bg-white/10 hover:bg-white/20 backdrop-blur-md px-3.5 py-1.5 rounded-full transition-all border border-white/15">
+            <button className="flex items-center gap-1.5 text-xs font-bold text-white/90 hover:text-white bg-white/10 hover:bg-white/20 backdrop-blur-md px-3.5 py-1.5 rounded-full transition-all border border-white/15">
               <Share2 className="w-3.5 h-3.5" />
               <span>Share</span>
             </button>
           </div>
 
-          {/* Center Hero Information & CTA */}
+          {/* Requirement 6: Personalized Greeting (NO EMOJI, NO PLAYFUL ICONS) */}
           <div className="relative z-10 my-6 max-w-md space-y-3">
-            <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-white leading-none">
-              Vital Sync
+            <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-white leading-tight">
+              {userName ? `Hello, ${userName}` : 'Hello'}
             </h1>
-            <p className="text-xs sm:text-sm text-blue-100 font-medium leading-relaxed max-w-sm">
-              Continuous clinical-grade heart telemetry monitoring cardiovascular stability, vascular rhythm, and daily recovery.
+            <p className="text-sm sm:text-base text-blue-100 font-semibold tracking-wide">
+              How can HealthBridge assist you today?
             </p>
 
-            {/* Metric Row Badges (Matching Reference Completed / Favorites / Rating) */}
-            <div className="flex items-center gap-5 pt-2 text-white">
+            {/* Metric Row Badges */}
+            <div className="flex items-center gap-5 pt-3 text-white">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-full bg-white/15 backdrop-blur-md flex items-center justify-center border border-white/20">
                   <Heart className="w-4 h-4 text-rose-400 fill-rose-400" />
                 </div>
                 <div>
                   <div className="text-sm font-extrabold">72 bpm</div>
-                  <div className="text-[10px] text-blue-200">Heart Rate</div>
+                  <div className="text-[10px] text-blue-200 font-medium">Heart Rate</div>
                 </div>
               </div>
 
@@ -153,7 +156,7 @@ export default function DashboardPage() {
                 </div>
                 <div>
                   <div className="text-sm font-extrabold">98%</div>
-                  <div className="text-[10px] text-blue-200">SpO₂ Level</div>
+                  <div className="text-[10px] text-blue-200 font-medium">SpO₂ Level</div>
                 </div>
               </div>
 
@@ -163,16 +166,16 @@ export default function DashboardPage() {
                 </div>
                 <div>
                   <div className="text-sm font-extrabold">4.9 / 5</div>
-                  <div className="text-[10px] text-blue-200">Rhythm Index</div>
+                  <div className="text-[10px] text-blue-200 font-medium">Rhythm Index</div>
                 </div>
               </div>
             </div>
 
-            {/* Primary Pill Action Button */}
+            {/* Primary Action Pill Button */}
             <div className="pt-2">
               <Link
                 href="/dashboard/progress"
-                className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full bg-white text-[#0D1B2A] hover:bg-slate-100 font-black text-xs transition-all shadow-lg active:scale-95"
+                className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-full bg-white text-[#0D1B2A] hover:bg-slate-100 font-black text-xs transition-all shadow-lg active:scale-95"
               >
                 <Play className="w-4 h-4 fill-[#0D1B2A]" />
                 <span>Check Clinical Vitals</span>
@@ -180,7 +183,7 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* Bottom Scheduled Vitals Chips (Workout sessions Equivalent in Reference) */}
+          {/* Bottom Scheduled Vitals & Care Chips */}
           <div className="relative z-10 pt-4 border-t border-white/15">
             <div className="flex items-center justify-between text-xs font-extrabold text-blue-100 mb-3">
               <span>Scheduled Vitals & Care</span>
@@ -226,13 +229,13 @@ export default function DashboardPage() {
         </div>
 
         {/* ── RIGHT TOP CARDS & BOTTOM PROGRESS CARD (5 COLS) ── */}
-        <div className="lg:col-span-5 space-y-6 flex flex-col justify-between">
+        <div className="lg:col-span-5 space-y-6 flex flex-col justify-between w-full">
           
           {/* TOP ROW: AI ASSISTANT + TODAY'S HEALTH */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full">
             
             {/* CARD 1: AI ASSISTANT (Matching Reference AI Assistant) */}
-            <div className="bg-white dark:bg-[#18181D] rounded-[28px] p-5 border-2 border-[#0D1B2A] dark:border-slate-800 shadow-lg flex flex-col justify-between">
+            <div className="bg-white dark:bg-[#18181D] rounded-[28px] p-5 border-2 border-[#0D1B2A] dark:border-slate-800 shadow-lg flex flex-col justify-between w-full">
               <div className="flex items-center justify-between mb-2">
                 <h3 className="text-sm font-extrabold text-[#0D1B2A] dark:text-white">AI Assistant</h3>
                 <Sparkles className="w-4 h-4 text-[#4882FF]" />
@@ -266,7 +269,7 @@ export default function DashboardPage() {
             </div>
 
             {/* CARD 2: TODAY'S HEALTH / LIVE VITALS (Matching Reference Today's Activity) */}
-            <div className="bg-white dark:bg-[#18181D] rounded-[28px] p-5 border-2 border-[#0D1B2A] dark:border-slate-800 shadow-lg flex flex-col justify-between">
+            <div className="bg-white dark:bg-[#18181D] rounded-[28px] p-5 border-2 border-[#0D1B2A] dark:border-slate-800 shadow-lg flex flex-col justify-between w-full">
               <div className="flex items-center justify-between mb-1">
                 <h3 className="text-sm font-extrabold text-[#0D1B2A] dark:text-white">Today's health</h3>
               </div>
@@ -331,7 +334,7 @@ export default function DashboardPage() {
           </div>
 
           {/* BOTTOM CARD: PROGRESS & TRENDS (Matching Reference Progress Card) */}
-          <div className="bg-white dark:bg-[#18181D] rounded-[28px] p-6 border-2 border-[#0D1B2A] dark:border-slate-800 shadow-lg space-y-4">
+          <div className="bg-white dark:bg-[#18181D] rounded-[28px] p-6 border-2 border-[#0D1B2A] dark:border-slate-800 shadow-lg space-y-4 w-full">
             <div className="flex items-center justify-between">
               <h3 className="text-base font-extrabold text-[#0D1B2A] dark:text-white">Progress</h3>
               
@@ -377,10 +380,10 @@ export default function DashboardPage() {
       </div>
 
       {/* ── LOWER HEALTHBRIDGE CLINICAL MODULES GRID (REPORTS + APPOINTMENTS + CARE) ── */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 w-full">
         
         {/* REPORTS LIST PANEL */}
-        <div className="lg:col-span-6 bg-white dark:bg-[#18181D] rounded-[28px] p-6 border-2 border-[#0D1B2A] dark:border-slate-800 shadow-lg space-y-4">
+        <div className="lg:col-span-6 bg-white dark:bg-[#18181D] rounded-[28px] p-6 border-2 border-[#0D1B2A] dark:border-slate-800 shadow-lg space-y-4 w-full">
           <div className="flex items-center justify-between">
             <h3 className="text-lg font-extrabold text-[#0D1B2A] dark:text-white">Diagnostic & Lab Reports</h3>
             <Link
@@ -435,7 +438,7 @@ export default function DashboardPage() {
         </div>
 
         {/* UPCOMING APPOINTMENTS PANEL */}
-        <div className="lg:col-span-6 bg-white dark:bg-[#18181D] rounded-[28px] p-6 border-2 border-[#0D1B2A] dark:border-slate-800 shadow-lg flex flex-col justify-between">
+        <div className="lg:col-span-6 bg-white dark:bg-[#18181D] rounded-[28px] p-6 border-2 border-[#0D1B2A] dark:border-slate-800 shadow-lg flex flex-col justify-between w-full">
           <div className="flex items-center justify-between">
             <h3 className="text-lg font-extrabold text-[#0D1B2A] dark:text-white">Upcoming Session</h3>
             <Link
