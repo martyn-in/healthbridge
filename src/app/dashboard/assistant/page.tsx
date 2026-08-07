@@ -78,19 +78,19 @@ export default function AssistantPage() {
         
         <div className="relative z-10 flex items-center justify-between flex-wrap gap-4">
           <div className="flex items-center gap-4">
-            <div className="p-3 rounded-2xl flex items-center justify-center shadow-sm" style={{ background: 'linear-gradient(135deg, #E6F0FF 0%, #F3F5F8 100%)' }}>
-              <Bot className="h-8 w-8" style={{ color: '#0066FF' }} />
+            <div className="p-3 rounded-2xl flex items-center justify-center shadow-sm bg-[#4D50A2] text-[#F9DF77]">
+              <Bot className="h-8 w-8 text-[#F9DF77]" />
             </div>
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <h1 className="text-2xl font-extrabold tracking-tight" style={{ color: '#0D1B2A' }}>HealthBridge AI</h1>
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase" style={{ background: '#E8E3FF', color: '#6E56CF' }}>
+                <h1 className="text-2xl font-extrabold tracking-tight text-[#2F3273] dark:text-white">HealthBridge AI</h1>
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-[#F9DF77] text-[#2F3273]">
                   Powered by OpenAI GPT-4o
                 </span>
                 <span className="dot-live"></span>
               </div>
-              <p className="text-sm font-medium" style={{ color: '#9BAABF' }}>
-                Patient context active for <span className="font-bold" style={{ color: '#0D1B2A' }}>{activeProfile?.name || 'User'}</span>.
+              <p className="text-sm font-medium text-[#4D50A2] dark:text-[#CBD0FB]">
+                Patient context active for <span className="font-bold text-[#2F3273] dark:text-white">{activeProfile?.name || 'User'}</span>.
               </p>
             </div>
           </div>
@@ -101,8 +101,8 @@ export default function AssistantPage() {
               className="pill-btn pill-btn-ghost flex items-center gap-2"
               title="Toggle Text-to-Speech"
             >
-              <Volume2 className="h-4 w-4" style={{ color: ttsEnabled ? '#0066FF' : '#9BAABF' }} />
-              <span className="text-xs font-semibold" style={{ color: ttsEnabled ? '#0066FF' : '#9BAABF' }}>
+              <Volume2 className="h-4 w-4" style={{ color: ttsEnabled ? '#4D50A2' : '#9BAABF' }} />
+              <span className="text-xs font-semibold" style={{ color: ttsEnabled ? '#4D50A2' : '#9BAABF' }}>
                 {ttsEnabled ? 'Voice On' : 'Voice Off'}
               </span>
             </button>
@@ -111,8 +111,8 @@ export default function AssistantPage() {
               className="pill-btn pill-btn-ghost flex items-center gap-2 text-xs font-semibold"
               title="Clear Chat History"
             >
-              <Trash2 className="h-4 w-4" style={{ color: '#FF3366' }} />
-              <span style={{ color: '#FF3366' }}>Clear</span>
+              <Trash2 className="h-4 w-4 text-[#EF4444]" />
+              <span className="text-[#EF4444]">Clear</span>
             </button>
           </div>
         </div>
@@ -124,8 +124,7 @@ export default function AssistantPage() {
           <button
             key={idx}
             onClick={() => handleQuickAction(action)}
-            className={`pill-btn pill-btn-ghost text-xs font-semibold anim-fade-up delay-${(idx + 1) * 100}`}
-            style={{ color: '#0D1B2A' }}
+            className={`pill-btn pill-btn-ghost text-xs font-semibold bg-[#F4F5FB] dark:bg-[#2F3273] text-[#2F3273] dark:text-white border border-[#2F3273]/15 hover:bg-[#4D50A2] hover:text-white transition-all`}
           >
             {action}
           </button>
@@ -138,17 +137,16 @@ export default function AssistantPage() {
         <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
           {assistantMessages.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-center space-y-6 anim-fade-up">
-              <div className="p-4 rounded-full" style={{ background: 'rgba(0,102,255,0.05)' }}>
-                <Bot className="h-12 w-12 opacity-50" style={{ color: '#0066FF' }} />
+              <div className="p-4 rounded-full bg-[#4D50A2]/10 text-[#4D50A2] dark:text-[#F9DF77]">
+                <Bot className="h-12 w-12 opacity-50 text-[#4D50A2]" />
               </div>
-              <h3 className="text-lg font-bold" style={{ color: '#0D1B2A' }}>How can I help you today?</h3>
+              <h3 className="text-lg font-bold text-[#2F3273] dark:text-white">How can I help you today?</h3>
               <div className="flex flex-col gap-2 max-w-sm w-full">
                 {samplePrompts.map((prompt, idx) => (
                   <button
                     key={idx}
                     onClick={() => handleQuickAction(prompt)}
-                    className="neu-card p-3 rounded-2xl text-sm font-medium text-left hover:card-lift transition-all"
-                    style={{ color: '#0D1B2A' }}
+                    className="neu-card p-3 rounded-2xl text-sm font-medium text-left hover:card-lift transition-all bg-[#F4F5FB] dark:bg-[#2F3273] text-[#2F3273] dark:text-white border border-[#2F3273]/15"
                   >
                     {prompt}
                   </button>
@@ -164,11 +162,11 @@ export default function AssistantPage() {
                 }`}
               >
                 <div
-                  className="flex h-8 w-8 items-center justify-center rounded-full shrink-0 shadow-sm font-bold"
-                  style={{
-                    background: msg.sender === 'user' ? 'var(--accent-lavender)' : 'linear-gradient(135deg, #6E56CF 0%, #7C5CFC 100%)',
-                    color: msg.sender === 'user' ? '#6E56CF' : '#ffffff'
-                  }}
+                  className={`flex h-8 w-8 items-center justify-center rounded-full shrink-0 shadow-sm font-bold ${
+                    msg.sender === 'user'
+                      ? 'bg-[#F9DF77] text-[#2F3273]'
+                      : 'bg-[#2F3273] text-[#F9DF77]'
+                  }`}
                 >
                   {msg.sender === 'user' ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4" />}
                 </div>
@@ -176,8 +174,8 @@ export default function AssistantPage() {
                 <div
                   className={`max-w-md sm:max-w-lg rounded-2xl p-4 text-sm space-y-2 shadow-sm ${
                     msg.sender === 'user'
-                      ? 'bg-[#6E56CF] text-white rounded-br-sm'
-                      : 'glass-subcard text-[var(--text-primary)] rounded-bl-sm'
+                      ? 'bg-[#4D50A2] text-white rounded-br-sm'
+                      : 'bg-white dark:bg-[#1E204A] border border-[#2F3273]/15 text-[#2F3273] dark:text-white rounded-bl-sm'
                   }`}
                 >
                   <p className="leading-relaxed whitespace-pre-line">{msg.text}</p>

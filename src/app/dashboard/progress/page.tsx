@@ -52,7 +52,7 @@ function MultiSeriesProgressChart() {
             const y = height - (val / 100) * (height - 40) - 20;
             return (
               <g key={val}>
-                <line x1="30" y1={y} x2={width - 30} y2={y} stroke="#6E56CF" strokeWidth="1" strokeDasharray="3 3" opacity="0.12" />
+                <line x1="30" y1={y} x2={width - 30} y2={y} stroke="#4D50A2" strokeWidth="1" strokeDasharray="3 3" opacity="0.15" />
                 <text x="5" y={y + 4} fill="var(--text-secondary)" fontSize="10" fontWeight="bold">{val}</text>
               </g>
             );
@@ -64,29 +64,29 @@ function MultiSeriesProgressChart() {
               y1="20"
               x2={ptActive1.x}
               y2={height - 20}
-              stroke="#6E56CF"
+              stroke="#F9DF77"
               strokeWidth="2"
               strokeDasharray="4 4"
             />
           )}
 
-          <path d={getPath(points3)} fill="none" stroke="#DED8FF" strokeWidth="3" strokeLinecap="round" />
-          <path d={getPath(points2)} fill="none" stroke="#B9ACFF" strokeWidth="3" strokeLinecap="round" />
-          <path d={getPath(points1)} fill="none" stroke="#6E56CF" strokeWidth="3.5" strokeLinecap="round" />
+          <path d={getPath(points3)} fill="none" stroke="#CBD0FB" strokeWidth="3" strokeLinecap="round" />
+          <path d={getPath(points2)} fill="none" stroke="#F9DF77" strokeWidth="3" strokeLinecap="round" />
+          <path d={getPath(points1)} fill="none" stroke="#4D50A2" strokeWidth="3.5" strokeLinecap="round" />
 
-          <circle cx={points1[points1.length - 1].x} cy={points1[points1.length - 1].y} r="5" fill="#6E56CF" />
-          <circle cx={points2[points2.length - 1].x} cy={points2[points2.length - 1].y} r="5" fill="#B9ACFF" />
-          <circle cx={points3[points3.length - 1].x} cy={points3[points3.length - 1].y} r="5" fill="#DED8FF" />
+          <circle cx={points1[points1.length - 1].x} cy={points1[points1.length - 1].y} r="5" fill="#4D50A2" />
+          <circle cx={points2[points2.length - 1].x} cy={points2[points2.length - 1].y} r="5" fill="#F9DF77" />
+          <circle cx={points3[points3.length - 1].x} cy={points3[points3.length - 1].y} r="5" fill="#CBD0FB" />
         </svg>
 
         <div className="absolute right-0 top-6 flex flex-col gap-3 pointer-events-none">
-          <div className="glass-pill text-[#6E56CF] dark:text-[#8C73FF] text-[10px] font-extrabold px-3 py-1 rounded-full shadow-sm">
+          <div className="bg-[#4D50A2] text-white text-[10px] font-extrabold px-3 py-1 rounded-full shadow-sm">
             Mood Balance
           </div>
-          <div className="glass-pill text-[#6E56CF] dark:text-[#8C73FF] text-[10px] font-extrabold px-3 py-1 rounded-full shadow-sm">
+          <div className="bg-[#2F3273] text-[#F9DF77] text-[10px] font-extrabold px-3 py-1 rounded-full shadow-sm">
             Stress Level
           </div>
-          <div className="glass-pill text-[#6E56CF] dark:text-[#8C73FF] text-[10px] font-extrabold px-3 py-1 rounded-full shadow-sm">
+          <div className="bg-[#F4F5FB] dark:bg-[#2F3273] text-[#2F3273] dark:text-white text-[10px] font-extrabold px-3 py-1 rounded-full shadow-sm border border-[#2F3273]/15">
             Sleep Quality
           </div>
         </div>
@@ -99,7 +99,7 @@ function MultiSeriesProgressChart() {
               top: `${(ptActive1.y / height) * 100 - 12}%`,
             }}
           >
-            <div className="bg-[#6E56CF] text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-xl flex items-center gap-1">
+            <div className="bg-[#2F3273] text-[#F9DF77] text-[10px] font-black px-3 py-1 rounded-full shadow-xl flex items-center gap-1 border border-[#4D50A2]/40">
               <span>80%+ Imp</span>
             </div>
           </div>
@@ -127,21 +127,21 @@ function SteppedHealthProgressChart() {
         {bars.map((bar, idx) => (
           <div key={idx} className="flex flex-col items-center gap-2 group cursor-pointer">
             {bar.active && (
-              <div className="bg-[#6E56CF] text-white text-[9px] font-extrabold px-2.5 py-0.5 rounded-full shadow-md animate-bounce">
+              <div className="bg-[#F9DF77] text-[#2F3273] text-[9px] font-black px-2.5 py-0.5 rounded-full shadow-md animate-bounce">
                 80%+ Imp
               </div>
             )}
-            <div className="w-9 sm:w-11 glass-subcard rounded-2xl p-1 flex items-end h-[130px]">
+            <div className="w-9 sm:w-11 bg-[#F4F5FB] dark:bg-[#2F3273] rounded-2xl p-1 flex items-end h-[130px] border border-[#2F3273]/10">
               <div
                 className={`w-full rounded-xl transition-all duration-500 ${
                   bar.active
-                    ? 'bg-gradient-to-t from-[#6E56CF] to-[#B9ACFF] shadow-md'
-                    : 'bg-gradient-to-t from-[#E8E3FF] to-[var(--bg-card-subtle)] group-hover:from-[#B9ACFF]'
+                    ? 'bg-[#4D50A2] shadow-md'
+                    : 'bg-[#CBD0FB]/40 group-hover:bg-[#4D50A2]/60'
                 }`}
                 style={{ height: `${bar.height}%` }}
               />
             </div>
-            <span className={`text-[10px] font-bold ${bar.active ? 'text-[#6E56CF] dark:text-[#8C73FF] font-black' : 'text-[var(--text-secondary)]'}`}>
+            <span className={`text-[10px] font-bold ${bar.active ? 'text-[#4D50A2] dark:text-[#F9DF77] font-black' : 'text-[#4D50A2] dark:text-[#CBD0FB]'}`}>
               {bar.day}
             </span>
           </div>
@@ -220,15 +220,15 @@ export default function ProgressPage() {
               <path
                 d="M 0 90 L 50 80 L 100 40 L 150 70 L 200 30 L 250 50 L 300 20 L 350 45 L 400 15"
                 fill="none"
-                stroke="#6E56CF"
+                stroke="#4D50A2"
                 strokeWidth="3"
                 strokeLinecap="round"
               />
-              <circle cx="200" cy="30" r="5" fill="#6E56CF" />
+              <circle cx="200" cy="30" r="5" fill="#4D50A2" />
             </svg>
 
             <div className="absolute left-[50%] top-[20%] transform -translate-x-1/2 -translate-y-full">
-              <div className="bg-[#6E56CF] text-white text-[10px] font-extrabold px-3 py-1 rounded-full shadow-md">
+              <div className="bg-[#2F3273] text-[#F9DF77] text-[10px] font-black px-3 py-1 rounded-full shadow-md">
                 60%+ Prog
               </div>
             </div>
@@ -242,14 +242,14 @@ export default function ProgressPage() {
               <h3 className="text-base font-bold text-[var(--text-primary)]">Session</h3>
               <p className="text-xs font-semibold text-[var(--text-secondary)]">Duration</p>
             </div>
-            <div className="w-8 h-8 rounded-full glass-pill flex items-center justify-center text-[#6E56CF] dark:text-[#8C73FF]">
+            <div className="w-8 h-8 rounded-full bg-[#4D50A2] text-white flex items-center justify-center">
               <ArrowUpRight className="h-4 w-4" />
             </div>
           </div>
 
           <div className="my-4">
             <div className="text-3xl font-black text-[var(--text-primary)]">4.5 <span className="text-base font-bold text-[var(--text-secondary)]">hrs / wk</span></div>
-            <div className="text-xs font-bold text-[#6E56CF] dark:text-[#8C73FF] glass-pill inline-block px-2.5 py-0.5 rounded-full mt-2">
+            <div className="text-xs font-bold text-[#2F3273] dark:text-[#F9DF77] bg-[#F4F5FB] dark:bg-[#2F3273] inline-block px-2.5 py-0.5 rounded-full mt-2 border border-[#2F3273]/15">
               +12% vs last week
             </div>
           </div>
@@ -259,7 +259,7 @@ export default function ProgressPage() {
         <div className="lg:col-span-4 glass-panel rounded-3xl p-6 space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="text-base font-bold text-[var(--text-primary)]">Wellness <span className="text-xs font-normal text-[var(--text-secondary)]">this week</span></h3>
-            <span className="text-2xl font-black text-[var(--text-primary)]">65%</span>
+            <span className="text-2xl font-black text-[#4D50A2] dark:text-[#F9DF77]">65%</span>
           </div>
 
           <div className="space-y-3 pt-1">
@@ -267,24 +267,24 @@ export default function ProgressPage() {
               <span>Patience</span>
               <span className="text-[var(--text-primary)]">78%</span>
             </div>
-            <div className="w-full h-2.5 glass-subcard rounded-full overflow-hidden">
-              <div className="h-full bg-[#6E56CF] rounded-full" style={{ width: '78%' }} />
+            <div className="w-full h-2.5 bg-[#F4F5FB] dark:bg-[#2F3273] rounded-full overflow-hidden p-0.5 border border-[#2F3273]/10">
+              <div className="h-full bg-[#4D50A2] rounded-full" style={{ width: '78%' }} />
             </div>
 
             <div className="flex justify-between items-center text-xs font-bold text-[var(--text-secondary)]">
               <span>Energy</span>
               <span className="text-[var(--text-primary)]">85%</span>
             </div>
-            <div className="w-full h-2.5 glass-subcard rounded-full overflow-hidden">
-              <div className="h-full bg-[#8C73FF] rounded-full" style={{ width: '85%' }} />
+            <div className="w-full h-2.5 bg-[#F4F5FB] dark:bg-[#2F3273] rounded-full overflow-hidden p-0.5 border border-[#2F3273]/10">
+              <div className="h-full bg-[#F9DF77] rounded-full" style={{ width: '85%' }} />
             </div>
 
             <div className="flex justify-between items-center text-xs font-bold text-[var(--text-secondary)]">
               <span>Focus</span>
               <span className="text-[var(--text-primary)]">62%</span>
             </div>
-            <div className="w-full h-2.5 glass-subcard rounded-full overflow-hidden">
-              <div className="h-full bg-[#B9ACFF] rounded-full" style={{ width: '62%' }} />
+            <div className="w-full h-2.5 bg-[#F4F5FB] dark:bg-[#2F3273] rounded-full overflow-hidden p-0.5 border border-[#2F3273]/10">
+              <div className="h-full bg-[#2F3273] dark:bg-[#CBD0FB] rounded-full" style={{ width: '62%' }} />
             </div>
           </div>
         </div>
