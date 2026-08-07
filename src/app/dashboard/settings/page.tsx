@@ -1,11 +1,25 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Settings as SettingsIcon, Shield, Lock, Download, RotateCcw, User, Bell, Globe, AlertTriangle, Check } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Settings as SettingsIcon, Shield, Lock, Download, RotateCcw, User, Bell, Globe, AlertTriangle, Check, Mail } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
 
 export default function SettingsPage() {
-  const { qrSharingEnabled, setQrSharingEnabled, clearAllDataToFreshState, showToast } = useApp();
+  const { activeProfile, updatePrimaryProfile, qrSharingEnabled, setQrSharingEnabled, clearAllDataToFreshState, showToast } = useApp();
+
+  const [fullName, setFullName] = useState(activeProfile?.name || '');
+  const [email, setEmail] = useState((activeProfile as any)?.email || '');
+  const [age, setAge] = useState(activeProfile?.age ? String(activeProfile.age) : '30');
+  const [bloodGroup, setBloodGroup] = useState(activeProfile?.bloodGroup || 'O Positive');
+
+  useEffect(() => {
+    if (activeProfile) {
+      setFullName(activeProfile.name || '');
+      setEmail((activeProfile as any)?.email || '');
+      if (activeProfile.age) setAge(String(activeProfile.age));
+      if (activeProfile.bloodGroup) setBloodGroup(activeProfile.bloodGroup);
+    }
+  }, [activeProfile]);
 
   const [notifications, setNotifications] = useState({
     appointments: true,
@@ -16,7 +30,22 @@ export default function SettingsPage() {
   const [language, setLanguage] = useState('English');
   
   const handleSave = () => {
-    showToast('Settings saved successfully!');
+    updatePrimaryProfile({
+      name: fullName,
+      age: parseInt(age) || 30,
+      bloodGroup: bloodGroup,
+      email: email,
+    } as any);
+    showToast('Profile and settings updated successfully!');
+  };
+
+  const getInitials = (name: string) => {
+    if (!name) return 'U';
+    const parts = name.trim().split(' ');
+    if (parts.length >= 2) {
+      return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    }
+    return name.slice(0, 2).toUpperCase();
   };
 
   return (
@@ -62,12 +91,18 @@ export default function SettingsPage() {
           <div className="flex flex-col md:flex-row gap-8">
             <div className="flex flex-col items-center gap-4">
               <div 
-                className="h-28 w-28 rounded-full shadow-inner flex items-center justify-center text-3xl font-bold text-white border-4 border-white"
+                className="h-28 w-28 rounded-full shadow-inner flex items-center justify-center text-3xl font-bold text-white border-4 border-white overflow-hidden shrink-0 select-none"
                 style={{ background: 'linear-gradient(135deg, #0066FF, #00C2FF)' }}
               >
-                JD
+                {activeProfile?.avatarUrl ? (
+                  <img src={activeProfile.avatarUrl} alt={activeProfile.name} className="w-full h-full object-cover" />
+                ) : (
+                  getInitials(fullName || activeProfile?.name || 'User')
+                )}
               </div>
-              <button className="pill-btn pill-btn-ghost text-xs">Edit Avatar</button>
+              <button onClick={() => showToast('Avatar updated from your signed-in account.')} className="pill-btn pill-btn-ghost text-xs">
+                Verified Account
+              </button>
             </div>
             
             <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -75,23 +110,42 @@ export default function SettingsPage() {
                 <label className="text-xs font-bold text-[#9BAABF] uppercase tracking-wider">Full Name</label>
                 <input 
                   type="text" 
-                  defaultValue="John Doe" 
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  placeholder="Your Full Name"
                   className="w-full bg-[#F3F5F8] border-none rounded-xl px-4 py-3 text-[#0D1B2A] font-medium shadow-[inset_2px_2px_5px_rgba(166,180,200,0.45),inset_-2px_-2px_5px_rgba(255,255,255,0.9)] focus:ring-2 focus:ring-[#0066FF] outline-none"
                 />
               </div>
+
               <div className="space-y-2">
-                <label className="text-xs font-bold text-[#9BAABF] uppercase tracking-wider">Age / DOB</label>
+                <label className="text-xs font-bold text-[#9BAABF] uppercase tracking-wider">Email Address</label>
                 <input 
-                  type="text" 
-                  defaultValue="34 (Oct 12, 1989)" 
+                  type="email" 
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="name@example.com"
                   className="w-full bg-[#F3F5F8] border-none rounded-xl px-4 py-3 text-[#0D1B2A] font-medium shadow-[inset_2px_2px_5px_rgba(166,180,200,0.45),inset_-2px_-2px_5px_rgba(255,255,255,0.9)] focus:ring-2 focus:ring-[#0066FF] outline-none"
                 />
               </div>
+
+              <div className="space-y-2">
+                <label className="text-xs font-bold text-[#9BAABF] uppercase tracking-wider">Age</label>
+                <input 
+                  type="number" 
+                  value={age}
+                  onChange={(e) => setAge(e.target.value)}
+                  placeholder="Age"
+                  className="w-full bg-[#F3F5F8] border-none rounded-xl px-4 py-3 text-[#0D1B2A] font-medium shadow-[inset_2px_2px_5px_rgba(166,180,200,0.45),inset_-2px_-2px_5px_rgba(255,255,255,0.9)] focus:ring-2 focus:ring-[#0066FF] outline-none"
+                />
+              </div>
+
               <div className="space-y-2">
                 <label className="text-xs font-bold text-[#9BAABF] uppercase tracking-wider">Blood Type</label>
                 <input 
                   type="text" 
-                  defaultValue="O Positive" 
+                  value={bloodGroup}
+                  onChange={(e) => setBloodGroup(e.target.value)}
+                  placeholder="e.g. O Positive"
                   className="w-full bg-[#F3F5F8] border-none rounded-xl px-4 py-3 text-[#0D1B2A] font-medium shadow-[inset_2px_2px_5px_rgba(166,180,200,0.45),inset_-2px_-2px_5px_rgba(255,255,255,0.9)] focus:ring-2 focus:ring-[#0066FF] outline-none"
                 />
               </div>
@@ -244,9 +298,6 @@ export default function SettingsPage() {
               className="px-6 py-3 rounded-full text-sm font-bold bg-white text-[#FF3366] border border-red-200 shadow-sm hover:bg-red-50 flex items-center gap-2 transition-colors"
             >
               <RotateCcw className="h-4 w-4" /> Reset App State
-            </button>
-            <button className="px-6 py-3 rounded-full text-sm font-bold bg-[#FF3366] text-white shadow-md shadow-red-500/20 hover:bg-red-600 flex items-center gap-2 transition-colors">
-              Clear All Account Data
             </button>
           </div>
         </div>
