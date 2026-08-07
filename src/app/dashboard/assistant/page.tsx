@@ -84,8 +84,8 @@ export default function AssistantPage() {
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <h1 className="text-2xl font-extrabold tracking-tight" style={{ color: '#0D1B2A' }}>HealthBridge AI</h1>
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase" style={{ background: 'rgba(0,102,255,0.1)', color: '#0066FF' }}>
-                  Powered by Gemini
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase" style={{ background: '#E8E3FF', color: '#6E56CF' }}>
+                  Powered by OpenAI GPT-4o
                 </span>
                 <span className="dot-live"></span>
               </div>
