@@ -34,14 +34,8 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body
-        className="antialiased min-h-screen relative"
-        style={{
-          background: '#F3F5F8',
-          color: '#0D1B2A',
-          fontFamily: "'Inter', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif",
-        }}
-      >
+      <body className="antialiased min-h-screen relative font-sans">
+        <div className="mesh-gradient-bg" />
         <ClerkAuthProvider>
           <AppProvider>
             <ClerkUserSync />

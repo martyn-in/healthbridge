@@ -91,18 +91,18 @@ export const Header: React.FC<{ onOpenHealthCard?: () => void }> = ({ onOpenHeal
           <Logo size="sm" showText={true} />
         </div>
 
-        {/* Center: Image 1 Pill Navigation Tabs */}
-        <nav className="hidden md:flex items-center gap-1 p-1 rounded-full bg-[var(--bg-card)] border border-[var(--border-subtle)] shadow-sm backdrop-blur-md">
+        {/* Center: Image 1 Navigation Tabs */}
+        <nav className="hidden md:flex items-center gap-1 p-1 rounded-xl bg-[var(--bg-card)] border border-[var(--surface-border)] shadow-sm backdrop-blur-md">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
             return (
               <Link
                 key={item.name}
                 href={item.href}
-                className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold transition-all duration-200 ${
+                className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 ${
                   isActive
-                    ? "bg-[var(--accent-purple)] text-white shadow-sm scale-100"
-                    : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--accent-lavender)]"
+                    ? "bg-[#5B42F3] text-white shadow-sm scale-100"
+                    : "text-[#5E5A73] dark:text-[#CBD5E1] hover:text-[#1E1B2E] dark:hover:text-white hover:bg-[var(--accent-lavender)]"
                 }`}
               >
                 {item.icon}
@@ -118,17 +118,16 @@ export const Header: React.FC<{ onOpenHealthCard?: () => void }> = ({ onOpenHeal
             <button
               onClick={onOpenHealthCard}
               title="Open Emergency Digital Health Card"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all active:scale-95 bg-[var(--bg-card)] border border-[var(--border-subtle)] shadow-sm text-[var(--accent-purple)] hover:bg-[var(--accent-lavender)]"
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all active:scale-95 bg-[var(--bg-card)] border border-[var(--surface-border)] shadow-sm text-[#5B42F3] dark:text-[#9D8CFF] hover:bg-[var(--accent-lavender)]"
             >
-              <QrCode className="h-3.5 w-3.5 text-[var(--accent-purple)]" />
+              <QrCode className="h-3.5 w-3.5 text-[#5B42F3] dark:text-[#9D8CFF]" />
               <span className="hidden sm:inline">Digital ID</span>
             </button>
           )}
 
           <button
             onClick={triggerSos}
-            className="sos-btn flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-white text-[11px] font-extrabold uppercase tracking-wider transition-all active:scale-95"
-            style={{ background: "#FF3366" }}
+            className="sos-btn flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-white text-[11px] font-extrabold uppercase tracking-wider transition-all active:scale-95 bg-rose-600 hover:bg-rose-700 shadow-md"
           >
             <ShieldAlert className="h-3.5 w-3.5 shrink-0" />
             <span>{t(language, "emergencySos")}</span>
@@ -137,7 +136,7 @@ export const Header: React.FC<{ onOpenHealthCard?: () => void }> = ({ onOpenHeal
           {/* Light / Dark Mode Toggle Button */}
           <button
             onClick={() => setDarkMode(!darkMode)}
-            className="p-2 rounded-full bg-[var(--bg-card)] border border-[var(--border-subtle)] shadow-sm text-[var(--text-secondary)] hover:text-[var(--accent-purple)] transition-all hover:scale-105"
+            className="p-2 rounded-xl bg-[var(--bg-card)] border border-[var(--surface-border)] shadow-sm text-[#5E5A73] dark:text-[#CBD5E1] hover:text-[#5B42F3] transition-all hover:scale-105"
             title={darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
           >
             {darkMode ? (
