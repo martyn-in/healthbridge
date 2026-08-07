@@ -82,8 +82,8 @@ export const Header: React.FC<{ onOpenHealthCard?: () => void }> = ({ onOpenHeal
       )}
 
       <div className="max-w-7xl mx-auto flex h-16 items-center justify-between px-4 sm:px-6 gap-4">
-        {/* Left: Brand Logo */}
-        <div className="flex items-center gap-3">
+        {/* Left: Brand Logo (Only shown on mobile when Sidebar is hidden) */}
+        <div className="flex items-center gap-3 lg:hidden">
           <Logo size="sm" showText={true} />
         </div>
 

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { HeartPulse, Droplets, Moon, Wind, Play, Pause, Plus, Minus, Activity, Flame, Trophy, TrendingUp, Brain, Footprints, ChevronRight } from 'lucide-react';
+import { HeartPulse, Droplets, Moon, Wind, Play, Pause, Plus, Minus, Activity, Flame, Trophy, Brain, Footprints, ChevronRight } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
 
 export default function WellnessPage() {
@@ -54,12 +54,10 @@ export default function WellnessPage() {
     updateWellness({ sleepHours: Math.max(0, wellness.sleepHours - 0.5) });
   };
 
-  // Steps dummy state
   const [steps, setSteps] = useState(6450);
   const addSteps = () => setSteps(s => Math.min(20000, s + 500));
   const removeSteps = () => setSteps(s => Math.max(0, s - 500));
 
-  // Mindfulness dummy state
   const [mindfulness, setMindfulness] = useState(15);
   const addMindfulness = () => setMindfulness(m => Math.min(120, m + 5));
   const removeMindfulness = () => setMindfulness(m => Math.max(0, m - 5));
@@ -67,24 +65,24 @@ export default function WellnessPage() {
   const todayDate = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
 
   // SVG Metric Ring Component
-  const MetricRing = ({ value, max, color, icon: Icon, title, unit, onAdd, onMinus, delay }: any) => {
+  const MetricRing = ({ value, max, color, icon: Icon, title, unit, onAdd, onMinus }: any) => {
     const radius = 42;
     const circumference = 2 * Math.PI * radius;
     const percentage = Math.min(100, Math.max(0, (value / max) * 100));
     const strokeDashoffset = circumference - (percentage / 100) * circumference;
 
     return (
-      <div className={`neu-card rounded-3xl p-6 flex flex-col items-center justify-between h-full card-lift anim-fade-up ${delay}`}>
+      <div className="bg-white rounded-3xl p-6 flex flex-col items-center justify-between h-full border border-[#6E56CF]/10 shadow-sm">
         <div className="w-full flex justify-between items-center mb-4">
-          <h3 className="text-sm font-extrabold text-[#0D1B2A]">{title}</h3>
-          <div className="p-2 rounded-2xl" style={{ backgroundColor: `${color}15` }}>
-            <Icon className="h-5 w-5" style={{ color }} />
+          <h3 className="text-sm font-extrabold text-[#1E1B2E]">{title}</h3>
+          <div className="p-2 rounded-2xl bg-[#E8E3FF]">
+            <Icon className="h-5 w-5 text-[#6E56CF]" />
           </div>
         </div>
         
         <div className="relative flex items-center justify-center mb-6 mt-2">
-          <svg width="120" height="120" className="transform -rotate-90 drop-shadow-sm">
-            <circle cx="60" cy="60" r={radius} fill="transparent" stroke="#E2E8F0" strokeWidth="12" />
+          <svg width="120" height="120" className="transform -rotate-90">
+            <circle cx="60" cy="60" r={radius} fill="transparent" stroke="#F8F7FF" strokeWidth="12" />
             <circle
               cx="60" cy="60" r={radius} fill="transparent" stroke={color} strokeWidth="12"
               strokeDasharray={circumference} strokeDashoffset={strokeDashoffset}
@@ -92,20 +90,20 @@ export default function WellnessPage() {
             />
           </svg>
           <div className="absolute flex flex-col items-center justify-center">
-            <span className="text-2xl font-black text-[#0D1B2A] tracking-tighter">{value}</span>
-            <span className="text-[10px] font-bold text-[#9BAABF] uppercase">{unit}</span>
+            <span className="text-2xl font-black text-[#1E1B2E] tracking-tighter">{value}</span>
+            <span className="text-[10px] font-bold text-[#6B677E] uppercase">{unit}</span>
           </div>
         </div>
 
         <div className="flex gap-2 w-full justify-between items-center mt-auto pt-2">
-          <button onClick={onMinus} className="pill-btn pill-btn-ghost p-2.5 rounded-full !w-auto shadow-sm" style={{ color }}>
+          <button onClick={onMinus} className="w-9 h-9 rounded-full bg-[#F8F7FF] hover:bg-[#E8E3FF] flex items-center justify-center text-[#6E56CF] transition-colors">
             <Minus className="h-4 w-4" />
           </button>
           <div className="flex flex-col justify-center items-center px-1">
-            <span className="text-[10px] font-extrabold text-[#9BAABF] uppercase tracking-wider">Target</span>
-            <span className="text-xs font-bold text-[#0D1B2A]">{max} {unit}</span>
+            <span className="text-[10px] font-extrabold text-[#6B677E] uppercase tracking-wider">Target</span>
+            <span className="text-xs font-bold text-[#1E1B2E]">{max} {unit}</span>
           </div>
-          <button onClick={onAdd} className="pill-btn pill-btn-ghost p-2.5 rounded-full !w-auto shadow-sm" style={{ color }}>
+          <button onClick={onAdd} className="w-9 h-9 rounded-full bg-[#E8E3FF] hover:bg-[#DED8FF] flex items-center justify-center text-[#6E56CF] transition-colors font-bold">
             <Plus className="h-4 w-4" />
           </button>
         </div>
@@ -114,169 +112,154 @@ export default function WellnessPage() {
   };
 
   return (
-    <div className="space-y-8 pb-10">
-      {/* 1. Hero header */}
-      <div className="frosted-card rounded-3xl p-8 relative overflow-hidden anim-fade-up border-0 shadow-sm" style={{ background: 'rgba(255, 255, 255, 0.85)' }}>
-        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5 pointer-events-none"></div>
+    <div className="space-y-8 pb-10 font-sans selection:bg-[#E8E3FF] selection:text-[#6E56CF]">
+      {/* Hero header */}
+      <div className="bg-white rounded-3xl p-7 border border-[#6E56CF]/10 shadow-sm relative overflow-hidden">
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="flex items-center gap-5">
-            <div className="h-16 w-16 rounded-2xl bg-white shadow-lg flex items-center justify-center" style={{ boxShadow: '0 8px 24px rgba(0, 200, 117, 0.2)' }}>
-              <HeartPulse className="h-8 w-8" style={{ color: '#00C875' }} />
+            <div className="h-14 w-14 rounded-2xl bg-[#E8E3FF] flex items-center justify-center text-[#6E56CF]">
+              <HeartPulse className="h-7 w-7" />
             </div>
             <div>
-              <div className="text-sm font-bold text-[#9BAABF] mb-1">{todayDate}</div>
-              <h1 className="text-3xl font-black text-[#0D1B2A] tracking-tight">Wellness & Goals</h1>
+              <div className="text-xs font-bold text-[#6B677E] mb-0.5">{todayDate}</div>
+              <h1 className="text-3xl font-extrabold text-[#1E1B2E] tracking-tight">Wellness & Goals</h1>
             </div>
           </div>
           
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 bg-white px-4 py-2.5 rounded-2xl shadow-sm border border-slate-100">
-              <Flame className="h-5 w-5" style={{ color: '#FF9500' }} />
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 bg-[#F8F7FF] px-4 py-2.5 rounded-2xl border border-[#6E56CF]/10">
+              <Flame className="h-5 w-5 text-[#6E56CF]" />
               <div className="flex flex-col">
-                <span className="text-[10px] font-bold text-[#9BAABF] uppercase leading-none">Current Streak</span>
-                <span className="text-sm font-black text-[#0D1B2A] leading-none mt-1">12 Days</span>
+                <span className="text-[10px] font-bold text-[#6B677E] uppercase leading-none">Current Streak</span>
+                <span className="text-sm font-extrabold text-[#1E1B2E] leading-none mt-1">12 Days</span>
               </div>
             </div>
-            <div className="flex items-center gap-2 bg-white px-4 py-2.5 rounded-2xl shadow-sm border border-slate-100">
-              <Trophy className="h-5 w-5" style={{ color: '#7C5CFC' }} />
+            <div className="flex items-center gap-2 bg-[#F8F7FF] px-4 py-2.5 rounded-2xl border border-[#6E56CF]/10">
+              <Trophy className="h-5 w-5 text-[#6E56CF]" />
               <div className="flex flex-col">
-                <span className="text-[10px] font-bold text-[#9BAABF] uppercase leading-none">Best Streak</span>
-                <span className="text-sm font-black text-[#0D1B2A] leading-none mt-1">24 Days</span>
+                <span className="text-[10px] font-bold text-[#6B677E] uppercase leading-none">Best Streak</span>
+                <span className="text-sm font-extrabold text-[#1E1B2E] leading-none mt-1">24 Days</span>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         
         {/* Left Column: 2x2 Grid */}
         <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6">
           <MetricRing 
-            title="Sleep Hygiene" value={wellness.sleepHours} max={8} color="#7C5CFC" 
-            icon={Moon} unit="hrs" onAdd={addSleep} onMinus={removeSleep} delay="delay-100"
+            title="Sleep Hygiene" value={wellness.sleepHours} max={8} color="#6E56CF" 
+            icon={Moon} unit="hrs" onAdd={addSleep} onMinus={removeSleep}
           />
           <MetricRing 
-            title="Daily Steps" value={steps} max={10000} color="#0066FF" 
-            icon={Footprints} unit="steps" onAdd={addSteps} onMinus={removeSteps} delay="delay-200"
+            title="Daily Steps" value={steps} max={10000} color="#6E56CF" 
+            icon={Footprints} unit="steps" onAdd={addSteps} onMinus={removeSteps}
           />
           <MetricRing 
-            title="Hydration" value={wellness.waterIntakeMl} max={wellness.waterGoalMl || 2000} color="#00C2FF" 
-            icon={Droplets} unit="ml" onAdd={addWater} onMinus={removeWater} delay="delay-300"
+            title="Hydration" value={wellness.waterIntakeMl} max={wellness.waterGoalMl || 2500} color="#6E56CF" 
+            icon={Droplets} unit="ml" onAdd={addWater} onMinus={removeWater}
           />
           <MetricRing 
-            title="Mindfulness" value={mindfulness} max={30} color="#00D4AA" 
-            icon={Brain} unit="mins" onAdd={addMindfulness} onMinus={removeMindfulness} delay="delay-400"
+            title="Mindfulness" value={mindfulness} max={30} color="#6E56CF" 
+            icon={Brain} unit="mins" onAdd={addMindfulness} onMinus={removeMindfulness}
           />
         </div>
 
         {/* Right Column: Sparkline, Stats & Recommendations */}
         <div className="lg:col-span-5 space-y-6">
           
-          {/* 3. Weekly Activity Sparkline */}
-          <div className="frosted-card rounded-3xl p-6 anim-slide-left delay-100">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-sm font-extrabold text-[#0D1B2A] flex items-center gap-2">
-                <Activity className="h-4 w-4" style={{ color: '#0066FF' }} /> Weekly Activity
+          {/* Weekly Activity */}
+          <div className="bg-white rounded-3xl p-6 border border-[#6E56CF]/10 shadow-sm space-y-4">
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-extrabold text-[#1E1B2E] flex items-center gap-2">
+                <Activity className="h-4 w-4 text-[#6E56CF]" /> Weekly Activity
               </h3>
-              <span className="text-xs font-bold text-[#0066FF] bg-[#0066FF] bg-opacity-10 px-2.5 py-1 rounded-full">+14% vs last week</span>
+              <span className="text-xs font-bold text-[#6E56CF] bg-[#E8E3FF] px-3 py-1 rounded-full">+14% vs last week</span>
             </div>
             
-            <div className="h-32 w-full flex items-end justify-between gap-2 relative">
-              {/* Sparkline SVG */}
+            <div className="h-28 w-full flex items-end justify-between gap-2 relative pt-4">
               <svg className="absolute inset-0 h-full w-full" preserveAspectRatio="none">
-                <path d="M0,80 Q40,40 80,60 T160,30 T240,70 T320,20" className="sparkline-path" fill="none" stroke="#0066FF" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M0,80 Q40,40 80,60 T160,30 T240,70 T320,20 L320,120 L0,120 Z" fill="url(#blue-grad)" opacity="0.1" />
-                <defs>
-                  <linearGradient id="blue-grad" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stopColor="#0066FF" stopOpacity="1" />
-                    <stop offset="100%" stopColor="#0066FF" stopOpacity="0" />
-                  </linearGradient>
-                </defs>
+                <path d="M0,70 Q40,30 80,50 T160,25 T240,60 T320,15" fill="none" stroke="#6E56CF" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M0,70 Q40,30 80,50 T160,25 T240,60 T320,15 L320,100 L0,100 Z" fill="#6E56CF" opacity="0.08" />
               </svg>
               
-              {/* Bars just for visual structure behind sparkline */}
-              {[40, 60, 45, 80, 50, 90, 75].map((val, i) => (
-                <div key={i} className="flex flex-col items-center gap-2 z-10 w-full">
-                  <div className="w-full bg-slate-100 rounded-t-lg h-24 relative overflow-hidden group">
-                     <div className="absolute bottom-0 w-full bg-[#0066FF] opacity-10 group-hover:opacity-20 transition-opacity rounded-t-lg" style={{ height: `${val}%` }}></div>
-                  </div>
-                  <span className="text-[10px] font-bold text-[#9BAABF]">
-                    {['M', 'T', 'W', 'T', 'F', 'S', 'S'][i]}
-                  </span>
+              {['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((day, i) => (
+                <div key={i} className="flex flex-col items-center gap-1 z-10 w-full">
+                  <div className="w-full bg-[#F8F7FF] rounded-t-lg h-16 opacity-40"></div>
+                  <span className="text-[10px] font-bold text-[#6B677E]">{day}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Guided Breathing Mini-Card (Keeping logic intact) */}
-          <div className="neu-card rounded-3xl p-6 anim-slide-left delay-200">
-             <div className="flex items-center justify-between mb-4">
-               <h3 className="text-sm font-extrabold text-[#0D1B2A] flex items-center gap-2">
-                 <Wind className="h-4 w-4" style={{ color: '#00D4AA' }} /> 4-7-8 Breathing
-               </h3>
-               <div className={`px-2 py-1 rounded-full text-[10px] font-bold ${isBreathingActive ? 'bg-[#00D4AA] text-white' : 'bg-slate-100 text-[#9BAABF]'}`}>
-                 {isBreathingActive ? breathingPhase : 'Ready'}
-               </div>
-             </div>
-             <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="h-14 w-14 rounded-full bg-white shadow-sm border-2 border-slate-50 flex items-center justify-center relative overflow-hidden">
-                    {isBreathingActive && (
-                      <div className="absolute inset-0 bg-[#00D4AA] opacity-20 animate-ping rounded-full" style={{ animationDuration: '3s' }}></div>
-                    )}
-                    <span className="text-lg font-black text-[#0D1B2A] z-10">{timerCount}s</span>
-                  </div>
-                  <p className="text-xs text-[#9BAABF] font-medium max-w-[120px]">Relieve stress and reset your focus.</p>
+          {/* 4-7-8 Breathing Exercise */}
+          <div className="bg-white rounded-3xl p-6 border border-[#6E56CF]/10 shadow-sm space-y-4">
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-extrabold text-[#1E1B2E] flex items-center gap-2">
+                <Wind className="h-4 w-4 text-[#6E56CF]" /> 4-7-8 Breathing
+              </h3>
+              <span className="text-[10px] font-bold uppercase text-[#6B677E] bg-[#F8F7FF] px-2 py-0.5 rounded-full">
+                {isBreathingActive ? breathingPhase : 'Ready'}
+              </span>
+            </div>
+
+            <div className="flex items-center justify-between bg-[#F8F7FF] p-4 rounded-2xl border border-[#6E56CF]/10">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-full bg-[#E8E3FF] text-[#6E56CF] font-black text-lg flex items-center justify-center">
+                  {timerCount}s
                 </div>
-                <button
-                  onClick={() => setIsBreathingActive(!isBreathingActive)}
-                  className="pill-btn pill-btn-primary bg-[#00D4AA] hover:bg-[#00C875] border-none shadow-lg shadow-teal-500/30"
-                >
-                  {isBreathingActive ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
-                </button>
-             </div>
+                <div>
+                  <div className="text-xs font-bold text-[#1E1B2E]">
+                    {isBreathingActive ? `${breathingPhase} deeply...` : 'Relieve stress and reset focus'}
+                  </div>
+                  <div className="text-[10px] text-[#6B677E]">Clinical vagus nerve relaxation technique</div>
+                </div>
+              </div>
+
+              <button
+                onClick={() => setIsBreathingActive(!isBreathingActive)}
+                className="w-10 h-10 rounded-full bg-[#6E56CF] text-white flex items-center justify-center shadow-sm hover:scale-105 transition-all"
+              >
+                {isBreathingActive ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4 ml-0.5" />}
+              </button>
+            </div>
           </div>
 
-          {/* 4. Recommendation Cards */}
-          <div className="space-y-3 anim-slide-left delay-300">
-            <h3 className="text-sm font-extrabold text-[#0D1B2A] mb-3 ml-2">Suggested for You</h3>
+          {/* Suggested Recommendations */}
+          <div className="bg-white rounded-3xl p-6 border border-[#6E56CF]/10 shadow-sm space-y-3">
+            <h3 className="text-sm font-extrabold text-[#1E1B2E]">Suggested for You</h3>
             
-            <div 
-              onClick={() => showToast('Tip: Turning off screens 30m before bed increases REM sleep by up to 18%.')} 
-              className="frosted-card rounded-2xl p-4 flex items-center gap-4 cursor-pointer hover:bg-white/80 transition-colors group"
-            >
-              <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-[#7C5CFC] to-[#0066FF] flex items-center justify-center text-white shadow-sm shrink-0">
-                <Moon className="h-5 w-5" />
+            <div className="flex items-center justify-between p-3.5 rounded-2xl bg-[#F8F7FF] border border-[#6E56CF]/10 hover:bg-[#E8E3FF]/40 transition-all cursor-pointer">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-xl bg-[#E8E3FF] text-[#6E56CF] flex items-center justify-center">
+                  <Moon className="h-4 w-4" />
+                </div>
+                <div>
+                  <div className="text-xs font-bold text-[#1E1B2E]">Improve Sleep Quality</div>
+                  <div className="text-[10px] text-[#6B677E]">Try winding down 30m earlier tonight</div>
+                </div>
               </div>
-              <div className="flex-1">
-                <h4 className="text-sm font-bold text-[#0D1B2A]">Improve Sleep Quality</h4>
-                <p className="text-xs text-[#9BAABF] line-clamp-1">Try winding down 30m earlier tonight.</p>
-              </div>
-              <div className="h-8 w-8 rounded-full bg-slate-50 flex items-center justify-center group-hover:bg-[#7C5CFC] group-hover:text-white transition-colors">
-                <ChevronRight className="h-4 w-4" />
-              </div>
+              <ChevronRight className="h-4 w-4 text-[#6B677E]" />
             </div>
 
-            <div 
-              onClick={() => showToast('Goal update: A 15-minute walk will complete your daily step goal!')} 
-              className="frosted-card rounded-2xl p-4 flex items-center gap-4 cursor-pointer hover:bg-white/80 transition-colors group"
-            >
-              <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-[#FF9500] to-[#FF3366] flex items-center justify-center text-white shadow-sm shrink-0">
-                <TrendingUp className="h-5 w-5" />
+            <div className="flex items-center justify-between p-3.5 rounded-2xl bg-[#F8F7FF] border border-[#6E56CF]/10 hover:bg-[#E8E3FF]/40 transition-all cursor-pointer">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-xl bg-[#E8E3FF] text-[#6E56CF] flex items-center justify-center">
+                  <Footprints className="h-4 w-4" />
+                </div>
+                <div>
+                  <div className="text-xs font-bold text-[#1E1B2E]">Increase Daily Steps</div>
+                  <div className="text-[10px] text-[#6B677E]">You are 3,550 steps away from your goal</div>
+                </div>
               </div>
-              <div className="flex-1">
-                <h4 className="text-sm font-bold text-[#0D1B2A]">Increase Daily Steps</h4>
-                <p className="text-xs text-[#9BAABF] line-clamp-1">You are 3,550 steps away from goal.</p>
-              </div>
-              <div className="h-8 w-8 rounded-full bg-slate-50 flex items-center justify-center group-hover:bg-[#FF9500] group-hover:text-white transition-colors">
-                <ChevronRight className="h-4 w-4" />
-              </div>
+              <ChevronRight className="h-4 w-4 text-[#6B677E]" />
             </div>
-
           </div>
 
         </div>
+
       </div>
     </div>
   );

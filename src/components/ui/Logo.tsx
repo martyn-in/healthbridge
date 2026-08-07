@@ -13,7 +13,7 @@ export const Logo: React.FC<LogoProps> = ({ className = '', size = 'md', showTex
 
   return (
     <div className={`flex items-center gap-2.5 ${className}`}>
-      <div className={`flex items-center justify-center bg-teal-600 dark:bg-teal-500 text-white shadow-sm ${iconBox}`}>
+      <div className={`flex items-center justify-center bg-[#6E56CF] text-white shadow-sm ${iconBox}`}>
         <svg
           width={iconSize}
           height={iconSize}
