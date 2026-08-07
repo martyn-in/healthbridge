@@ -42,10 +42,12 @@ export const Sidebar: React.FC = () => {
     return (
       <Link
         href={item.path}
-        className="group flex items-center justify-between px-3 py-2.5 rounded-2xl text-[12px] font-semibold transition-all duration-200"
+        className={`group flex items-center justify-between px-3 py-2.5 rounded-2xl text-[12px] font-semibold transition-all duration-200 ${
+          isActive ? 'shadow-sm' : 'text-[#1E1B2E] dark:text-[#F8FAFC] hover:bg-[var(--accent-lavender)]'
+        }`}
         style={{
           background: isActive ? item.bg : 'transparent',
-          color: isActive ? item.color : 'var(--text-primary)',
+          color: isActive ? item.color : undefined,
           border: isActive ? `1px solid ${item.color}30` : '1px solid transparent',
         }}
       >
@@ -53,11 +55,11 @@ export const Sidebar: React.FC = () => {
           <div className="w-7 h-7 rounded-xl flex items-center justify-center transition-all"
             style={{
               background: isActive ? item.bg : 'transparent',
-              color: isActive ? item.color : 'var(--text-secondary)',
+              color: isActive ? item.color : undefined,
             }}>
-            <Icon className="h-3.5 w-3.5" />
+            <Icon className={`h-3.5 w-3.5 ${!isActive ? 'text-[#6B677E] dark:text-[#CBD5E1]' : ''}`} />
           </div>
-          <span>{item.name}</span>
+          <span className={!isActive ? 'text-[#1E1B2E] dark:text-[#F8FAFC]' : ''}>{item.name}</span>
         </div>
         {isActive && <ChevronRight className="h-3 w-3 opacity-60" />}
       </Link>

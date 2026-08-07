@@ -3,16 +3,18 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
-/* ─── LIGHT MODE TOKENS (IMAGE 1 SOFT PALETTE) ─────────────────────────── */
+/* ─── LIGHT MODE DESIGN TOKENS (IMAGE 1 SOFT PALETTE) ─────────────────── */
 :root {
   --bg-base:                #F2EFFE;
   --bg-surface:             #E8E3FF;
   --bg-card:                #FFFFFF;
   --bg-card-subtle:         #F8F7FF;
 
+  --text-heading:           #1E1B2E;
   --text-primary:           #1E1B2E;
   --text-secondary:         #6B677E;
   --text-muted:             #9692A8;
+  --text-disabled:          #B4B0C7;
 
   --accent-purple:          #6E56CF;
   --accent-violet:          #7C5CFC;
@@ -20,8 +22,8 @@
   --accent-lavender-dark:   #DED8FF;
   --accent-crimson:         #FF3366;
 
-  --border-subtle:          rgba(110, 86, 207, 0.12);
-  --border-card:            rgba(255, 255, 255, 0.95);
+  --surface-card:           #FFFFFF;
+  --surface-border:         rgba(110, 86, 207, 0.12);
   --shadow-sm:              0 2px 10px rgba(110, 86, 207, 0.03);
   --shadow-md:              0 8px 30px rgba(110, 86, 207, 0.05);
   --shadow-lg:              0 20px 50px rgba(110, 86, 207, 0.08);
@@ -30,25 +32,27 @@
   --radius-pill:            999px;
 }
 
-/* ─── DARK MODE TOKENS (HIGH CONTRAST CHARCOAL & VIOLET) ─────────────────── */
+/* ─── DARK MODE DESIGN TOKENS (WCAG AA COMPLIANT MEDICAL DARK PALETTE) ────── */
 .dark, html.dark {
-  --bg-base:                #090710;
-  --bg-surface:             #141120;
-  --bg-card:                #1A1628;
-  --bg-card-subtle:         #251F38;
+  --bg-base:                #0B0F19;
+  --bg-surface:             #111827;
+  --bg-card:                rgba(15, 23, 42, 0.85);
+  --bg-card-subtle:         rgba(30, 41, 59, 0.75);
 
-  --text-primary:           #FFFFFF;
-  --text-secondary:         #D1CBDD;
-  --text-muted:             #A39DB5;
+  --text-heading:           #F8FAFC;
+  --text-primary:           #F8FAFC;
+  --text-secondary:         #E2E8F0;
+  --text-muted:             #CBD5E1;
+  --text-disabled:          #94A3B8;
 
   --accent-purple:          #8C73FF;
   --accent-violet:          #9D8CFF;
-  --accent-lavender:        #2B2344;
-  --accent-lavender-dark:   #3B315B;
+  --accent-lavender:        rgba(140, 115, 255, 0.18);
+  --accent-lavender-dark:   rgba(140, 115, 255, 0.28);
   --accent-crimson:         #FF4D7D;
 
-  --border-subtle:          rgba(255, 255, 255, 0.15);
-  --border-card:            rgba(255, 255, 255, 0.18);
+  --surface-card:           rgba(15, 23, 42, 0.85);
+  --surface-border:         rgba(255, 255, 255, 0.14);
   --shadow-sm:              0 2px 10px rgba(0, 0, 0, 0.40);
   --shadow-md:              0 8px 30px rgba(0, 0, 0, 0.60);
   --shadow-lg:              0 20px 50px rgba(0, 0, 0, 0.80);
@@ -73,52 +77,80 @@ body {
 h1, h2, h3, h4, h5, h6, .font-heading {
   font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   letter-spacing: -0.02em;
+  color: var(--text-heading);
 }
 
-/* ─── ULTIMATE HIGH-CONTRAST DARK MODE OVERRIDES (OVERRIDE ALL HARDCODED TAILWIND COLORS) ── */
+/* ─── ULTIMATE HIGH-CONTRAST DARK MODE OVERRIDES FOR ALL TEXT ─────────── */
 .dark, .dark body, .dark html {
-  background-color: #090710 !important;
-  color: #FFFFFF !important;
+  background-color: #0B0F19 !important;
+  color: #F8FAFC !important;
 }
 
-/* Force all headings and titles to brilliant white in dark mode */
+/* Force all headings, patient/doctor names, titles to high-contrast crisp white */
 .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6,
+.dark .text-primary,
 .dark [class*="text-[#0D1B2A]"],
 .dark [class*="text-[#1E1B2E]"],
 .dark [class*="text-[#000000]"],
 .dark [class*="text-slate-900"],
-.dark [class*="text-slate-800"],
-.dark [class*="text-slate-700"] {
-  color: #FFFFFF !important;
+.dark [class*="text-slate-800"] {
+  color: #F8FAFC !important;
 }
 
-/* Force all secondary metadata text to crisp soft silver/white */
+/* Force body paragraphs, labels, and standard text to light slate-200 */
+.dark p, .dark label, .dark li,
+.dark [class*="text-[#4A5568]"],
+.dark [class*="text-slate-700"] {
+  color: #E2E8F0 !important;
+}
+
+/* Force secondary metadata, timestamps, subtitles to crisp slate-300 */
 .dark [class*="text-[#9BAABF]"],
 .dark [class*="text-[#6B677E]"],
 .dark [class*="text-[#78758A]"],
-.dark [class*="text-[#4A5568]"],
 .dark [class*="text-slate-400"],
 .dark [class*="text-slate-500"],
 .dark [class*="text-slate-600"] {
-  color: #D1CBDD !important;
+  color: #CBD5E1 !important;
 }
 
-/* Force all cards, sidebars, headers, and modals to deep charcoal/violet */
+/* Glassmorphism panels in Dark Mode */
 .dark .frosted-card, .dark .soft-card, .dark .neu-card, .dark aside, .dark header,
 .dark [class*="bg-white"] {
-  background-color: #1A1628 !important;
-  border-color: rgba(255, 255, 255, 0.15) !important;
-  color: #FFFFFF !important;
+  background-color: rgba(15, 23, 42, 0.85) !important;
+  border-color: rgba(255, 255, 255, 0.14) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  color: #F8FAFC !important;
 }
 
 .dark input, .dark textarea, .dark select {
-  background-color: #251F38 !important;
-  color: #FFFFFF !important;
+  background-color: rgba(30, 41, 59, 0.90) !important;
+  color: #F8FAFC !important;
   border-color: rgba(255, 255, 255, 0.18) !important;
 }
 
 .dark input::placeholder, .dark textarea::placeholder {
-  color: #A39DB5 !important;
+  color: #94A3B8 !important;
+}
+
+/* Chart text readability in Dark Mode */
+.dark .recharts-text,
+.dark .recharts-cartesian-axis-tick-value,
+.dark .recharts-legend-item-text {
+  fill: #E2E8F0 !important;
+  color: #E2E8F0 !important;
+}
+
+.dark .recharts-cartesian-grid line {
+  stroke: rgba(255, 255, 255, 0.10) !important;
+}
+
+.dark .recharts-default-tooltip {
+  background-color: #0F172A !important;
+  border-color: rgba(255, 255, 255, 0.20) !important;
+  color: #F8FAFC !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
 }
 
 /* ─── CUSTOM SCROLLBAR ────────────────────────────────────────────── */
@@ -133,7 +165,7 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 /* ─── SOFT CARDS & UTILITIES ────────────────────────────────────── */
 .soft-card {
   background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--surface-border);
   box-shadow: var(--shadow-md);
   color: var(--text-primary);
 }
