@@ -15,7 +15,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   return (
     <AuthGuard>
       <div className="min-h-screen flex flex-col font-sans transition-colors relative"
-        style={{ background: '#F4F4F0', color: '#111111' }}>
+        style={{ background: '#F2EFFE', color: '#1E1B2E' }}>
 
         {/* Ambient background orbs */}
         <div className="fixed top-0 right-0 w-96 h-96 rounded-full pointer-events-none z-0"
