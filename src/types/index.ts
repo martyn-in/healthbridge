@@ -39,6 +39,7 @@ export interface MedicalReport {
   id: string;
   profileId: string;
   fileName: string;
+  fileUrl?: string;
   fileType: string;
   fileSize: string;
   uploadedAt: string;

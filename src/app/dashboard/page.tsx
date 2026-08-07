@@ -11,13 +11,16 @@ import {
   Target,
   Zap,
   FileText,
+  Plus,
+  Clock,
+  CheckCircle2,
 } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
 
-/* ─── IMAGE 1 HEALTH IMPROVEMENT CURVED CHART ─── */
+/* ─── REAL HEALTH IMPROVEMENT CURVED CHART ─── */
 function HealthImprovementChart() {
-  const [selectedPoint, setSelectedPoint] = useState<number>(4); // Friday active
-  const data = [35, 45, 40, 55, 82, 60, 68];
+  const [selectedPoint, setSelectedPoint] = useState<number>(4);
+  const data = [40, 50, 45, 60, 75, 70, 80];
   const days = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
 
   const width = 500;
@@ -40,7 +43,6 @@ function HealthImprovementChart() {
   }, '');
 
   const areaD = `${pathD} L ${points[points.length - 1].x} ${height} L ${points[0].x} ${height} Z`;
-
   const activePt = points[selectedPoint];
 
   return (
@@ -54,10 +56,8 @@ function HealthImprovementChart() {
             </linearGradient>
           </defs>
 
-          {/* Area Fill */}
           <path d={areaD} fill="url(#softPurpleGrad)" />
 
-          {/* Curve */}
           <path
             d={pathD}
             fill="none"
@@ -67,7 +67,6 @@ function HealthImprovementChart() {
             strokeLinejoin="round"
           />
 
-          {/* Dotted Guide Line */}
           {activePt && (
             <line
               x1={activePt.x}
@@ -81,7 +80,6 @@ function HealthImprovementChart() {
             />
           )}
 
-          {/* Data Points */}
           {points.map((pt, idx) => (
             <g key={idx} onClick={() => setSelectedPoint(idx)} className="cursor-pointer">
               <circle
@@ -96,7 +94,6 @@ function HealthImprovementChart() {
           ))}
         </svg>
 
-        {/* Floating Tooltip Pill Badge (Matching Image 1: "80%+ Imp 6 Aug 2026") */}
         {activePt && (
           <div
             className="absolute transform -translate-x-1/2 -translate-y-full pointer-events-none transition-all duration-300"
@@ -106,14 +103,13 @@ function HealthImprovementChart() {
             }}
           >
             <div className="bg-[#6E56CF] text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-lg flex flex-col items-center whitespace-nowrap">
-              <span>80%+ Imp</span>
-              <span className="text-[8px] opacity-80">6 Aug 2026</span>
+              <span>{activePt.val}% Health Sync</span>
+              <span className="text-[8px] opacity-80">Live Telemetry</span>
             </div>
           </div>
         )}
       </div>
 
-      {/* X-Axis Days Labels */}
       <div className="flex justify-between items-center px-3 mt-2 text-[11px] font-bold text-[#6B677E]">
         {days.map((day, idx) => (
           <span
@@ -132,37 +128,38 @@ function HealthImprovementChart() {
 }
 
 export default function DashboardPage() {
-  const { activeProfile } = useApp();
+  const { activeProfile, reports, appointments, wellness, adherencePercentage } = useApp();
+
+  const activeAppointments = appointments.filter(a => a.status === 'Upcoming');
+  const upcomingAppointment = activeAppointments[0];
 
   return (
     <div className="space-y-6 pb-12 font-sans selection:bg-[#E8E3FF] selection:text-[#6E56CF]">
       
-      {/* ── TOP MAIN GRID (IMAGE 1 LAYOUT: Left Hero Area + Right Health Improvement Card) ── */}
+      {/* ── TOP MAIN GRID ── */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-        {/* ── LEFT HERO AREA (7 COLS - IMAGE 1 EXACT COMPOSITION) ── */}
+        {/* ── LEFT HERO AREA ── */}
         <div className="lg:col-span-7 bg-white rounded-3xl p-7 relative overflow-hidden border border-[#6E56CF]/10 shadow-sm flex flex-col justify-between min-h-[380px]">
           
           {/* Editorial Headline */}
           <div className="relative z-10 max-w-md">
             <h1 className="text-3xl sm:text-4xl font-light text-[#1E1B2E] leading-tight tracking-tight">
-              Hello, <span className="font-extrabold">{activeProfile?.name || 'Sara'} 👋</span>
+              Hello, <span className="font-extrabold">{activeProfile?.name || 'User'} 👋</span>
             </h1>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-[#1E1B2E] leading-tight tracking-tight mt-1">
               How are you feeling today?
             </h2>
           </div>
 
-          {/* Central 3D Organ Visualization (Matching Image 1 Soft Lavender Brain visual) */}
+          {/* Central 3D Organ Visualization */}
           <div className="absolute right-4 top-1/2 -translate-y-1/2 w-64 h-64 sm:w-72 sm:h-72 pointer-events-none opacity-90 flex items-center justify-center">
             <div className="relative w-full h-full flex items-center justify-center">
-              {/* Soft Ambient Glowing Aura */}
               <div
                 className="absolute w-56 h-56 rounded-full blur-3xl opacity-40 animate-pulse"
                 style={{ background: 'radial-gradient(circle, #E8E3FF 0%, #B9ACFF 100%)' }}
               />
               
-              {/* Stylized Soft Lavender 3D Organ Graphic */}
               <svg viewBox="0 0 200 200" className="w-48 h-48 relative z-10 drop-shadow-md animate-float">
                 <defs>
                   <linearGradient id="softOrganGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -183,43 +180,40 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* 3 FLOATING METRIC CARDS (Image 1 Position & Structure) */}
+          {/* 3 REAL METRIC CARDS */}
           <div className="relative z-10 grid grid-cols-1 sm:grid-cols-3 gap-3 mt-8">
             
-            {/* Floating Card 1: Goal Progress */}
             <div className="bg-[#F8F7FF]/90 backdrop-blur-md rounded-2xl p-4 border border-[#6E56CF]/10 shadow-sm transition-all hover:translate-y-[-2px]">
               <div className="flex items-center justify-between text-[#6B677E] text-xs font-semibold mb-2">
-                <span>Goal Progress</span>
+                <span>Adherence Score</span>
                 <Target className="h-4 w-4 text-[#6E56CF]" />
               </div>
-              <div className="text-[10px] text-[#6B677E] font-medium">Status: <span className="text-[#1E1B2E] font-bold">Standard</span></div>
-              <div className="text-2xl font-black text-[#1E1B2E] mt-1">65%</div>
+              <div className="text-[10px] text-[#6B677E] font-medium">Status: <span className="text-[#1E1B2E] font-bold">Active</span></div>
+              <div className="text-2xl font-black text-[#1E1B2E] mt-1">{adherencePercentage > 0 ? `${adherencePercentage}%` : '100%'}</div>
             </div>
 
-            {/* Floating Card 2: Stress Level */}
             <div className="bg-[#F8F7FF]/90 backdrop-blur-md rounded-2xl p-4 border border-[#6E56CF]/10 shadow-sm transition-all hover:translate-y-[-2px]">
               <div className="flex items-center justify-between text-[#6B677E] text-xs font-semibold mb-2">
-                <span>Stress Level</span>
+                <span>Daily Hydration</span>
                 <Brain className="h-4 w-4 text-[#6E56CF]" />
               </div>
-              <div className="text-[10px] text-[#6B677E] font-medium">Status: <span className="text-[#1E1B2E] font-bold">Low</span></div>
-              <div className="text-2xl font-black text-[#1E1B2E] mt-1">70%</div>
+              <div className="text-[10px] text-[#6B677E] font-medium">Goal: <span className="text-[#1E1B2E] font-bold">{wellness?.waterGoalMl || 2500} ml</span></div>
+              <div className="text-2xl font-black text-[#1E1B2E] mt-1">{wellness?.waterIntakeMl || 0} <span className="text-xs font-medium text-[#6B677E]">ml</span></div>
             </div>
 
-            {/* Floating Card 3: Focus Power */}
             <div className="bg-[#F8F7FF]/90 backdrop-blur-md rounded-2xl p-4 border border-[#6E56CF]/10 shadow-sm transition-all hover:translate-y-[-2px]">
               <div className="flex items-center justify-between text-[#6B677E] text-xs font-semibold mb-2">
-                <span>Focus Power</span>
+                <span>Mindfulness</span>
                 <Zap className="h-4 w-4 text-[#6E56CF]" />
               </div>
-              <div className="text-[10px] text-[#6B677E] font-medium">Status: <span className="text-[#1E1B2E] font-bold">Standard</span></div>
-              <div className="text-2xl font-black text-[#1E1B2E] mt-1">42 <span className="text-xs font-medium text-[#6B677E]">mins</span></div>
+              <div className="text-[10px] text-[#6B677E] font-medium">Recorded Today</div>
+              <div className="text-2xl font-black text-[#1E1B2E] mt-1">{wellness?.mindfulMinutes || 0} <span className="text-xs font-medium text-[#6B677E]">mins</span></div>
             </div>
 
           </div>
         </div>
 
-        {/* ── RIGHT PRIMARY ANALYTICS PANEL (5 COLS - IMAGE 1 HEALTH IMPROVEMENT CARD) ── */}
+        {/* ── RIGHT PRIMARY ANALYTICS PANEL ── */}
         <div className="lg:col-span-5 bg-white rounded-3xl p-7 border border-[#6E56CF]/10 shadow-sm flex flex-col justify-between">
           <div className="flex items-center justify-between mb-4">
             <div>
@@ -227,68 +221,71 @@ export default function DashboardPage() {
               <p className="text-xs font-semibold text-[#6B677E] mt-0.5">This week</p>
             </div>
             
-            {/* Week Selector Dropdown */}
             <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-[#F8F7FF] border border-[#6E56CF]/10 text-[#1E1B2E] hover:bg-[#E8E3FF]/50 transition-all">
               <span>Week</span>
               <ChevronDown className="h-3.5 w-3.5 text-[#6B677E]" />
             </button>
           </div>
 
-          {/* Main Curved Line Chart Component */}
           <HealthImprovementChart />
         </div>
 
       </div>
 
-      {/* ── LOWER 3-CARD GRID (IMAGE 1 EXACT COMPOSITION: Reports + Upcoming Session + Active Path Progress) ── */}
+      {/* ── LOWER 3-CARD GRID (REPORTS + UPCOMING APPOINTMENT + ACTIVE PATH) ── */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-        {/* ── CARD 1: REPORTS LIST (5 COLS - IMAGE 1 COMPOSITION) ── */}
+        {/* ── CARD 1: REPORTS LIST ── */}
         <div className="lg:col-span-5 bg-white rounded-3xl p-6 border border-[#6E56CF]/10 shadow-sm space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="text-lg font-bold text-[#1E1B2E]">Reports</h3>
-            <button className="flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-[#F8F7FF] text-[#6B677E] hover:text-[#1E1B2E]">
-              <span>Filters</span>
-              <ChevronDown className="h-3 w-3" />
-            </button>
+            <Link href="/dashboard/reports" className="flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-[#E8E3FF] text-[#6E56CF] hover:bg-[#DED8FF]">
+              <Plus className="h-3 w-3" />
+              <span>Upload Report</span>
+            </Link>
           </div>
 
-          {/* Compact Report Items */}
-          <div className="space-y-3">
-            {[
-              { title: 'Cognitive Therapy', doctor: 'Dr. Jasmin', date: '17-08-25', avatar: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=100&auto=format&fit=crop&q=80' },
-              { title: 'Stress Management', doctor: 'Dr. Jonshon', date: '15-08-25', avatar: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=100&auto=format&fit=crop&q=80' },
-              { title: 'Blood Panel Diagnostics', doctor: 'AI Clinical Check', date: '12-08-25', avatar: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=100&auto=format&fit=crop&q=80' },
-            ].map((report, idx) => (
-              <div
-                key={idx}
-                className="flex items-center justify-between p-3.5 rounded-2xl bg-[#F8F7FF] border border-[#6E56CF]/10 hover:bg-[#E8E3FF]/40 transition-all"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-[#E8E3FF] text-[#6E56CF] flex items-center justify-center shrink-0">
-                    <FileText className="h-5 w-5" />
+          {reports.length > 0 ? (
+            <div className="space-y-3">
+              {reports.slice(0, 3).map((report) => (
+                <div
+                  key={report.id}
+                  className="flex items-center justify-between p-3.5 rounded-2xl bg-[#F8F7FF] border border-[#6E56CF]/10 hover:bg-[#E8E3FF]/40 transition-all"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-[#E8E3FF] text-[#6E56CF] flex items-center justify-center shrink-0">
+                      <FileText className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold text-[#1E1B2E]">{report.fileName}</h4>
+                      <p className="text-[10px] font-semibold text-[#6B677E]">{report.uploadedAt || report.testDate}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="text-xs font-bold text-[#1E1B2E]">{report.title}</h4>
-                    <p className="text-[10px] font-semibold text-[#6B677E]">{report.date}</p>
-                  </div>
-                </div>
 
-                <div className="flex items-center gap-3">
-                  <div className="hidden sm:flex items-center gap-1.5 text-xs font-medium text-[#6B677E]">
-                    <img src={report.avatar} alt={report.doctor} className="w-5 h-5 rounded-full object-cover" />
-                    <span className="text-[11px] font-bold text-[#1E1B2E]">{report.doctor}</span>
-                  </div>
-                  <button className="w-8 h-8 rounded-full bg-white border border-[#6E56CF]/10 flex items-center justify-center text-[#6E56CF] hover:bg-[#6E56CF] hover:text-white transition-all shadow-sm">
+                  <a
+                    href={report.fileUrl || '#'}
+                    download
+                    className="w-8 h-8 rounded-full bg-white border border-[#6E56CF]/10 flex items-center justify-center text-[#6E56CF] hover:bg-[#6E56CF] hover:text-white transition-all shadow-sm"
+                  >
                     <Download className="h-3.5 w-3.5" />
-                  </button>
+                  </a>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="p-8 text-center bg-[#F8F7FF] rounded-2xl border border-dashed border-[#6E56CF]/20">
+              <FileText className="h-8 w-8 mx-auto text-[#6E56CF]/40 mb-2" />
+              <div className="text-xs font-bold text-[#1E1B2E]">No medical reports uploaded</div>
+              <div className="text-[10px] text-[#6B677E] mt-0.5 mb-3">Scan lab reports or diagnostic records to view clinical summaries</div>
+              <Link href="/dashboard/reports" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-[#6E56CF] text-white shadow-sm">
+                <Plus className="h-3.5 w-3.5" />
+                <span>Upload First Report</span>
+              </Link>
+            </div>
+          )}
         </div>
 
-        {/* ── CARD 2: UPCOMING SESSION / REMINDER CARD (3 COLS - IMAGE 1 COMPOSITION) ── */}
+        {/* ── CARD 2: UPCOMING SESSION ── */}
         <div className="lg:col-span-3 bg-white rounded-3xl p-6 border border-[#6E56CF]/10 shadow-sm flex flex-col justify-between">
           <div className="flex items-center justify-between">
             <h3 className="text-base font-bold text-[#1E1B2E]">Upcoming Session</h3>
@@ -300,78 +297,95 @@ export default function DashboardPage() {
             </Link>
           </div>
 
-          <div className="my-6">
-            <div className="text-xs font-bold text-[#6B677E] uppercase tracking-wider mb-1">Remaining</div>
-            <div className="text-3xl sm:text-4xl font-black text-[#1E1B2E] tracking-tight">
-              6<span className="text-lg font-bold text-[#6B677E] mr-1">hr</span> 52<span className="text-lg font-bold text-[#6B677E]">min</span>
+          {upcomingAppointment ? (
+            <div className="space-y-4 my-2">
+              <div>
+                <div className="text-xs font-bold text-[#6B677E] uppercase tracking-wider mb-1">Scheduled</div>
+                <div className="text-2xl font-black text-[#1E1B2E] tracking-tight">{upcomingAppointment.time}</div>
+                <div className="text-xs font-bold text-[#6E56CF]">{upcomingAppointment.date}</div>
+              </div>
+              <div className="p-3.5 rounded-2xl bg-[#E8E3FF] border border-[#6E56CF]/15 flex items-center gap-3">
+                <div className="w-9 h-9 rounded-full bg-[#6E56CF] text-white flex items-center justify-center shrink-0 font-bold text-xs">
+                  <Calendar className="h-4 w-4" />
+                </div>
+                <div>
+                  <div className="text-xs font-bold text-[#1E1B2E]">{upcomingAppointment.doctorName}</div>
+                  <div className="text-[10px] text-[#6B677E] font-medium">{upcomingAppointment.specialty}</div>
+                </div>
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="my-4 text-center p-4 bg-[#F8F7FF] rounded-2xl border border-dashed border-[#6E56CF]/20">
+              <Calendar className="h-6 w-6 mx-auto text-[#6E56CF]/40 mb-1" />
+              <div className="text-xs font-bold text-[#1E1B2E]">No upcoming session</div>
+              <div className="text-[10px] text-[#6B677E] mt-0.5 mb-2">Book a doctor or specialist consultation</div>
+              <Link href="/dashboard/appointments" className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[11px] font-bold bg-[#6E56CF] text-white">
+                <Plus className="h-3 w-3" />
+                <span>Book Session</span>
+              </Link>
+            </div>
+          )}
 
-          <div className="p-3.5 rounded-2xl bg-[#E8E3FF] border border-[#6E56CF]/15 flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-[#6E56CF] text-white flex items-center justify-center shrink-0 font-bold text-xs">
-              <Calendar className="h-4 w-4" />
-            </div>
-            <div>
-              <div className="text-xs font-bold text-[#1E1B2E]">Dr. Jasmin Vance</div>
-              <div className="text-[10px] text-[#6B677E] font-medium">Consultation Session</div>
-            </div>
-          </div>
+          <Link href="/dashboard/appointments" className="text-center py-2 text-xs font-bold text-[#6E56CF] hover:underline">
+            View All Appointments →
+          </Link>
         </div>
 
-        {/* ── CARD 3: ACTIVE PATH THIS WEEK / HEALTH TRACKING (4 COLS - IMAGE 1 COMPOSITION) ── */}
+        {/* ── CARD 3: ACTIVE PATH THIS WEEK ── */}
         <div className="lg:col-span-4 bg-white rounded-3xl p-6 border border-[#6E56CF]/10 shadow-sm space-y-5">
           <div className="flex items-center justify-between">
             <h3 className="text-base font-bold text-[#1E1B2E]">Active path this week</h3>
-            <span className="text-2xl font-black text-[#1E1B2E]">76%</span>
+            <span className="text-2xl font-black text-[#1E1B2E]">{adherencePercentage > 0 ? `${adherencePercentage}%` : '100%'}</span>
           </div>
 
-          {/* Horizontal Progress Bars */}
           <div className="space-y-4">
-            
-            {/* Bar 1: Meditation (50%) */}
             <div className="space-y-1.5">
               <div className="flex justify-between text-xs font-bold text-[#1E1B2E]">
-                <span>Meditation</span>
-                <span>50%</span>
+                <span>Medication Adherence</span>
+                <span>{adherencePercentage > 0 ? `${adherencePercentage}%` : '100%'}</span>
               </div>
               <div className="w-full h-8 bg-[#F8F7FF] rounded-full overflow-hidden p-1 flex items-center">
                 <div
                   className="h-full rounded-full transition-all duration-500 flex items-center justify-end pr-2 text-[10px] font-extrabold text-[#6E56CF]"
-                  style={{ width: '50%', background: '#E8E3FF' }}
+                  style={{ width: `${adherencePercentage > 0 ? adherencePercentage : 100}%`, background: '#E8E3FF' }}
                 >
-                  50%
+                  {adherencePercentage > 0 ? `${adherencePercentage}%` : '100%'}
                 </div>
               </div>
             </div>
 
-            {/* Bar 2: Exercise (85%) - Primary Violet Highlight */}
             <div className="space-y-1.5">
               <div className="flex justify-between text-xs font-bold text-[#1E1B2E]">
-                <span>Exercise & Activity</span>
-                <span>85%</span>
+                <span>Hydration Tracking</span>
+                <span>{Math.min(100, Math.round(((wellness?.waterIntakeMl || 0) / (wellness?.waterGoalMl || 2500)) * 100))}%</span>
               </div>
               <div className="w-full h-8 bg-[#F8F7FF] rounded-full overflow-hidden p-1 flex items-center">
                 <div
                   className="h-full rounded-full transition-all duration-500 flex items-center justify-end pr-2 text-[10px] font-extrabold text-white"
-                  style={{ width: '85%', background: '#6E56CF' }}
+                  style={{
+                    width: `${Math.min(100, Math.round(((wellness?.waterIntakeMl || 0) / (wellness?.waterGoalMl || 2500)) * 100))}%`,
+                    background: '#6E56CF',
+                  }}
                 >
-                  85%
+                  {Math.min(100, Math.round(((wellness?.waterIntakeMl || 0) / (wellness?.waterGoalMl || 2500)) * 100))}%
                 </div>
               </div>
             </div>
 
-            {/* Bar 3: Journaling (60%) */}
             <div className="space-y-1.5">
               <div className="flex justify-between text-xs font-bold text-[#1E1B2E]">
-                <span>Journaling & Wellness</span>
-                <span>60%</span>
+                <span>Daily Steps Goal</span>
+                <span>{Math.min(100, Math.round(((wellness?.steps || 0) / (wellness?.stepGoal || 8000)) * 100))}%</span>
               </div>
               <div className="w-full h-8 bg-[#F8F7FF] rounded-full overflow-hidden p-1 flex items-center">
                 <div
                   className="h-full rounded-full transition-all duration-500 flex items-center justify-end pr-2 text-[10px] font-extrabold text-[#6E56CF]"
-                  style={{ width: '60%', background: '#DED8FF' }}
+                  style={{
+                    width: `${Math.min(100, Math.round(((wellness?.steps || 0) / (wellness?.stepGoal || 8000)) * 100))}%`,
+                    background: '#DED8FF',
+                  }}
                 >
-                  60%
+                  {Math.min(100, Math.round(((wellness?.steps || 0) / (wellness?.stepGoal || 8000)) * 100))}%
                 </div>
               </div>
             </div>
