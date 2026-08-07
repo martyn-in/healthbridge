@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import {
@@ -22,33 +22,35 @@ import {
   Calendar,
   Sparkles,
   ShieldAlert,
+  FolderLock,
+  Stethoscope,
 } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
 
-// ── Vertical Bar Chart Component (Matching Reference Image Progress Card) ──
+// ── Vertical Bar Chart Component (Matching Progress Card in Reference Image) ──
 function ReferenceProgressChart() {
   const bars = [
-    { height: 40, missed: 15 },
-    { height: 60, missed: 10 },
-    { height: 45, missed: 20 },
-    { height: 85, missed: 5 },
-    { height: 70, missed: 10 },
-    { height: 90, missed: 0 },
-    { height: 65, missed: 15 },
-    { height: 80, missed: 10 },
-    { height: 95, missed: 0 },
-    { height: 75, missed: 15 },
-    { height: 88, missed: 5 },
-    { height: 100, missed: 0 },
-    { height: 82, missed: 10 },
-    { height: 68, missed: 15 },
-    { height: 92, missed: 0 },
-    { height: 78, missed: 10 },
+    { height: 40 },
+    { height: 60 },
+    { height: 45 },
+    { height: 85 },
+    { height: 70 },
+    { height: 90 },
+    { height: 65 },
+    { height: 80 },
+    { height: 95 },
+    { height: 75 },
+    { height: 88 },
+    { height: 100 },
+    { height: 82 },
+    { height: 68 },
+    { height: 92 },
+    { height: 78 },
   ];
 
   return (
     <div className="w-full space-y-4">
-      <div className="flex items-end justify-between gap-1.5 h-[130px] pt-4 px-1">
+      <div className="flex items-end justify-between gap-1.5 h-[135px] pt-4 px-1">
         {bars.map((bar, idx) => (
           <div key={idx} className="flex-1 flex flex-col items-center gap-1 group h-full justify-end">
             <div className="w-full max-w-[14px] bg-slate-100 dark:bg-slate-800 rounded-t-sm overflow-hidden flex flex-col justify-end h-full">
@@ -76,7 +78,7 @@ function ReferenceProgressChart() {
 }
 
 export default function DashboardPage() {
-  const { activeProfile, reports, appointments, wellness, adherencePercentage } = useApp();
+  const { activeProfile, reports, appointments, wellness, adherencePercentage, triggerSos } = useApp();
 
   const activeAppointments = appointments.filter((a) => a.status === 'Upcoming');
   const upcomingAppointment = activeAppointments[0];
@@ -84,65 +86,68 @@ export default function DashboardPage() {
   const userName = activeProfile?.name ? activeProfile.name.trim() : '';
 
   return (
-    <div className="space-y-6 pb-6 w-full flex-1 flex flex-col font-sans selection:bg-[#4882FF]/20 selection:text-[#4882FF]">
+    <div className="space-y-6 pb-6 font-sans selection:bg-[#4882FF]/20 selection:text-[#4882FF] w-full">
       
-      {/* ── TOP REFERENCE GRID (60% LEFT HERO + 40% RIGHT COLUMNS) ── */}
+      {/* ── MAIN REFERENCE GRID (60% LEFT HERO CARD + 40% RIGHT COLUMN CARDS) ── */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch w-full">
         
-        {/* ── LEFT HERO CARD (DOMINATED BY ANATOMICAL HEART REFERENCE 4) ── */}
+        {/* ── LEFT HERO CARD (DOMINATED BY ANATOMICAL GLASS HEART BACKGROUND) ── */}
         <div
-          className="lg:col-span-7 rounded-[28px] p-7 sm:p-8 relative overflow-hidden text-white flex flex-col justify-between min-h-[480px] border-2 border-[#0D1B2A] shadow-2xl w-full"
+          className="lg:col-span-7 rounded-[28px] p-7 sm:p-9 relative overflow-hidden text-white flex flex-col justify-between min-h-[480px] border-2 border-[#0D1B2A] shadow-xl w-full"
           style={{
             background: 'linear-gradient(135deg, #1E3A8A 0%, #3B82F6 40%, #7C3AED 80%, #0F172A 100%)',
           }}
         >
-          {/* Background Ambient Lighting & Glows */}
-          <div className="absolute inset-0 pointer-events-none z-0">
-            <div className="absolute -top-24 -right-24 w-[450px] h-[450px] rounded-full bg-[#3B82F6]/45 blur-3xl" />
-            <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] rounded-full bg-[#8B5CF6]/45 blur-3xl" />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#0F172A]/95 via-[#0F172A]/65 to-transparent" />
-          </div>
-
-          {/* Integrated Isolated Anatomical Heart Image (Seamlessly Blended) */}
-          <div className="absolute right-0 top-0 bottom-0 w-full sm:w-[60%] pointer-events-none z-0 flex items-center justify-center">
-            <div className="relative w-full h-full">
+          {/* Background Ambient Lighting & Heart Visual fully covering the card background */}
+          <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+            {/* Glowing Ambient Radial Lights */}
+            <div className="absolute -top-20 -right-20 w-[500px] h-[500px] rounded-full bg-[#3B82F6]/45 blur-3xl" />
+            <div className="absolute bottom-0 right-1/4 w-[450px] h-[450px] rounded-full bg-[#8B5CF6]/45 blur-3xl" />
+            
+            {/* Anatomical Heart Asset (Reference Image 4) filling the hero background */}
+            <div className="absolute right-0 top-0 bottom-0 w-full sm:w-[65%] h-full opacity-90 mix-blend-screen">
               <Image
                 src="/hero_heart.png"
-                alt="Anatomical Glass Heart Telemetry"
+                alt="Anatomical Glass Heart Visual"
                 fill
-                className="object-contain object-right drop-shadow-[0_25px_60px_rgba(59,130,246,0.8)] animate-float"
-                style={{ mixBlendMode: 'screen' }}
+                className="object-cover object-right animate-float drop-shadow-[0_20px_50px_rgba(59,130,246,0.6)]"
                 priority
               />
             </div>
+
+            {/* Gradient Overlay for Vibrant High-Contrast Text Legibility */}
+            <div className="absolute inset-0 bg-gradient-to-r from-[#0F172A]/95 via-[#0F172A]/70 to-transparent" />
           </div>
 
-          {/* Top Hero Header Bar */}
+          {/* Top Hero Pill Navigation Controls */}
           <div className="relative z-10 flex items-center justify-between">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[11px] font-extrabold uppercase tracking-wider bg-white/15 backdrop-blur-md border border-white/20 text-white shadow-sm">
               <Activity className="w-3.5 h-3.5 text-cyan-300 animate-pulse" />
-              <span>HEALTH OVERVIEW • CARDIAC TELEMETRY</span>
+              <span>HEALTH OVERVIEW</span>
             </div>
 
-            <button className="flex items-center gap-1.5 text-xs font-bold text-white/90 hover:text-white bg-white/10 hover:bg-white/20 backdrop-blur-md px-3.5 py-1.5 rounded-full transition-all border border-white/15">
+            <button className="flex items-center gap-1.5 text-xs font-bold text-white/90 hover:text-white bg-white/15 hover:bg-white/25 backdrop-blur-md px-3.5 py-1.5 rounded-full transition-all border border-white/20">
               <Share2 className="w-3.5 h-3.5" />
               <span>Share</span>
             </button>
           </div>
 
-          {/* Requirement 6: Personalized Greeting (NO EMOJI, NO PLAYFUL ICONS) */}
-          <div className="relative z-10 my-6 max-w-md space-y-3">
-            <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-white leading-tight">
+          {/* Center Personalized Greeting (No Emojis, Crisp, Clean & Vibrant) */}
+          <div className="relative z-10 my-6 max-w-lg space-y-3">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-none drop-shadow-md">
               {userName ? `Hello, ${userName}` : 'Hello'}
             </h1>
-            <p className="text-sm sm:text-base text-blue-100 font-semibold tracking-wide">
+            <p className="text-lg sm:text-xl text-blue-100 font-bold tracking-tight">
               How can HealthBridge assist you today?
             </p>
+            <p className="text-xs sm:text-sm text-slate-200 font-medium leading-relaxed max-w-sm pt-1">
+              Continuous clinical-grade telemetry monitoring cardiovascular stability, vascular rhythm, and daily recovery.
+            </p>
 
-            {/* Metric Row Badges */}
-            <div className="flex items-center gap-5 pt-3 text-white">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-white/15 backdrop-blur-md flex items-center justify-center border border-white/20">
+            {/* Key Clinical Vitals Metrics Row */}
+            <div className="flex flex-wrap items-center gap-5 pt-3 text-white">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30">
                   <Heart className="w-4 h-4 text-rose-400 fill-rose-400" />
                 </div>
                 <div>
@@ -151,8 +156,8 @@ export default function DashboardPage() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-white/15 backdrop-blur-md flex items-center justify-center border border-white/20">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30">
                   <Activity className="w-4 h-4 text-cyan-300" />
                 </div>
                 <div>
@@ -161,8 +166,8 @@ export default function DashboardPage() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-white/15 backdrop-blur-md flex items-center justify-center border border-white/20">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30">
                   <ShieldCheck className="w-4 h-4 text-emerald-300" />
                 </div>
                 <div>
@@ -172,20 +177,20 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            {/* Primary Action Pill Button */}
-            <div className="pt-2">
+            {/* Primary Action Button */}
+            <div className="pt-3">
               <Link
                 href="/dashboard/progress"
-                className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-full bg-white text-[#0D1B2A] hover:bg-slate-100 font-black text-xs transition-all shadow-lg active:scale-95"
+                className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-full bg-white text-[#0D1B2A] hover:bg-slate-100 font-black text-xs transition-all shadow-xl active:scale-95"
               >
                 <Play className="w-4 h-4 fill-[#0D1B2A]" />
-                <span>Check Clinical Vitals</span>
+                <span>View Health Summary</span>
               </Link>
             </div>
           </div>
 
-          {/* Bottom Scheduled Vitals & Care Chips */}
-          <div className="relative z-10 pt-4 border-t border-white/15">
+          {/* Bottom Scheduled Vitals Chips (Matching Workout Sessions Layout) */}
+          <div className="relative z-10 pt-4 border-t border-white/20">
             <div className="flex items-center justify-between text-xs font-extrabold text-blue-100 mb-3">
               <span>Scheduled Vitals & Care</span>
               <Link href="/dashboard/appointments" className="text-white hover:underline text-[11px] font-bold">
@@ -229,14 +234,14 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* ── RIGHT TOP CARDS & BOTTOM PROGRESS CARD (5 COLS) ── */}
+        {/* ── RIGHT COLUMN CARDS (AI ASSISTANT + TODAY'S HEALTH + PROGRESS) ── */}
         <div className="lg:col-span-5 space-y-6 flex flex-col justify-between w-full">
           
           {/* TOP ROW: AI ASSISTANT + TODAY'S HEALTH */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full">
             
             {/* CARD 1: AI ASSISTANT (Matching Reference AI Assistant) */}
-            <div className="bg-white dark:bg-[#18181D] rounded-[28px] p-5 border-2 border-[#0D1B2A] dark:border-slate-800 shadow-lg flex flex-col justify-between w-full">
+            <div className="bg-white dark:bg-[#18181D] rounded-[28px] p-5 border-2 border-[#0D1B2A] dark:border-slate-800 shadow-lg flex flex-col justify-between">
               <div className="flex items-center justify-between mb-2">
                 <h3 className="text-sm font-extrabold text-[#0D1B2A] dark:text-white">AI Assistant</h3>
                 <Sparkles className="w-4 h-4 text-[#4882FF]" />
@@ -270,7 +275,7 @@ export default function DashboardPage() {
             </div>
 
             {/* CARD 2: TODAY'S HEALTH / LIVE VITALS (Matching Reference Today's Activity) */}
-            <div className="bg-white dark:bg-[#18181D] rounded-[28px] p-5 border-2 border-[#0D1B2A] dark:border-slate-800 shadow-lg flex flex-col justify-between w-full">
+            <div className="bg-white dark:bg-[#18181D] rounded-[28px] p-5 border-2 border-[#0D1B2A] dark:border-slate-800 shadow-lg flex flex-col justify-between">
               <div className="flex items-center justify-between mb-1">
                 <h3 className="text-sm font-extrabold text-[#0D1B2A] dark:text-white">Today's health</h3>
               </div>
@@ -380,19 +385,19 @@ export default function DashboardPage() {
 
       </div>
 
-      {/* ── LOWER HEALTHBRIDGE CLINICAL MODULES GRID (REPORTS + APPOINTMENTS + CARE) ── */}
+      {/* ── LOWER SECTION: HEALTHBRIDGE CLINICAL MODULES & EMERGENCY SOS ── */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 w-full">
         
-        {/* REPORTS LIST PANEL */}
-        <div className="lg:col-span-6 bg-white dark:bg-[#18181D] rounded-[28px] p-6 border-2 border-[#0D1B2A] dark:border-slate-800 shadow-lg space-y-4 w-full">
+        {/* CARD 1: DIAGNOSTIC & LAB REPORTS */}
+        <div className="lg:col-span-4 bg-white dark:bg-[#18181D] rounded-[28px] p-6 border-2 border-[#0D1B2A] dark:border-slate-800 shadow-lg space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-lg font-extrabold text-[#0D1B2A] dark:text-white">Diagnostic & Lab Reports</h3>
+            <h3 className="text-base font-extrabold text-[#0D1B2A] dark:text-white">Diagnostic & Lab Reports</h3>
             <Link
               href="/dashboard/reports"
-              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-extrabold bg-[#4882FF] text-white hover:bg-blue-600 transition-all shadow-sm"
+              className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold bg-[#4882FF] text-white hover:bg-blue-600 transition-all shadow-sm"
             >
               <Plus className="w-3.5 h-3.5" />
-              <span>Upload Report</span>
+              <span>Upload</span>
             </Link>
           </div>
 
@@ -401,11 +406,11 @@ export default function DashboardPage() {
               {reports.slice(0, 3).map((report) => (
                 <div
                   key={report.id}
-                  className="flex items-center justify-between p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/80 hover:border-[#4882FF] transition-all"
+                  className="flex items-center justify-between p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/80 hover:border-[#4882FF] transition-all"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-950 text-[#4882FF] flex items-center justify-center shrink-0">
-                      <FileText className="w-5 h-5" />
+                    <div className="w-9 h-9 rounded-xl bg-blue-100 dark:bg-blue-950 text-[#4882FF] flex items-center justify-center shrink-0">
+                      <FileText className="w-4 h-4" />
                     </div>
                     <div>
                       <h4 className="text-xs font-bold text-[#0D1B2A] dark:text-white">{report.fileName}</h4>
@@ -415,7 +420,7 @@ export default function DashboardPage() {
 
                   <Link
                     href="/dashboard/reports"
-                    className="px-3 py-1 rounded-full text-xs font-bold bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-[#4882FF] hover:bg-[#4882FF] hover:text-white transition-all shadow-sm"
+                    className="px-3 py-1 rounded-full text-[11px] font-bold bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-[#4882FF] hover:bg-[#4882FF] hover:text-white transition-all shadow-sm"
                   >
                     Analyze
                   </Link>
@@ -423,25 +428,25 @@ export default function DashboardPage() {
               ))}
             </div>
           ) : (
-            <div className="p-8 text-center bg-slate-50 dark:bg-slate-800/40 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-700">
-              <FileText className="w-8 h-8 mx-auto text-slate-400 mb-2" />
+            <div className="p-6 text-center bg-slate-50 dark:bg-slate-800/40 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-700">
+              <FileText className="w-7 h-7 mx-auto text-slate-400 mb-2" />
               <div className="text-xs font-bold text-[#0D1B2A] dark:text-white">No medical reports uploaded</div>
-              <div className="text-[10px] text-slate-500 mt-0.5 mb-3">Scan lab reports or diagnostic records to view clinical summaries</div>
+              <div className="text-[10px] text-slate-500 mt-0.5 mb-3">Scan lab reports or diagnostic records</div>
               <Link
                 href="/dashboard/reports"
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold bg-[#4882FF] text-white shadow-sm hover:bg-blue-600"
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#4882FF] text-white shadow-sm hover:bg-blue-600"
               >
                 <Plus className="w-3.5 h-3.5" />
-                <span>Upload First Report</span>
+                <span>Upload Report</span>
               </Link>
             </div>
           )}
         </div>
 
-        {/* UPCOMING APPOINTMENTS PANEL */}
-        <div className="lg:col-span-6 bg-white dark:bg-[#18181D] rounded-[28px] p-6 border-2 border-[#0D1B2A] dark:border-slate-800 shadow-lg flex flex-col justify-between w-full">
+        {/* CARD 2: UPCOMING SESSIONS */}
+        <div className="lg:col-span-4 bg-white dark:bg-[#18181D] rounded-[28px] p-6 border-2 border-[#0D1B2A] dark:border-slate-800 shadow-lg flex flex-col justify-between">
           <div className="flex items-center justify-between">
-            <h3 className="text-lg font-extrabold text-[#0D1B2A] dark:text-white">Upcoming Session</h3>
+            <h3 className="text-base font-extrabold text-[#0D1B2A] dark:text-white">Upcoming Consultation</h3>
             <Link
               href="/dashboard/appointments"
               className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-[#4882FF] hover:bg-[#4882FF] hover:text-white transition-all"
@@ -451,15 +456,15 @@ export default function DashboardPage() {
           </div>
 
           {upcomingAppointment ? (
-            <div className="space-y-4 my-2">
+            <div className="space-y-3 my-2">
               <div>
-                <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Scheduled</div>
-                <div className="text-2xl font-black text-[#0D1B2A] dark:text-white tracking-tight">{upcomingAppointment.time}</div>
+                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Scheduled</div>
+                <div className="text-xl font-black text-[#0D1B2A] dark:text-white tracking-tight">{upcomingAppointment.time}</div>
                 <div className="text-xs font-bold text-[#4882FF]">{upcomingAppointment.date}</div>
               </div>
-              <div className="p-4 rounded-2xl bg-blue-50 dark:bg-slate-800 border border-blue-200/80 dark:border-slate-700 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-[#4882FF] text-white flex items-center justify-center shrink-0 font-bold text-xs">
-                  <Calendar className="w-5 h-5" />
+              <div className="p-3.5 rounded-2xl bg-blue-50 dark:bg-slate-800 border border-blue-200/80 dark:border-slate-700 flex items-center gap-3">
+                <div className="w-9 h-9 rounded-full bg-[#4882FF] text-white flex items-center justify-center shrink-0 font-bold text-xs">
+                  <Calendar className="w-4 h-4" />
                 </div>
                 <div>
                   <div className="text-xs font-bold text-[#0D1B2A] dark:text-white">{upcomingAppointment.doctorName}</div>
@@ -468,20 +473,46 @@ export default function DashboardPage() {
               </div>
             </div>
           ) : (
-            <div className="my-4 text-center p-6 bg-slate-50 dark:bg-slate-800/40 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-700">
-              <Calendar className="w-8 h-8 mx-auto text-slate-400 mb-1" />
+            <div className="my-2 text-center p-5 bg-slate-50 dark:bg-slate-800/40 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-700">
+              <Calendar className="w-7 h-7 mx-auto text-slate-400 mb-1" />
               <div className="text-xs font-bold text-[#0D1B2A] dark:text-white">No upcoming session</div>
-              <div className="text-[10px] text-slate-500 mt-0.5 mb-2">Book a doctor or specialist consultation</div>
-              <Link href="/dashboard/appointments" className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold bg-[#4882FF] text-white">
+              <div className="text-[10px] text-slate-500 mt-0.5 mb-2">Book a doctor or specialist</div>
+              <Link href="/dashboard/appointments" className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#4882FF] text-white">
                 <Plus className="w-3.5 h-3.5" />
                 <span>Book Session</span>
               </Link>
             </div>
           )}
 
-          <Link href="/dashboard/appointments" className="text-center py-2 text-xs font-bold text-[#4882FF] hover:underline">
+          <Link href="/dashboard/appointments" className="text-center py-1 text-xs font-bold text-[#4882FF] hover:underline">
             View All Appointments →
           </Link>
+        </div>
+
+        {/* CARD 3: EMERGENCY SOS ACTION CARD */}
+        <div className="lg:col-span-4 bg-gradient-to-br from-rose-500 to-rose-700 rounded-[28px] p-6 border-2 border-[#0D1B2A] text-white shadow-lg flex flex-col justify-between">
+          <div className="flex items-center justify-between">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-[10px] font-extrabold uppercase tracking-wider text-white">
+              <ShieldAlert className="w-3.5 h-3.5 animate-pulse" />
+              <span>EMERGENCY ASSISTANCE</span>
+            </div>
+            <span className="w-2.5 h-2.5 rounded-full bg-white animate-ping" />
+          </div>
+
+          <div className="my-3 space-y-1">
+            <h3 className="text-2xl font-black tracking-tight text-white">Emergency SOS</h3>
+            <p className="text-xs text-rose-100 font-medium">
+              Need immediate medical dispatch, paramedic alert, or emergency contact notification?
+            </p>
+          </div>
+
+          <button
+            onClick={triggerSos}
+            className="w-full py-3.5 px-4 rounded-full bg-white text-rose-700 hover:bg-rose-50 font-black text-xs transition-all shadow-xl flex items-center justify-center gap-2 active:scale-95"
+          >
+            <ShieldAlert className="w-4 h-4 fill-rose-700" />
+            <span>TRIGGER EMERGENCY SOS</span>
+          </button>
         </div>
 
       </div>

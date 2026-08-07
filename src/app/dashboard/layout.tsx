@@ -33,12 +33,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <Header onOpenHealthCard={() => setIsHealthCardOpen(true)} />
 
             {/* Scrollable Content */}
-            <main className="flex-1 p-4 sm:p-6 w-full space-y-6 flex flex-col justify-between">
-              <div className="flex-1 w-full">{children}</div>
-              {/* Requirement 10: Disclaimer placed at the very bottom */}
-              <div className="pt-6 border-t border-slate-200/50 dark:border-slate-800/50">
-                <DisclaimerBanner />
-              </div>
+            <main className="flex-1 p-4 sm:p-6 max-w-[1600px] mx-auto w-full space-y-6">
+              {children}
+              <DisclaimerBanner />
             </main>
           </div>
         </div>
