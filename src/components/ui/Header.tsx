@@ -64,12 +64,12 @@ export const Header: React.FC<{ onOpenHealthCard?: () => void }> = ({ onOpenHeal
 
   return (
     <header
-      className="sticky top-0 z-40 font-sans transition-all"
+      className="sticky top-0 z-40 font-sans transition-colors duration-300"
       style={{
-        background: "rgba(242, 239, 254, 0.88)",
+        background: "var(--bg-base)",
         backdropFilter: "blur(20px)",
         WebkitBackdropFilter: "blur(20px)",
-        borderBottom: "1px solid rgba(110, 86, 207, 0.08)",
+        borderBottom: "1px solid var(--border-subtle)",
       }}
     >
       {toastMessage && (
@@ -92,7 +92,7 @@ export const Header: React.FC<{ onOpenHealthCard?: () => void }> = ({ onOpenHeal
         </div>
 
         {/* Center: Image 1 Pill Navigation Tabs */}
-        <nav className="hidden md:flex items-center gap-1 p-1 rounded-full bg-white/80 border border-[#6E56CF]/10 shadow-sm backdrop-blur-md">
+        <nav className="hidden md:flex items-center gap-1 p-1 rounded-full bg-[var(--bg-card)] border border-[var(--border-subtle)] shadow-sm backdrop-blur-md">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
             return (
@@ -101,8 +101,8 @@ export const Header: React.FC<{ onOpenHealthCard?: () => void }> = ({ onOpenHeal
                 href={item.href}
                 className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold transition-all duration-200 ${
                   isActive
-                    ? "bg-white text-[#1E1B2E] shadow-sm scale-100 border border-[#6E56CF]/10"
-                    : "text-[#78758A] hover:text-[#1E1B2E] hover:bg-[#E8E3FF]/50"
+                    ? "bg-[var(--accent-purple)] text-white shadow-sm scale-100"
+                    : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--accent-lavender)]"
                 }`}
               >
                 {item.icon}
@@ -118,9 +118,9 @@ export const Header: React.FC<{ onOpenHealthCard?: () => void }> = ({ onOpenHeal
             <button
               onClick={onOpenHealthCard}
               title="Open Emergency Digital Health Card"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all active:scale-95 bg-white border border-[#6E56CF]/10 shadow-sm text-[#6E56CF] hover:bg-[#E8E3FF]/40"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all active:scale-95 bg-[var(--bg-card)] border border-[var(--border-subtle)] shadow-sm text-[var(--accent-purple)] hover:bg-[var(--accent-lavender)]"
             >
-              <QrCode className="h-3.5 w-3.5 text-[#6E56CF]" />
+              <QrCode className="h-3.5 w-3.5 text-[var(--accent-purple)]" />
               <span className="hidden sm:inline">Digital ID</span>
             </button>
           )}
@@ -137,20 +137,20 @@ export const Header: React.FC<{ onOpenHealthCard?: () => void }> = ({ onOpenHeal
           {/* Light / Dark Mode Toggle Button */}
           <button
             onClick={() => setDarkMode(!darkMode)}
-            className="p-2 rounded-full bg-white dark:bg-[#1E1A2B] border border-[#6E56CF]/10 shadow-sm text-[#78758A] dark:text-[#A8A4BA] hover:text-[#6E56CF] dark:hover:text-[#8C73FF] transition-all hover:scale-105"
+            className="p-2 rounded-full bg-[var(--bg-card)] border border-[var(--border-subtle)] shadow-sm text-[var(--text-secondary)] hover:text-[var(--accent-purple)] transition-all hover:scale-105"
             title={darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
           >
             {darkMode ? (
               <Sun className="h-4 w-4 text-amber-400" />
             ) : (
-              <Moon className="h-4 w-4 text-[#6E56CF]" />
+              <Moon className="h-4 w-4 text-[var(--accent-purple)]" />
             )}
           </button>
 
           {/* Quick Settings Icon */}
           <Link
             href="/dashboard/settings"
-            className="p-2 rounded-full bg-white dark:bg-[#1E1A2B] border border-[#6E56CF]/10 shadow-sm text-[#78758A] dark:text-[#A8A4BA] hover:text-[#6E56CF] dark:hover:text-[#8C73FF] transition-all hover:scale-105"
+            className="p-2 rounded-full bg-[var(--bg-card)] border border-[var(--border-subtle)] shadow-sm text-[var(--text-secondary)] hover:text-[var(--accent-purple)] transition-all hover:scale-105"
             title="Settings"
           >
             <Settings className="h-4 w-4" />
@@ -160,17 +160,17 @@ export const Header: React.FC<{ onOpenHealthCard?: () => void }> = ({ onOpenHeal
           <div className="relative">
             <button
               onClick={() => { setShowLangMenu(!showLangMenu); setShowProfileMenu(false); }}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-semibold transition-all active:scale-95 text-[#1E1B2E]"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-semibold transition-all active:scale-95 text-[var(--text-primary)]"
             >
-              <Globe className="h-3.5 w-3.5 text-[#78758A]" />
+              <Globe className="h-3.5 w-3.5 text-[var(--text-secondary)]" />
               <span className="uppercase font-bold text-[11px]">{language}</span>
-              <ChevronDown className="h-3 w-3 transition-transform duration-200 text-[#78758A]" style={{ transform: showLangMenu ? "rotate(180deg)" : "rotate(0deg)" }} />
+              <ChevronDown className="h-3 w-3 transition-transform duration-200 text-[var(--text-secondary)]" style={{ transform: showLangMenu ? "rotate(180deg)" : "rotate(0deg)" }} />
             </button>
             {showLangMenu && (
               <div
-                className="absolute right-0 mt-2 w-52 rounded-2xl py-2 z-50 bg-white border border-[#6E56CF]/10 shadow-xl"
+                className="absolute right-0 mt-2 w-52 rounded-2xl py-2 z-50 bg-[var(--bg-card)] border border-[var(--border-subtle)] shadow-xl"
               >
-                <div className="px-4 py-1.5 text-[10px] uppercase font-bold tracking-wider text-[#78758A]">
+                <div className="px-4 py-1.5 text-[10px] uppercase font-bold tracking-wider text-[var(--text-secondary)]">
                   Select Language
                 </div>
                 {languages.map((l) => (
@@ -179,13 +179,13 @@ export const Header: React.FC<{ onOpenHealthCard?: () => void }> = ({ onOpenHeal
                     onClick={() => { setLanguage(l.code); setShowLangMenu(false); }}
                     className="w-full text-left px-4 py-2 text-xs flex items-center justify-between transition-colors rounded-xl font-medium"
                     style={{
-                      color: language === l.code ? "#6E56CF" : "#1E1B2E",
+                      color: language === l.code ? "var(--accent-purple)" : "var(--text-primary)",
                       fontWeight: language === l.code ? 700 : 500,
-                      background: language === l.code ? "#E8E3FF" : "transparent",
+                      background: language === l.code ? "var(--accent-lavender)" : "transparent",
                     }}
                   >
                     <span>{l.label}</span>
-                    {language === l.code && <Check className="h-3.5 w-3.5 text-[#6E56CF]" />}
+                    {language === l.code && <Check className="h-3.5 w-3.5 text-[var(--accent-purple)]" />}
                   </button>
                 ))}
               </div>
@@ -196,7 +196,7 @@ export const Header: React.FC<{ onOpenHealthCard?: () => void }> = ({ onOpenHeal
           <div className="relative">
             <button
               onClick={() => { setShowProfileMenu(!showProfileMenu); setShowLangMenu(false); }}
-              className="flex items-center gap-2 pl-1 pr-3 py-1 rounded-full text-xs font-medium transition-all active:scale-95 bg-white border border-[#6E56CF]/10 shadow-sm"
+              className="flex items-center gap-2 pl-1 pr-3 py-1 rounded-full text-xs font-medium transition-all active:scale-95 bg-[var(--bg-card)] border border-[var(--border-subtle)] shadow-sm"
             >
               <div
                 className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-white font-extrabold text-[11px] select-none overflow-hidden"
@@ -208,17 +208,17 @@ export const Header: React.FC<{ onOpenHealthCard?: () => void }> = ({ onOpenHeal
                   activeProfile.name.charAt(0)
                 )}
               </div>
-              <span className="hidden md:inline font-bold max-w-[110px] truncate text-[#1E1B2E]">
+              <span className="hidden md:inline font-bold max-w-[110px] truncate text-[var(--text-primary)]">
                 {activeProfile.name}
               </span>
-              <ChevronDown className="h-3 w-3 transition-transform duration-200 text-[#78758A]" style={{ transform: showProfileMenu ? "rotate(180deg)" : "rotate(0deg)" }} />
+              <ChevronDown className="h-3 w-3 transition-transform duration-200 text-[var(--text-secondary)]" style={{ transform: showProfileMenu ? "rotate(180deg)" : "rotate(0deg)" }} />
             </button>
 
             {showProfileMenu && (
               <div
-                className="absolute right-0 mt-2 w-64 rounded-2xl p-2 z-50 bg-white border border-[#6E56CF]/10 shadow-2xl"
+                className="absolute right-0 mt-2 w-64 rounded-2xl p-2 z-50 bg-[var(--bg-card)] border border-[var(--border-subtle)] shadow-2xl"
               >
-                <div className="px-3 py-2 text-[10px] uppercase font-bold tracking-wider text-[#78758A]">
+                <div className="px-3 py-2 text-[10px] uppercase font-bold tracking-wider text-[var(--text-secondary)]">
                   Active Patient Profile
                 </div>
                 {profiles.map((p, idx) => {
@@ -230,8 +230,8 @@ export const Header: React.FC<{ onOpenHealthCard?: () => void }> = ({ onOpenHeal
                       onClick={() => { setActiveProfile(p); setShowProfileMenu(false); }}
                       className="w-full text-left px-3 py-2.5 rounded-xl text-xs flex items-center gap-3 transition-all"
                       style={{
-                        background: isActive ? "#E8E3FF" : "transparent",
-                        borderLeft: isActive ? "3px solid #6E56CF" : "3px solid transparent",
+                        background: isActive ? "var(--accent-lavender)" : "transparent",
+                        borderLeft: isActive ? "3px solid var(--accent-purple)" : "3px solid transparent",
                       }}
                     >
                       <div
@@ -245,14 +245,14 @@ export const Header: React.FC<{ onOpenHealthCard?: () => void }> = ({ onOpenHeal
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="font-semibold truncate" style={{ color: isActive ? "#6E56CF" : "#1E1B2E" }}>
+                        <div className="font-semibold truncate" style={{ color: isActive ? "var(--accent-purple)" : "var(--text-primary)" }}>
                           {p.name}
                         </div>
-                        <div className="text-[10px] font-normal text-[#78758A]">
+                        <div className="text-[10px] font-normal text-[var(--text-secondary)]">
                           {p.relationship} · Blood: {p.bloodGroup || 'O+'}
                         </div>
                       </div>
-                      {isActive && <Check className="h-3.5 w-3.5 shrink-0 text-[#6E56CF]" />}
+                      {isActive && <Check className="h-3.5 w-3.5 shrink-0 text-[var(--accent-purple)]" />}
                     </button>
                   );
                 })}
