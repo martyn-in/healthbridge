@@ -223,17 +223,12 @@ function LoginContent() {
 
   return (
     <div className="min-h-screen relative flex flex-col justify-between font-sans overflow-hidden bg-[#F3F5F8] text-[#0D1B2A] selection:bg-[#6E56CF] selection:text-white">
-      {/* Ambient Radial Glows */}
-      <div className="absolute inset-0 pointer-events-none z-0">
-        <div
-          className="absolute -top-32 -left-32 w-[600px] h-[600px] rounded-full blur-[130px] opacity-40"
-          style={{ background: 'radial-gradient(circle, rgba(110,86,207,0.15) 0%, transparent 70%)' }}
-        />
-        <div
-          className="absolute top-1/2 -right-32 w-[550px] h-[550px] rounded-full blur-[140px] opacity-35"
-          style={{ background: 'radial-gradient(circle, rgba(124,92,252,0.12) 0%, transparent 70%)' }}
-        />
-        <div className="absolute inset-0 bg-[radial-gradient(#6e56cf08_1px,transparent_1px)] [background-size:24px_24px]" />
+      {/* Multi-Layer Animated Pastel Mesh Gradient Background */}
+      <div className="mesh-gradient-container">
+        <div className="mesh-blob mesh-blob-pink" />
+        <div className="mesh-blob mesh-blob-blue" />
+        <div className="mesh-blob mesh-blob-lavender" />
+        <div className="mesh-blob mesh-blob-cyan" />
       </div>
 
       {/* Top Header Navigation */}

@@ -3,12 +3,12 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
-/* ─── DESIGN TOKENS (IMAGE 1 SOFT LAVENDER & VIOLET PALETTE) ─────────────── */
+/* ─── DESIGN TOKENS (LIGHT MODE MESH PALETTE) ─────────────────────────── */
 :root {
-  --bg-base:                #F2EFFE;
-  --bg-surface:             #E8E3FF;
-  --bg-card:                #FFFFFF;
-  --bg-card-subtle:         #F8F7FF;
+  --bg-base:                #F6F7FE;
+  --bg-surface:             rgba(232, 227, 255, 0.75);
+  --bg-card:                rgba(255, 255, 255, 0.75);
+  --bg-card-subtle:         rgba(248, 247, 255, 0.85);
 
   --text-primary:           #1E1B2E;
   --text-secondary:         #6B677E;
@@ -20,22 +20,22 @@
   --accent-lavender-dark:   #DED8FF;
   --accent-crimson:         #FF3366;
 
-  --border-subtle:          rgba(110, 86, 207, 0.08);
-  --border-card:            rgba(255, 255, 255, 0.95);
-  --shadow-sm:              0 2px 10px rgba(110, 86, 207, 0.03);
-  --shadow-md:              0 8px 30px rgba(110, 86, 207, 0.05);
-  --shadow-lg:              0 20px 50px rgba(110, 86, 207, 0.08);
+  --border-subtle:          rgba(110, 86, 207, 0.12);
+  --border-card:            rgba(255, 255, 255, 0.85);
+  --shadow-sm:              0 2px 10px rgba(110, 86, 207, 0.04);
+  --shadow-md:              0 10px 35px rgba(110, 86, 207, 0.06);
+  --shadow-lg:              0 20px 50px rgba(110, 86, 207, 0.09);
 
   --radius-card:            24px;
   --radius-pill:            999px;
 }
 
-/* ─── DARK MODE DESIGN TOKENS (PREMIUM DARK CHARCOAL) ──────────────────── */
+/* ─── DARK MODE DESIGN TOKENS (PREMIUM DARK OBSIDIAN MESH) ─────────────── */
 html.dark, .dark {
-  --bg-base:                #111114;
-  --bg-surface:             #1B1B20;
-  --bg-card:                #18181D;
-  --bg-card-subtle:         #23232A;
+  --bg-base:                #0C0C10;
+  --bg-surface:             rgba(27, 27, 32, 0.80);
+  --bg-card:                rgba(24, 24, 29, 0.78);
+  --bg-card-subtle:         rgba(35, 35, 42, 0.85);
 
   --text-primary:           #F6F6F8;
   --text-secondary:         #A0A0A8;
@@ -47,11 +47,11 @@ html.dark, .dark {
   --accent-lavender-dark:   #3A3458;
   --accent-crimson:         #FF4D79;
 
-  --border-subtle:          rgba(255, 255, 255, 0.08);
+  --border-subtle:          rgba(255, 255, 255, 0.10);
   --border-card:            rgba(255, 255, 255, 0.12);
-  --shadow-sm:              0 2px 10px rgba(0, 0, 0, 0.25);
-  --shadow-md:              0 8px 30px rgba(0, 0, 0, 0.35);
-  --shadow-lg:              0 20px 50px rgba(0, 0, 0, 0.50);
+  --shadow-sm:              0 2px 10px rgba(0, 0, 0, 0.30);
+  --shadow-md:              0 10px 35px rgba(0, 0, 0, 0.45);
+  --shadow-lg:              0 20px 50px rgba(0, 0, 0, 0.60);
 }
 
 /* ─── RESET & BASE ────────────────────────────────────────────────── */
@@ -72,21 +72,146 @@ body {
 ::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb {
-  background: rgba(110, 86, 207, 0.20);
+  background: rgba(110, 86, 207, 0.25);
   border-radius: 10px;
 }
-::-webkit-scrollbar-thumb:hover { background: rgba(110, 86, 207, 0.35); }
+::-webkit-scrollbar-thumb:hover { background: rgba(110, 86, 207, 0.40); }
 
-/* ─── SOFT CARDS & UTILITIES ────────────────────────────────────── */
-.soft-card {
-  background: #FFFFFF;
-  border: 1px solid rgba(110, 86, 207, 0.08);
-  box-shadow: 0 8px 30px rgba(110, 86, 207, 0.04);
+/* ─── FROSTED GLASS PANELS & CARDS ──────────────────────────────── */
+.frosted-glass, .soft-card, .frosted-card {
+  background: var(--bg-card) !important;
+  backdrop-filter: blur(24px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+  border: 1px solid var(--border-subtle) !important;
+  box-shadow: var(--shadow-md) !important;
 }
 
+/* ─── ANIMATED MESH GRADIENT CONTAINER & BLOBS ────────────────────── */
+.mesh-gradient-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+  background: var(--bg-base);
+  transition: background-color 0.5s ease;
+}
+
+.mesh-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  -webkit-filter: blur(90px);
+  opacity: 0.85;
+  will-change: transform;
+}
+
+/* Light Mode Mesh Colors & Blobs */
+.mesh-blob-pink {
+  top: -10%;
+  right: -5%;
+  width: 55vw;
+  height: 55vw;
+  max-width: 750px;
+  max-height: 750px;
+  background: radial-gradient(circle, rgba(244, 168, 232, 0.70) 0%, rgba(255, 183, 236, 0.35) 45%, transparent 75%);
+  animation: meshDriftPink 26s ease-in-out infinite;
+}
+
+.mesh-blob-blue {
+  bottom: -15%;
+  left: -8%;
+  width: 60vw;
+  height: 60vw;
+  max-width: 850px;
+  max-height: 850px;
+  background: radial-gradient(circle, rgba(67, 85, 244, 0.70) 0%, rgba(59, 75, 249, 0.40) 45%, transparent 75%);
+  animation: meshDriftBlue 22s ease-in-out infinite;
+}
+
+.mesh-blob-lavender {
+  top: 25%;
+  left: 20%;
+  width: 50vw;
+  height: 50vw;
+  max-width: 700px;
+  max-height: 700px;
+  background: radial-gradient(circle, rgba(164, 177, 253, 0.70) 0%, rgba(137, 154, 255, 0.38) 45%, transparent 75%);
+  animation: meshDriftLavender 28s ease-in-out infinite;
+}
+
+.mesh-blob-cyan {
+  top: -15%;
+  left: -10%;
+  width: 45vw;
+  height: 45vw;
+  max-width: 600px;
+  max-height: 600px;
+  background: radial-gradient(circle, rgba(210, 234, 255, 0.65) 0%, rgba(185, 215, 255, 0.30) 45%, transparent 75%);
+  animation: meshDriftCyan 32s ease-in-out infinite;
+}
+
+/* Dark Mode Overrides for Mesh Blobs */
+html.dark .mesh-blob-pink, .dark .mesh-blob-pink {
+  background: radial-gradient(circle, rgba(120, 40, 140, 0.50) 0%, rgba(80, 25, 100, 0.22) 50%, transparent 85%);
+  opacity: 0.70;
+}
+
+html.dark .mesh-blob-blue, .dark .mesh-blob-blue {
+  background: radial-gradient(circle, rgba(30, 50, 180, 0.55) 0%, rgba(15, 25, 110, 0.28) 50%, transparent 85%);
+  opacity: 0.75;
+}
+
+html.dark .mesh-blob-lavender, .dark .mesh-blob-lavender {
+  background: radial-gradient(circle, rgba(25, 35, 75, 0.65) 0%, rgba(15, 20, 45, 0.32) 50%, transparent 85%);
+  opacity: 0.75;
+}
+
+html.dark .mesh-blob-cyan, .dark .mesh-blob-cyan {
+  background: radial-gradient(circle, rgba(20, 80, 150, 0.40) 0%, transparent 85%);
+  opacity: 0.65;
+}
+
+/* ─── GPU ACCELERATED MESH KEYFRAME DRIFTS ────────────────────────── */
+@keyframes meshDriftPink {
+  0% { transform: translate3d(0%, 0%, 0) scale(1) rotate(0deg); }
+  33% { transform: translate3d(-12%, 10%, 0) scale(1.15) rotate(-5deg); }
+  66% { transform: translate3d(-20%, -6%, 0) scale(0.92) rotate(4deg); }
+  100% { transform: translate3d(0%, 0%, 0) scale(1) rotate(0deg); }
+}
+
+@keyframes meshDriftBlue {
+  0% { transform: translate3d(0%, 0%, 0) scale(1) rotate(0deg); }
+  25% { transform: translate3d(10%, -8%, 0) scale(1.12) rotate(6deg); }
+  50% { transform: translate3d(18%, 5%, 0) scale(1.05) rotate(-4deg); }
+  75% { transform: translate3d(8%, 10%, 0) scale(0.95) rotate(5deg); }
+  100% { transform: translate3d(0%, 0%, 0) scale(1) rotate(0deg); }
+}
+
+@keyframes meshDriftLavender {
+  0% { transform: translate3d(0%, 0%, 0) scale(1); }
+  40% { transform: translate3d(14%, 12%, 0) scale(1.22); }
+  70% { transform: translate3d(-10%, -14%, 0) scale(0.88); }
+  100% { transform: translate3d(0%, 0%, 0) scale(1); }
+}
+
+@keyframes meshDriftCyan {
+  0% { transform: translate3d(0%, 0%, 0) scale(1); }
+  50% { transform: translate3d(-18%, 18%, 0) scale(1.28); }
+  100% { transform: translate3d(0%, 0%, 0) scale(1); }
+}
+
+/* Respect Prefers Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .mesh-blob {
+    animation: none !important;
+  }
+}
+
+/* ─── BUTTONS & UTILITIES ────────────────────────────────────────── */
 .pill-btn {
   display: inline-flex;
-  items-center: center;
+  align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 1.25rem;
   border-radius: 9999px;
@@ -116,7 +241,6 @@ body {
   background: #DED8FF;
 }
 
-/* Floating animation */
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(-8px); }

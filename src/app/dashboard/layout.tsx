@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import { Sidebar } from '@/components/ui/Sidebar';
 import { Header } from '@/components/ui/Header';
-import { JudgeDemoBar } from '@/components/ui/JudgeDemoBar';
 import { EmergencySosModal } from '@/components/ui/EmergencySosModal';
 import { DigitalHealthCardModal } from '@/components/ui/DigitalHealthCardModal';
 import { DisclaimerBanner } from '@/components/ui/DisclaimerBanner';
@@ -14,14 +13,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   return (
     <AuthGuard>
-      <div className="min-h-screen flex flex-col font-sans transition-colors duration-300 relative"
-        style={{ background: 'var(--bg-base)', color: 'var(--text-primary)' }}>
+      <div className="min-h-screen flex flex-col font-sans transition-colors duration-300 relative text-[var(--text-primary)]">
 
-        {/* Ambient background orbs */}
-        <div className="fixed top-0 right-0 w-96 h-96 rounded-full pointer-events-none z-0"
-          style={{ background: 'radial-gradient(circle, rgba(0,102,255,0.08) 0%, transparent 70%)', transform: 'translate(30%,-30%)' }} />
-        <div className="fixed bottom-0 left-0 w-80 h-80 rounded-full pointer-events-none z-0"
-          style={{ background: 'radial-gradient(circle, rgba(255,51,102,0.07) 0%, transparent 70%)', transform: 'translate(-30%,30%)' }} />
+        {/* ── MULTI-LAYER ANIMATED PASTEL MESH GRADIENT BACKGROUND ── */}
+        <div className="mesh-gradient-container">
+          <div className="mesh-blob mesh-blob-pink" />
+          <div className="mesh-blob mesh-blob-blue" />
+          <div className="mesh-blob mesh-blob-lavender" />
+          <div className="mesh-blob mesh-blob-cyan" />
+        </div>
 
         <div className="flex flex-1 relative z-10">
           {/* Desktop Sidebar */}
