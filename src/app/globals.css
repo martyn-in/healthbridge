@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
@@ -20,7 +20,7 @@
   --accent-lavender-dark:   #DED8FF;
   --accent-crimson:         #FF3366;
 
-  --border-subtle:          rgba(110, 86, 207, 0.10);
+  --border-subtle:          rgba(110, 86, 207, 0.12);
   --border-card:            rgba(255, 255, 255, 0.95);
   --shadow-sm:              0 2px 10px rgba(110, 86, 207, 0.03);
   --shadow-md:              0 8px 30px rgba(110, 86, 207, 0.05);
@@ -30,37 +30,37 @@
   --radius-pill:            999px;
 }
 
-/* ─── DARK MODE TOKENS (SLEEK CHARCOAL & DEEP VIOLET PALETTE) ───────────── */
+/* ─── DARK MODE TOKENS (HIGH CONTRAST CHARCOAL & VIOLET) ─────────────────── */
 .dark, html.dark {
-  --bg-base:                #0F0D15;
-  --bg-surface:             #181523;
-  --bg-card:                #1E1A2B;
-  --bg-card-subtle:         #28233A;
+  --bg-base:                #0B0914;
+  --bg-surface:             #161324;
+  --bg-card:                #1C182E;
+  --bg-card-subtle:         #28223D;
 
-  --text-primary:           #F6F5FA;
-  --text-secondary:         #A8A4BA;
-  --text-muted:             #77738A;
+  --text-primary:           #FFFFFF;
+  --text-secondary:         #C5C0DA;
+  --text-muted:             #9893AE;
 
   --accent-purple:          #8C73FF;
   --accent-violet:          #9D8CFF;
-  --accent-lavender:        #2E2744;
-  --accent-lavender-dark:   #3E365E;
+  --accent-lavender:        #2F274B;
+  --accent-lavender-dark:   #403663;
   --accent-crimson:         #FF4D7D;
 
-  --border-subtle:          rgba(255, 255, 255, 0.10);
-  --border-card:            rgba(255, 255, 255, 0.12);
-  --shadow-sm:              0 2px 10px rgba(0, 0, 0, 0.25);
-  --shadow-md:              0 8px 30px rgba(0, 0, 0, 0.40);
-  --shadow-lg:              0 20px 50px rgba(0, 0, 0, 0.60);
+  --border-subtle:          rgba(255, 255, 255, 0.14);
+  --border-card:            rgba(255, 255, 255, 0.18);
+  --shadow-sm:              0 2px 10px rgba(0, 0, 0, 0.30);
+  --shadow-md:              0 8px 30px rgba(0, 0, 0, 0.50);
+  --shadow-lg:              0 20px 50px rgba(0, 0, 0, 0.70);
 }
 
-/* ─── RESET & BASE ────────────────────────────────────────────────── */
+/* ─── RESET & BASE TYPOGRAPHY ────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; }
 
 html { scroll-behavior: smooth; }
 
 body {
-  font-family: 'Inter', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   background: var(--bg-base);
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
@@ -69,14 +69,20 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+/* Professional Cool Typography for Headings */
+h1, h2, h3, h4, h5, h6, .font-heading {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  letter-spacing: -0.02em;
+}
+
 /* ─── CUSTOM SCROLLBAR ────────────────────────────────────────────── */
-::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb {
-  background: rgba(140, 115, 255, 0.25);
+  background: rgba(140, 115, 255, 0.35);
   border-radius: 10px;
 }
-::-webkit-scrollbar-thumb:hover { background: rgba(140, 115, 255, 0.45); }
+::-webkit-scrollbar-thumb:hover { background: rgba(140, 115, 255, 0.60); }
 
 /* ─── SOFT CARDS & UTILITIES ────────────────────────────────────── */
 .soft-card {
