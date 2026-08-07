@@ -214,17 +214,13 @@ export default function AssistantPage() {
           )}
           
           {isLoading && (
-            <div className="flex items-end gap-3 anim-fade-up">
-              <div
-                className="flex h-8 w-8 items-center justify-center rounded-full shrink-0 shadow-sm"
-                style={{ background: 'linear-gradient(135deg, #0066FF 0%, #00C2FF 100%)', color: '#ffffff' }}
-              >
+            <div className="flex items-center gap-3 anim-fade-up">
+              <div className="flex h-8 w-8 items-center justify-center rounded-xl shrink-0 bg-indigo-500 text-white shadow-sm">
                 <Bot className="h-4 w-4" />
               </div>
-              <div className="rounded-2xl rounded-bl-sm p-4 shadow-sm flex items-center gap-1.5" style={{ background: 'rgba(255, 255, 255, 0.65)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255, 255, 255, 0.95)' }}>
-                <span className="h-2 w-2 rounded-full animate-bounce" style={{ background: '#0066FF', animationDelay: '0ms' }}></span>
-                <span className="h-2 w-2 rounded-full animate-bounce" style={{ background: '#0066FF', animationDelay: '150ms' }}></span>
-                <span className="h-2 w-2 rounded-full animate-bounce" style={{ background: '#0066FF', animationDelay: '300ms' }}></span>
+              <div className="rounded-xl p-3.5 glass-subcard text-xs font-semibold text-indigo-400 flex items-center gap-2 border border-indigo-500/20">
+                <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
+                <span>HealthBridge AI is analyzing your request...</span>
               </div>
             </div>
           )}

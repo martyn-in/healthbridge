@@ -222,62 +222,47 @@ function LoginContent() {
   };
 
   return (
-    <div className="min-h-screen relative flex flex-col justify-between font-sans overflow-hidden bg-[#F3F5F8] text-[#0D1B2A] selection:bg-[#6E56CF] selection:text-white">
-      {/* Multi-Layer Animated Pastel Mesh Gradient Background */}
-      <div className="mesh-gradient-container">
-        <div className="mesh-blob mesh-blob-pink" />
-        <div className="mesh-blob mesh-blob-blue" />
-        <div className="mesh-blob mesh-blob-lavender" />
-        <div className="mesh-blob mesh-blob-cyan" />
-      </div>
-
+    <div className="min-h-screen relative flex flex-col justify-between font-sans overflow-hidden bg-[#F4F5FB] dark:bg-[#12132C] text-[#1E204A] dark:text-white selection:bg-[#4D50A2] selection:text-white">
       {/* Top Header Navigation */}
       <header className="relative z-10 flex items-center justify-between px-6 py-5 max-w-7xl mx-auto w-full">
-        <Link href="/dashboard" className="flex items-center gap-3 group">
+        <Link href="/dashboard" className="flex items-center gap-3">
           <Logo size="md" showText={true} />
         </Link>
         <Link
           href="/dashboard"
-          className="text-xs font-bold text-[#0D1B2A] hover:text-[#6E56CF] transition-all px-4 py-2 rounded-full bg-white/80 border border-slate-200/80 shadow-sm backdrop-blur-md flex items-center gap-1.5 active:scale-95"
+          className="text-xs font-bold text-[#2F3273] dark:text-white hover:text-[#4D50A2] transition-all px-4 py-2 rounded-xl bg-white dark:bg-[#1E204A] border border-[#2F3273]/15 shadow-sm flex items-center gap-1.5 active:scale-95"
         >
           <span>Open Dashboard</span>
-          <ArrowRight className="w-3.5 h-3.5 text-[#6E56CF]" />
+          <ArrowRight className="w-3.5 h-3.5 text-[#4D50A2]" />
         </Link>
       </header>
 
       {/* Main Authentication Container */}
-      <main className="relative z-10 max-w-md w-full mx-auto px-4 py-6 flex-1 flex flex-col justify-center">
-        <div
-          className="rounded-3xl p-8 relative overflow-hidden backdrop-blur-2xl transition-all"
-          style={{
-            background: 'rgba(255, 255, 255, 0.95)',
-            border: '1px solid rgba(200, 215, 235, 0.75)',
-            boxShadow: '0 20px 50px rgba(13, 27, 42, 0.08), 0 2px 10px rgba(13, 27, 42, 0.04)',
-          }}
-        >
+      <main className="relative z-10 max-w-md w-full mx-auto px-4 py-8 flex-1 flex flex-col justify-center">
+        <div className="rounded-3xl p-8 bg-white dark:bg-[#1E204A] border border-[#2F3273]/15 dark:border-white/15 shadow-2xl space-y-6">
           {/* Header Title */}
-          <div className="text-center mb-6">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-wider bg-[#E8E3FF] text-[#6E56CF] border border-[#6E56CF]/20 mb-3">
-              <ShieldCheck className="w-3.5 h-3.5 text-[#6E56CF]" />
+          <div className="text-center space-y-2">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-[10px] font-black uppercase tracking-wider bg-[#F9DF77] text-[#2F3273]">
+              <ShieldCheck className="w-3.5 h-3.5" />
               <span>Real Google OAuth 2.0</span>
             </div>
-            <h1 className="text-2xl font-black text-[#0D1B2A] tracking-tight">
+            <h1 className="text-2xl font-black text-[#2F3273] dark:text-white tracking-tight">
               {mode === 'signin' ? 'Sign In to HealthBridge' : 'Create Patient Account'}
             </h1>
-            <p className="text-xs text-slate-500 font-medium mt-1">
+            <p className="text-xs text-[#4D50A2] dark:text-[#CBD0FB] font-semibold">
               Sign in with your Google Account or registered email.
             </p>
           </div>
 
           {/* Mode Switcher Tabs */}
-          <div className="flex bg-slate-100/90 p-1 rounded-2xl border border-slate-200/80 mb-6">
+          <div className="flex bg-[#F4F5FB] dark:bg-[#2F3273] p-1 rounded-xl border border-[#2F3273]/10">
             <button
               type="button"
               onClick={() => { setMode('signin'); setErrorMsg(''); }}
-              className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all ${
+              className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${
                 mode === 'signin'
-                  ? 'bg-white text-[#6E56CF] shadow-sm border border-slate-200/80'
-                  : 'text-slate-500 hover:text-[#0D1B2A]'
+                  ? 'bg-[#4D50A2] text-white shadow-sm'
+                  : 'text-[#2F3273] dark:text-[#CBD0FB]'
               }`}
             >
               Sign In
@@ -285,10 +270,10 @@ function LoginContent() {
             <button
               type="button"
               onClick={() => { setMode('signup'); setErrorMsg(''); }}
-              className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all ${
+              className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${
                 mode === 'signup'
-                  ? 'bg-white text-[#6E56CF] shadow-sm border border-slate-200/80'
-                  : 'text-slate-500 hover:text-[#0D1B2A]'
+                  ? 'bg-[#4D50A2] text-white shadow-sm'
+                  : 'text-[#2F3273] dark:text-[#CBD0FB]'
               }`}
             >
               Create Account
@@ -300,10 +285,9 @@ function LoginContent() {
             type="button"
             onClick={handleGoogleLoginTrigger}
             disabled={loading}
-            className="w-full mb-3 py-3 px-4 rounded-full border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold transition-all flex items-center justify-center gap-3 active:scale-95 shadow-sm hover:shadow"
+            className="w-full py-3 px-4 rounded-xl border border-[#2F3273]/20 bg-white dark:bg-[#2F3273] text-[#2F3273] dark:text-white text-xs font-extrabold transition-all flex items-center justify-center gap-3 active:scale-95 shadow-sm"
           >
-            {/* Google Multi-Color G Logo SVG */}
-            <svg className="w-4 h-4" viewBox="0 0 24 24">
+            <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24">
               <path
                 fill="#4285F4"
                 d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -325,55 +309,21 @@ function LoginContent() {
           </button>
 
           {/* Render Google Identity SDK Button Container */}
-          <div className="flex flex-col items-center justify-center mb-3 min-h-[44px]">
+          <div className="flex flex-col items-center justify-center min-h-[44px]">
             <div ref={googleBtnRef} className="w-full flex justify-center" />
           </div>
 
-          {/* Config Helper Toggle */}
-          <div className="text-center mb-4">
-            <button
-              type="button"
-              onClick={() => setShowConfigHelp(!showConfigHelp)}
-              className="text-[11px] font-semibold text-slate-400 hover:text-[#6E56CF] transition-colors inline-flex items-center gap-1"
-            >
-              <Settings className="w-3 h-3" />
-              <span>Google Cloud Client ID Settings</span>
-            </button>
-          </div>
-
-          {showConfigHelp && (
-            <div className="mb-4 p-3 rounded-2xl bg-slate-50 border border-slate-200 text-xs space-y-2">
-              <div className="font-bold text-[#0D1B2A] flex items-center gap-1.5">
-                <Key className="w-3.5 h-3.5 text-[#6E56CF]" />
-                <span>Custom Google OAuth Client ID</span>
-              </div>
-              <input
-                type="text"
-                value={customClientId}
-                onChange={(e) => setCustomClientId(e.target.value)}
-                placeholder="Enter Google Client ID"
-                className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-[11px] font-mono text-slate-700"
-              />
-              <p className="text-[10px] text-slate-500 leading-tight">
-                To fix <strong>Error 401: invalid_client</strong> in Google Cloud Console:
-                <br />1. Go to <strong>console.cloud.google.com</strong> → APIs & Services → Credentials.
-                <br />2. Create OAuth 2.0 Client ID (Web Application).
-                <br />3. Add Authorized JS Origin: <code>https://healthaibridge.vercel.app</code>
-              </p>
-            </div>
-          )}
-
-          <div className="relative flex py-2 items-center mb-4">
-            <div className="flex-grow border-t border-slate-200" />
-            <span className="flex-shrink mx-3 text-[10px] uppercase tracking-wider font-extrabold text-slate-400">
+          <div className="relative flex py-1 items-center">
+            <div className="flex-grow border-t border-[#2F3273]/15 dark:border-white/15" />
+            <span className="flex-shrink mx-3 text-[10px] uppercase tracking-wider font-extrabold text-[#4D50A2] dark:text-[#CBD0FB]">
               Or sign in with email
             </span>
-            <div className="flex-grow border-t border-slate-200" />
+            <div className="flex-grow border-t border-[#2F3273]/15 dark:border-white/15" />
           </div>
 
           {/* Error Alert */}
           {errorMsg && (
-            <div className="mb-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center gap-2 font-medium">
+            <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center gap-2 font-bold">
               <AlertCircle className="w-4 h-4 shrink-0 text-rose-500" />
               <span>{errorMsg}</span>
             </div>
@@ -383,53 +333,53 @@ function LoginContent() {
           <form onSubmit={handleSubmit} className="space-y-4">
             {mode === 'signup' && (
               <div>
-                <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+                <label className="block text-[11px] font-black uppercase tracking-wider text-[#2F3273] dark:text-white mb-1.5">
                   Full Legal Name
                 </label>
                 <div className="relative">
-                  <User className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400 pointer-events-none" />
+                  <User className="absolute left-3.5 top-3 h-4 w-4 text-[#4D50A2] pointer-events-none" />
                   <input
                     type="text"
                     required
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     placeholder="e.g. Dr. Jane Vance"
-                    className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-[#0D1B2A] placeholder-slate-400 focus:outline-none focus:border-[#6E56CF] focus:ring-2 focus:ring-[#6E56CF]/20 transition-all font-medium"
+                    className="w-full pl-10 pr-4 py-2.5 bg-[#F4F5FB] dark:bg-[#2F3273] border border-[#2F3273]/15 dark:border-white/15 rounded-xl text-xs text-[#2F3273] dark:text-white placeholder-[#4D50A2]/60 outline-none focus:border-[#4D50A2] font-semibold"
                   />
                 </div>
               </div>
             )}
 
             <div>
-              <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+              <label className="block text-[11px] font-black uppercase tracking-wider text-[#2F3273] dark:text-white mb-1.5">
                 Email Address
               </label>
               <div className="relative">
-                <Mail className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400 pointer-events-none" />
+                <Mail className="absolute left-3.5 top-3 h-4 w-4 text-[#4D50A2] pointer-events-none" />
                 <input
                   type="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@example.com"
-                  className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-[#0D1B2A] placeholder-slate-400 focus:outline-none focus:border-[#6E56CF] focus:ring-2 focus:ring-[#6E56CF]/20 transition-all font-medium"
+                  className="w-full pl-10 pr-4 py-2.5 bg-[#F4F5FB] dark:bg-[#2F3273] border border-[#2F3273]/15 dark:border-white/15 rounded-xl text-xs text-[#2F3273] dark:text-white placeholder-[#4D50A2]/60 outline-none focus:border-[#4D50A2] font-semibold"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+              <label className="block text-[11px] font-black uppercase tracking-wider text-[#2F3273] dark:text-white mb-1.5">
                 Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400 pointer-events-none" />
+                <Lock className="absolute left-3.5 top-3 h-4 w-4 text-[#4D50A2] pointer-events-none" />
                 <input
                   type="password"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••••••"
-                  className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-[#0D1B2A] placeholder-slate-400 focus:outline-none focus:border-[#6E56CF] focus:ring-2 focus:ring-[#6E56CF]/20 transition-all font-medium"
+                  className="w-full pl-10 pr-4 py-2.5 bg-[#F4F5FB] dark:bg-[#2F3273] border border-[#2F3273]/15 dark:border-white/15 rounded-xl text-xs text-[#2F3273] dark:text-white placeholder-[#4D50A2]/60 outline-none focus:border-[#4D50A2] font-semibold"
                 />
               </div>
             </div>
@@ -437,7 +387,7 @@ function LoginContent() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 px-4 rounded-xl text-xs font-bold text-white transition-all shadow-md active:scale-95 disabled:opacity-50 flex items-center justify-center gap-2 bg-[#6E56CF] hover:bg-[#5C45BD]"
+              className="w-full py-3 px-4 rounded-xl text-xs font-black text-white transition-all shadow-md active:scale-95 disabled:opacity-50 flex items-center justify-center gap-2 bg-[#4D50A2] hover:bg-[#2F3273]"
             >
               {loading ? (
                 <span>Authenticating...</span>
@@ -453,7 +403,7 @@ function LoginContent() {
       </main>
 
       {/* Footer Disclaimer */}
-      <footer className="relative z-10 py-4 px-6 max-w-7xl mx-auto w-full flex items-center justify-between text-[11px] text-slate-400 font-medium">
+      <footer className="relative z-10 py-4 px-6 max-w-7xl mx-auto w-full flex items-center justify-between text-[11px] text-[#4D50A2] dark:text-[#CBD0FB] font-semibold">
         <div className="flex items-center gap-4">
           <span className="flex items-center gap-1">
             <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />

@@ -197,7 +197,7 @@ export interface AssistantMessage {
   text: string;
   timestamp: string;
   language?: Language;
-  suggestedActions?: { label: string; actionPath?: string; query?: string }[];
+  suggestedActions?: { label: string; actionPath?: string; query?: string; triggerSos?: boolean }[];
 }
 
 export interface AuditEvent {

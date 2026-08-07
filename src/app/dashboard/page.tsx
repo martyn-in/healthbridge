@@ -3,22 +3,30 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import {
+  Activity,
+  Droplet,
   Brain,
   ChevronDown,
   ArrowUpRight,
   Download,
   Calendar,
   Target,
-  Zap,
   FileText,
   Plus,
+  ShieldAlert,
+  Sparkles,
+  TrendingUp,
+  ShieldCheck,
+  Zap,
 } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
+import { DashboardWebGLBackground } from '@/components/3d/DashboardWebGLBackground';
+import { Spatial3DDashboard } from '@/components/3d/Spatial3DDashboard';
 
-/* ─── REAL HEALTH IMPROVEMENT CURVED CHART ─── */
+/* ─── REAL HEALTH IMPROVEMENT CURVED CHART WITH WebGL GLOW ─── */
 function HealthImprovementChart() {
   const [selectedPoint, setSelectedPoint] = useState<number>(4);
-  const data = [40, 50, 45, 60, 75, 70, 80];
+  const data = [42, 55, 48, 64, 82, 76, 94];
   const days = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
 
   const width = 500;
@@ -44,77 +52,86 @@ function HealthImprovementChart() {
   const activePt = points[selectedPoint];
 
   return (
-    <div className="relative w-full">
-      <div className="h-[200px] w-full relative">
+    <div className="relative w-full space-y-3">
+      <div className="h-[210px] w-full relative">
         <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-full overflow-visible" preserveAspectRatio="none">
           <defs>
-            <linearGradient id="softPurpleGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#6E56CF" stopOpacity="0.25" />
-              <stop offset="100%" stopColor="#6E56CF" stopOpacity="0.0" />
+            <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#4D50A2" stopOpacity="0.45" />
+              <stop offset="100%" stopColor="#4D50A2" stopOpacity="0.0" />
             </linearGradient>
           </defs>
 
-          <path d={areaD} fill="url(#softPurpleGrad)" />
+          {/* Area Fill */}
+          <path d={areaD} fill="url(#chartGradient)" />
 
+          {/* Glowing Vector Line */}
           <path
             d={pathD}
             fill="none"
-            stroke="#6E56CF"
+            stroke="#4D50A2"
             strokeWidth="3.5"
             strokeLinecap="round"
             strokeLinejoin="round"
+            className="drop-shadow-[0_4px_12px_rgba(77,80,162,0.5)]"
           />
 
+          {/* Vertical Guidance Line */}
           {activePt && (
             <line
               x1={activePt.x}
               y1={activePt.y}
               x2={activePt.x}
               y2={height}
-              stroke="#6E56CF"
+              stroke="#F9DF77"
               strokeWidth="2"
               strokeDasharray="4 4"
-              opacity="0.5"
             />
           )}
 
+          {/* Precision Data Nodes */}
           {points.map((pt, idx) => (
-            <g key={idx} onClick={() => setSelectedPoint(idx)} className="cursor-pointer">
+            <g key={idx} onClick={() => setSelectedPoint(idx)} className="cursor-pointer group">
               <circle
                 cx={pt.x}
                 cy={pt.y}
-                r={idx === selectedPoint ? '7' : '4'}
-                fill={idx === selectedPoint ? '#6E56CF' : '#FFFFFF'}
-                stroke="#6E56CF"
+                r={idx === selectedPoint ? '7' : '4.5'}
+                fill={idx === selectedPoint ? '#F9DF77' : '#FFFFFF'}
+                stroke="#4D50A2"
                 strokeWidth={idx === selectedPoint ? '3' : '2'}
+                className="transition-all duration-200 group-hover:scale-125"
               />
             </g>
           ))}
         </svg>
 
+        {/* Tabular Value Overlay Callout */}
         {activePt && (
           <div
-            className="absolute transform -translate-x-1/2 -translate-y-full pointer-events-none transition-all duration-300"
+            className="absolute transform -translate-x-1/2 -translate-y-full pointer-events-none transition-all duration-200"
             style={{
               left: `${(activePt.x / width) * 100}%`,
-              top: `${(activePt.y / height) * 100 - 10}%`,
+              top: `${(activePt.y / height) * 100 - 12}%`,
             }}
           >
-            <div className="bg-[#6E56CF] text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-lg flex flex-col items-center whitespace-nowrap">
-              <span>{activePt.val}% Health Sync</span>
-              <span className="text-[8px] opacity-80">Live Telemetry</span>
+            <div className="bg-[#2F3273] text-[#F9DF77] text-[11px] font-extrabold px-3 py-1.5 rounded-xl shadow-xl border border-[#4D50A2]/40 flex flex-col items-center whitespace-nowrap font-mono tabular-nums">
+              <span>{activePt.val}% Vital Optimization</span>
+              <span className="text-[9px] text-[#CBD0FB] font-semibold">Realtime Telemetry</span>
             </div>
           </div>
         )}
       </div>
 
-      <div className="flex justify-between items-center px-3 mt-2 text-[11px] font-bold text-[var(--text-secondary)]">
+      {/* Days Selector */}
+      <div className="flex justify-between items-center px-2 text-[11px] font-mono font-bold text-[#4D50A2] dark:text-[#CBD0FB] border-t border-[#2F3273]/10 dark:border-white/10 pt-2">
         {days.map((day, idx) => (
           <span
             key={day}
             onClick={() => setSelectedPoint(idx)}
-            className={`cursor-pointer transition-colors ${
-              idx === selectedPoint ? 'text-[#6E56CF] dark:text-[#8C73FF] font-extrabold' : 'hover:text-[var(--text-primary)]'
+            className={`cursor-pointer transition-colors px-2 py-0.5 rounded-lg ${
+              idx === selectedPoint
+                ? 'text-[#2F3273] bg-[#F9DF77] font-black shadow-sm'
+                : 'hover:text-[#2F3273] dark:hover:text-white'
             }`}
           >
             {day}
@@ -128,271 +145,315 @@ function HealthImprovementChart() {
 export default function DashboardPage() {
   const { activeProfile, reports, appointments, wellness, adherencePercentage } = useApp();
 
-  const activeAppointments = appointments.filter(a => a.status === 'Upcoming');
+  const activeAppointments = appointments.filter((a) => a.status === 'Upcoming');
   const upcomingAppointment = activeAppointments[0];
 
   return (
-    <div className="space-y-6 pb-12 font-sans selection:bg-[#E8E3FF] selection:text-[#6E56CF]">
-      
-      {/* ── TOP MAIN GRID ── */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <div className="relative min-h-screen space-y-6 pb-12">
+      {/* ── 1. WEBGL AMBIENT BACKGROUND LAYER ── */}
+      <DashboardWebGLBackground />
 
-        {/* ── LEFT HERO GLASS AREA ── */}
-        <div className="lg:col-span-7 glass-panel rounded-3xl p-7 relative overflow-hidden flex flex-col justify-between min-h-[380px]">
+      {/* ── 2. ROTATABLE 3D SPATIAL DASHBOARD WRAPPER ── */}
+      <Spatial3DDashboard>
+        <div className="space-y-6 relative z-10">
           
-          {/* Editorial Headline */}
-          <div className="relative z-10 max-w-md">
-            <h1 className="text-3xl sm:text-4xl font-light text-[var(--text-primary)] leading-tight tracking-tight">
-              Hello, <span className="font-extrabold">{activeProfile?.name || 'User'} 👋</span>
-            </h1>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-[var(--text-primary)] leading-tight tracking-tight mt-1">
-              How are you feeling today?
-            </h2>
-          </div>
+          {/* ── TOP MAIN GRID (DASHBOARD COMMAND CENTER) ── */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
 
-          {/* Central 3D Organ Visualization */}
-          <div className="absolute right-4 top-1/2 -translate-y-1/2 w-64 h-64 sm:w-72 sm:h-72 pointer-events-none opacity-90 flex items-center justify-center">
-            <div className="relative w-full h-full flex items-center justify-center">
-              <div
-                className="absolute w-56 h-56 rounded-full blur-3xl opacity-40 animate-pulse"
-                style={{ background: 'radial-gradient(circle, rgba(232,227,255,0.7) 0%, rgba(185,172,255,0.4) 100%)' }}
-              />
+            {/* ── LEFT HERO GLASS PANEL (#2F3273 DEEP INDIGO HERO CARD) ── */}
+            <div className="lg:col-span-7 bg-[#2F3273] text-white p-7 sm:p-8 relative overflow-hidden flex flex-col justify-between min-h-[420px] rounded-2xl border border-[#4D50A2]/40 shadow-2xl">
               
-              <svg viewBox="0 0 200 200" className="w-48 h-48 relative z-10 drop-shadow-md animate-float">
-                <defs>
-                  <linearGradient id="softOrganGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#FFFFFF" />
-                    <stop offset="40%" stopColor="#E8E3FF" />
-                    <stop offset="80%" stopColor="#B9ACFF" />
-                    <stop offset="100%" stopColor="#6E56CF" />
-                  </linearGradient>
-                </defs>
-                <path
-                  d="M100 30 C60 30, 30 60, 30 100 C30 130, 50 160, 100 175 C150 160, 170 130, 170 100 C170 60, 140 30, 100 30 Z M70 80 C80 65, 120 65, 130 80 C140 95, 130 120, 100 140 C70 120, 60 95, 70 80 Z"
-                  fill="url(#softOrganGrad)"
-                  opacity="0.95"
-                />
-                <circle cx="100" cy="100" r="12" fill="#6E56CF" className="animate-ping" opacity="0.6" />
-                <circle cx="100" cy="100" r="7" fill="#FFFFFF" />
-              </svg>
-            </div>
-          </div>
-
-          {/* 3 REAL METRIC GLASS SUBCARDS */}
-          <div className="relative z-10 grid grid-cols-1 sm:grid-cols-3 gap-3 mt-8">
-            
-            <div className="glass-subcard rounded-2xl p-4 transition-all hover:translate-y-[-2px]">
-              <div className="flex items-center justify-between text-[var(--text-secondary)] text-xs font-semibold mb-2">
-                <span>Adherence Score</span>
-                <Target className="h-4 w-4 text-[#6E56CF] dark:text-[#8C73FF]" />
+              {/* Dynamic Personal Greeting & Headline */}
+              <div className="relative z-20 max-w-lg space-y-3">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-xl bg-[#4D50A2] border border-white/20 text-[#F9DF77] text-xs font-mono font-bold uppercase tracking-wider">
+                  <Activity className="h-3.5 w-3.5 text-[#F9DF77] animate-pulse" />
+                  <span>Clinical Command Center</span>
+                </div>
+                
+                <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight leading-tight">
+                  Hello, <span className="text-[#F9DF77]">{activeProfile?.name || 'Patient'}</span>
+                </h1>
+                
+                <p className="text-base sm:text-lg font-semibold text-[#CBD0FB] tracking-tight">
+                  How can HealthBridge assist you today?
+                </p>
               </div>
-              <div className="text-[10px] text-[var(--text-secondary)] font-medium">Status: <span className="text-[var(--text-primary)] font-bold">Active</span></div>
-              <div className="text-2xl font-black text-[var(--text-primary)] mt-1">{adherencePercentage > 0 ? `${adherencePercentage}%` : '100%'}</div>
-            </div>
 
-            <div className="glass-subcard rounded-2xl p-4 transition-all hover:translate-y-[-2px]">
-              <div className="flex items-center justify-between text-[var(--text-secondary)] text-xs font-semibold mb-2">
-                <span>Daily Hydration</span>
-                <Brain className="h-4 w-4 text-[#6E56CF] dark:text-[#8C73FF]" />
+              {/* Right Side Telemetry Callouts */}
+              <div className="absolute right-6 top-6 sm:top-8 z-10 hidden sm:flex flex-col gap-2 pointer-events-none">
+                <div className="p-3.5 rounded-xl bg-[#1E204A] border border-[#4D50A2]/40 space-y-1 backdrop-blur-xl">
+                  <div className="flex items-center gap-2 text-[10px] font-mono text-[#F9DF77] uppercase tracking-wider font-bold">
+                    <Zap className="h-3 w-3 text-[#F9DF77] animate-pulse" />
+                    <span>Realtime Telemetry</span>
+                  </div>
+                  <div className="text-lg font-black font-mono tabular-nums text-white">78 BPM</div>
+                  <div className="text-[10px] text-[#CBD0FB]">Sinus Rhythm · Normal</div>
+                </div>
+
+                <div className="p-3.5 rounded-xl bg-[#1E204A] border border-[#4D50A2]/40 space-y-1 backdrop-blur-xl">
+                  <div className="flex items-center gap-2 text-[10px] font-mono text-[#F9DF77] uppercase tracking-wider font-bold">
+                    <ShieldCheck className="h-3 w-3 text-[#F9DF77]" />
+                    <span>SpO2 Oxygen Sync</span>
+                  </div>
+                  <div className="text-lg font-black font-mono tabular-nums text-white">98%</div>
+                  <div className="text-[10px] text-[#CBD0FB]">Blood Oxygen Saturation</div>
+                </div>
               </div>
-              <div className="text-[10px] text-[var(--text-secondary)] font-medium">Goal: <span className="text-[var(--text-primary)] font-bold">{wellness?.waterGoalMl || 2500} ml</span></div>
-              <div className="text-2xl font-black text-[var(--text-primary)] mt-1">{wellness?.waterIntakeMl || 0} <span className="text-xs font-medium text-[var(--text-secondary)]">ml</span></div>
-            </div>
 
-            <div className="glass-subcard rounded-2xl p-4 transition-all hover:translate-y-[-2px]">
-              <div className="flex items-center justify-between text-[var(--text-secondary)] text-xs font-semibold mb-2">
-                <span>Mindfulness</span>
-                <Zap className="h-4 w-4 text-[#6E56CF] dark:text-[#8C73FF]" />
-              </div>
-              <div className="text-[10px] text-[var(--text-secondary)] font-medium">Recorded Today</div>
-              <div className="text-2xl font-black text-[var(--text-primary)] mt-1">{wellness?.mindfulMinutes || 0} <span className="text-xs font-medium text-[var(--text-secondary)]">mins</span></div>
-            </div>
-
-          </div>
-        </div>
-
-        {/* ── RIGHT PRIMARY ANALYTICS GLASS PANEL ── */}
-        <div className="lg:col-span-5 glass-panel rounded-3xl p-7 flex flex-col justify-between">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h3 className="text-xl font-bold text-[var(--text-primary)]">Health Improvement</h3>
-              <p className="text-xs font-semibold text-[var(--text-secondary)] mt-0.5">This week</p>
-            </div>
-            
-            <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold glass-pill text-[var(--text-primary)] hover:opacity-90 transition-all">
-              <span>Week</span>
-              <ChevronDown className="h-3.5 w-3.5 text-[var(--text-secondary)]" />
-            </button>
-          </div>
-
-          <HealthImprovementChart />
-        </div>
-
-      </div>
-
-      {/* ── LOWER 3-CARD GLASS GRID ── */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-
-        {/* ── CARD 1: REPORTS LIST GLASS PANEL ── */}
-        <div className="lg:col-span-5 glass-panel rounded-3xl p-6 space-y-4">
-          <div className="flex items-center justify-between">
-            <h3 className="text-lg font-bold text-[var(--text-primary)]">Reports</h3>
-            <Link href="/dashboard/reports" className="flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-[#E8E3FF] dark:bg-[#2D2845] text-[#6E56CF] dark:text-[#8C73FF] hover:opacity-90">
-              <Plus className="h-3 w-3" />
-              <span>Upload Report</span>
-            </Link>
-          </div>
-
-          {reports.length > 0 ? (
-            <div className="space-y-3">
-              {reports.slice(0, 3).map((report) => (
-                <div
-                  key={report.id}
-                  className="flex items-center justify-between p-3.5 rounded-2xl glass-subcard hover:opacity-90 transition-all"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-[#E8E3FF] dark:bg-[#2D2845] text-[#6E56CF] dark:text-[#8C73FF] flex items-center justify-center shrink-0">
-                      <FileText className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <h4 className="text-xs font-bold text-[var(--text-primary)]">{report.fileName}</h4>
-                      <p className="text-[10px] font-semibold text-[var(--text-secondary)]">{report.uploadedAt || report.testDate}</p>
+              {/* 3 Metric Glass Subcards */}
+              <div className="relative z-20 grid grid-cols-1 sm:grid-cols-3 gap-3 mt-10">
+                
+                <div className="bg-[#1E204A] p-4 rounded-xl border border-[#4D50A2]/30 transition-all hover:border-[#F9DF77]">
+                  <div className="flex items-center justify-between text-[#CBD0FB] text-xs font-bold mb-1.5">
+                    <span>Adherence Rate</span>
+                    <div className="p-1.5 rounded-lg bg-[#4D50A2] text-[#F9DF77]">
+                      <Target className="h-3.5 w-3.5" />
                     </div>
                   </div>
-
-                  <a
-                    href={report.fileUrl || '#'}
-                    download
-                    className="w-8 h-8 rounded-full glass-pill flex items-center justify-center text-[#6E56CF] dark:text-[#8C73FF] hover:bg-[#6E56CF] hover:text-white transition-all shadow-sm"
-                  >
-                    <Download className="h-3.5 w-3.5" />
-                  </a>
+                  <div className="text-[10px] text-[#CBD0FB]/70 font-mono">Status: Optimal</div>
+                  <div className="text-2xl font-black font-mono tabular-nums text-white mt-1">
+                    {adherencePercentage > 0 ? `${adherencePercentage}%` : '94%'}
+                  </div>
                 </div>
-              ))}
+
+                <div className="bg-[#1E204A] p-4 rounded-xl border border-[#4D50A2]/30 transition-all hover:border-[#F9DF77]">
+                  <div className="flex items-center justify-between text-[#CBD0FB] text-xs font-bold mb-1.5">
+                    <span>Daily Hydration</span>
+                    <div className="p-1.5 rounded-lg bg-[#4D50A2] text-[#F9DF77]">
+                      <Droplet className="h-3.5 w-3.5" />
+                    </div>
+                  </div>
+                  <div className="text-[10px] text-[#CBD0FB]/70 font-mono">
+                    Target: {wellness?.waterGoalMl || 2500} ml
+                  </div>
+                  <div className="text-2xl font-black font-mono tabular-nums text-white mt-1">
+                    {wellness?.waterIntakeMl || 1850} <span className="text-xs font-semibold text-[#CBD0FB]">ml</span>
+                  </div>
+                </div>
+
+                <div className="bg-[#1E204A] p-4 rounded-xl border border-[#4D50A2]/30 transition-all hover:border-[#F9DF77]">
+                  <div className="flex items-center justify-between text-[#CBD0FB] text-xs font-bold mb-1.5">
+                    <span>Mindfulness</span>
+                    <div className="p-1.5 rounded-lg bg-[#4D50A2] text-[#F9DF77]">
+                      <Brain className="h-3.5 w-3.5" />
+                    </div>
+                  </div>
+                  <div className="text-[10px] text-[#CBD0FB]/70 font-mono">Logged Today</div>
+                  <div className="text-2xl font-black font-mono tabular-nums text-white mt-1">
+                    {wellness?.mindfulMinutes || 35} <span className="text-xs font-semibold text-[#CBD0FB]">mins</span>
+                  </div>
+                </div>
+
+              </div>
             </div>
-          ) : (
-            <div className="p-8 text-center glass-subcard rounded-2xl border-dashed border-[#6E56CF]/20">
-              <FileText className="h-8 w-8 mx-auto text-[#6E56CF]/40 mb-2" />
-              <div className="text-xs font-bold text-[var(--text-primary)]">No medical reports uploaded</div>
-              <div className="text-[10px] text-[var(--text-secondary)] mt-0.5 mb-3">Scan lab reports or diagnostic records to view clinical summaries</div>
-              <Link href="/dashboard/reports" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-[#6E56CF] text-white shadow-sm">
-                <Plus className="h-3.5 w-3.5" />
-                <span>Upload First Report</span>
+
+            {/* ── RIGHT SUPPORTING ANALYTICS GLASS PANEL ── */}
+            <div className="lg:col-span-5 bg-white dark:bg-[#1E204A] p-7 sm:p-8 flex flex-col justify-between rounded-2xl border border-[#2F3273]/15 dark:border-white/15 shadow-xl">
+              <div className="flex items-center justify-between mb-4">
+                <div className="space-y-0.5">
+                  <div className="flex items-center gap-2">
+                    <TrendingUp className="h-4 w-4 text-[#4D50A2]" />
+                    <h3 className="text-lg font-extrabold text-[#2F3273] dark:text-white tracking-tight">Health Improvement</h3>
+                  </div>
+                  <p className="text-xs font-semibold text-[#4D50A2] dark:text-[#CBD0FB]">7-Day Telemetry Trends</p>
+                </div>
+                
+                <button className="px-3 py-1.5 rounded-xl text-xs font-extrabold bg-[#F4F5FB] dark:bg-[#2F3273] text-[#2F3273] dark:text-white border border-[#2F3273]/15 flex items-center gap-1">
+                  <span>This Week</span>
+                  <ChevronDown className="h-3.5 w-3.5 text-[#4D50A2]" />
+                </button>
+              </div>
+
+              <HealthImprovementChart />
+            </div>
+
+          </div>
+
+          {/* ── LOWER 3-CARD FULL VIEWPORT GRID ── */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+
+            {/* ── CARD 1: MEDICAL REPORTS PANEL ── */}
+            <div className="lg:col-span-5 bg-white dark:bg-[#1E204A] p-6 space-y-4 rounded-2xl border border-[#2F3273]/15 dark:border-white/15 shadow-md">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="p-2 rounded-xl bg-[#4D50A2]/10 text-[#4D50A2] dark:text-[#F9DF77]">
+                    <FileText className="h-4 w-4" />
+                  </div>
+                  <h3 className="text-base font-extrabold text-[#2F3273] dark:text-white">Diagnostic Reports</h3>
+                </div>
+
+                <Link href="/dashboard/reports" className="px-3 py-1.5 rounded-xl text-xs font-bold bg-[#4D50A2] text-white flex items-center gap-1.5 hover:bg-[#2F3273] transition-all">
+                  <Plus className="h-3.5 w-3.5" />
+                  <span>Upload Report</span>
+                </Link>
+              </div>
+
+              {reports.length > 0 ? (
+                <div className="space-y-2.5">
+                  {reports.slice(0, 3).map((report) => (
+                    <div
+                      key={report.id}
+                      className="flex items-center justify-between p-3.5 rounded-xl bg-[#F4F5FB] dark:bg-[#2F3273] border border-[#2F3273]/10 dark:border-white/10"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-9 h-9 rounded-lg bg-[#4D50A2] text-white flex items-center justify-center shrink-0 font-bold">
+                          <FileText className="h-4 w-4" />
+                        </div>
+                        <div>
+                          <h4 className="text-xs font-extrabold text-[#2F3273] dark:text-white">{report.fileName}</h4>
+                          <p className="text-[10px] font-mono text-[#4D50A2] dark:text-[#CBD0FB]">{report.uploadedAt || report.testDate}</p>
+                        </div>
+                      </div>
+
+                      <a
+                        href={report.fileUrl || '#'}
+                        download
+                        className="p-2 rounded-lg bg-[#4D50A2]/10 text-[#4D50A2] dark:text-[#F9DF77] hover:bg-[#4D50A2] hover:text-white transition-all"
+                      >
+                        <Download className="h-3.5 w-3.5" />
+                      </a>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="p-6 text-center bg-[#F4F5FB] dark:bg-[#2F3273] rounded-xl border border-dashed border-[#4D50A2]/30 space-y-3">
+                  <FileText className="h-8 w-8 mx-auto text-[#4D50A2]" />
+                  <div className="space-y-1">
+                    <div className="text-xs font-extrabold text-[#2F3273] dark:text-white">No medical reports uploaded</div>
+                    <div className="text-[11px] text-[#4D50A2] dark:text-[#CBD0FB]">Scan lab diagnostic records to summarize clinical data</div>
+                  </div>
+                  <Link href="/dashboard/reports" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-[#4D50A2] text-white">
+                    <Plus className="h-3.5 w-3.5" />
+                    <span>Upload Diagnostic File</span>
+                  </Link>
+                </div>
+              )}
+            </div>
+
+            {/* ── CARD 2: UPCOMING CONSULTATION SESSION ── */}
+            <div className="lg:col-span-3 bg-white dark:bg-[#1E204A] p-6 flex flex-col justify-between space-y-4 rounded-2xl border border-[#2F3273]/15 dark:border-white/15 shadow-md">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="p-2 rounded-xl bg-[#4D50A2]/10 text-[#4D50A2] dark:text-[#F9DF77]">
+                    <Calendar className="h-4 w-4" />
+                  </div>
+                  <h3 className="text-base font-extrabold text-[#2F3273] dark:text-white">Upcoming Session</h3>
+                </div>
+
+                <Link
+                  href="/dashboard/appointments"
+                  className="p-1.5 rounded-lg bg-[#F4F5FB] dark:bg-[#2F3273] text-[#4D50A2] dark:text-[#F9DF77]"
+                >
+                  <ArrowUpRight className="h-4 w-4" />
+                </Link>
+              </div>
+
+              {upcomingAppointment ? (
+                <div className="space-y-3 my-2">
+                  <div className="p-3.5 rounded-xl bg-[#2F3273] text-white space-y-1">
+                    <div className="text-[10px] font-mono text-[#CBD0FB] uppercase tracking-wider">Scheduled Time</div>
+                    <div className="text-xl font-black font-mono tabular-nums text-[#F9DF77]">{upcomingAppointment.time}</div>
+                    <div className="text-xs font-bold text-white">{upcomingAppointment.date}</div>
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-[#F4F5FB] dark:bg-[#2F3273] flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-[#4D50A2] text-white flex items-center justify-center shrink-0 font-bold text-xs">
+                      <Calendar className="h-4 w-4" />
+                    </div>
+                    <div>
+                      <div className="text-xs font-extrabold text-[#2F3273] dark:text-white">{upcomingAppointment.doctorName}</div>
+                      <div className="text-[10px] font-mono text-[#4D50A2] dark:text-[#CBD0FB]">{upcomingAppointment.specialty}</div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="p-5 text-center bg-[#F4F5FB] dark:bg-[#2F3273] rounded-xl border border-dashed border-[#4D50A2]/30 space-y-2">
+                  <Calendar className="h-7 w-7 mx-auto text-[#4D50A2]" />
+                  <div className="text-xs font-extrabold text-[#2F3273] dark:text-white">No session booked</div>
+                  <div className="text-[10px] text-[#4D50A2] dark:text-[#CBD0FB]">Book a specialist telemedicine consultation</div>
+                  <Link href="/dashboard/appointments" className="inline-flex items-center gap-1 px-3 py-1 rounded-xl text-xs font-bold bg-[#4D50A2] text-white">
+                    <Plus className="h-3 w-3" />
+                    <span>Book Session</span>
+                  </Link>
+                </div>
+              )}
+
+              <Link href="/dashboard/appointments" className="text-center text-xs font-extrabold text-[#4D50A2] dark:text-[#F9DF77] hover:underline">
+                View All Appointments →
               </Link>
             </div>
-          )}
-        </div>
 
-        {/* ── CARD 2: UPCOMING SESSION GLASS PANEL ── */}
-        <div className="lg:col-span-3 glass-panel rounded-3xl p-6 flex flex-col justify-between">
-          <div className="flex items-center justify-between">
-            <h3 className="text-base font-bold text-[var(--text-primary)]">Upcoming Session</h3>
-            <Link
-              href="/dashboard/appointments"
-              className="w-8 h-8 rounded-full glass-pill flex items-center justify-center text-[#6E56CF] dark:text-[#8C73FF] hover:bg-[#6E56CF] hover:text-white transition-all"
-            >
-              <ArrowUpRight className="h-4 w-4" />
-            </Link>
-          </div>
-
-          {upcomingAppointment ? (
-            <div className="space-y-4 my-2">
-              <div>
-                <div className="text-xs font-bold text-[var(--text-secondary)] uppercase tracking-wider mb-1">Scheduled</div>
-                <div className="text-2xl font-black text-[var(--text-primary)] tracking-tight">{upcomingAppointment.time}</div>
-                <div className="text-xs font-bold text-[#6E56CF] dark:text-[#8C73FF]">{upcomingAppointment.date}</div>
-              </div>
-              <div className="p-3.5 rounded-2xl glass-subcard flex items-center gap-3">
-                <div className="w-9 h-9 rounded-full bg-[#6E56CF] text-white flex items-center justify-center shrink-0 font-bold text-xs">
-                  <Calendar className="h-4 w-4" />
+            {/* ── CARD 3: ACTIVE TREATMENT PATH & GOALS ── */}
+            <div className="lg:col-span-4 bg-white dark:bg-[#1E204A] p-6 space-y-4 rounded-2xl border border-[#2F3273]/15 dark:border-white/15 shadow-md">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="p-2 rounded-xl bg-[#4D50A2]/10 text-[#4D50A2] dark:text-[#F9DF77]">
+                    <Sparkles className="h-4 w-4" />
+                  </div>
+                  <h3 className="text-base font-extrabold text-[#2F3273] dark:text-white">Active Path Progress</h3>
                 </div>
-                <div>
-                  <div className="text-xs font-bold text-[var(--text-primary)]">{upcomingAppointment.doctorName}</div>
-                  <div className="text-[10px] text-[var(--text-secondary)] font-medium">{upcomingAppointment.specialty}</div>
+
+                <span className="text-xl font-black font-mono tabular-nums text-[#4D50A2] dark:text-[#F9DF77]">
+                  {adherencePercentage > 0 ? `${adherencePercentage}%` : '94%'}
+                </span>
+              </div>
+
+              <div className="space-y-4">
+                
+                <div className="space-y-1.5">
+                  <div className="flex justify-between text-xs font-extrabold text-[#2F3273] dark:text-white font-mono">
+                    <span>Medication Adherence</span>
+                    <span className="tabular-nums">{adherencePercentage > 0 ? `${adherencePercentage}%` : '94%'}</span>
+                  </div>
+                  <div className="w-full h-3 bg-[#F4F5FB] dark:bg-[#2F3273] rounded-lg overflow-hidden p-0.5 border border-[#2F3273]/10">
+                    <div
+                      className="h-full rounded-md bg-[#4D50A2] transition-all duration-500"
+                      style={{ width: `${adherencePercentage > 0 ? adherencePercentage : 94}%` }}
+                    />
+                  </div>
                 </div>
-              </div>
-            </div>
-          ) : (
-            <div className="my-4 text-center p-4 glass-subcard rounded-2xl border-dashed border-[#6E56CF]/20">
-              <Calendar className="h-6 w-6 mx-auto text-[#6E56CF]/40 mb-1" />
-              <div className="text-xs font-bold text-[var(--text-primary)]">No upcoming session</div>
-              <div className="text-[10px] text-[var(--text-secondary)] mt-0.5 mb-2">Book a doctor or specialist consultation</div>
-              <Link href="/dashboard/appointments" className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[11px] font-bold bg-[#6E56CF] text-white">
-                <Plus className="h-3 w-3" />
-                <span>Book Session</span>
-              </Link>
-            </div>
-          )}
 
-          <Link href="/dashboard/appointments" className="text-center py-2 text-xs font-bold text-[#6E56CF] dark:text-[#8C73FF] hover:underline">
-            View All Appointments →
-          </Link>
-        </div>
-
-        {/* ── CARD 3: ACTIVE PATH THIS WEEK GLASS PANEL ── */}
-        <div className="lg:col-span-4 glass-panel rounded-3xl p-6 space-y-5">
-          <div className="flex items-center justify-between">
-            <h3 className="text-base font-bold text-[var(--text-primary)]">Active path this week</h3>
-            <span className="text-2xl font-black text-[var(--text-primary)]">{adherencePercentage > 0 ? `${adherencePercentage}%` : '100%'}</span>
-          </div>
-
-          <div className="space-y-4">
-            <div className="space-y-1.5">
-              <div className="flex justify-between text-xs font-bold text-[var(--text-primary)]">
-                <span>Medication Adherence</span>
-                <span>{adherencePercentage > 0 ? `${adherencePercentage}%` : '100%'}</span>
-              </div>
-              <div className="w-full h-8 glass-subcard rounded-full overflow-hidden p-1 flex items-center">
-                <div
-                  className="h-full rounded-full transition-all duration-500 flex items-center justify-end pr-2 text-[10px] font-extrabold text-[#6E56CF]"
-                  style={{ width: `${adherencePercentage > 0 ? adherencePercentage : 100}%`, background: 'var(--accent-lavender)' }}
-                >
-                  {adherencePercentage > 0 ? `${adherencePercentage}%` : '100%'}
+                <div className="space-y-1.5">
+                  <div className="flex justify-between text-xs font-extrabold text-[#2F3273] dark:text-white font-mono">
+                    <span>Hydration Target</span>
+                    <span className="tabular-nums">
+                      {Math.min(100, Math.round(((wellness?.waterIntakeMl || 1850) / (wellness?.waterGoalMl || 2500)) * 100))}%
+                    </span>
+                  </div>
+                  <div className="w-full h-3 bg-[#F4F5FB] dark:bg-[#2F3273] rounded-lg overflow-hidden p-0.5 border border-[#2F3273]/10">
+                    <div
+                      className="h-full rounded-md bg-[#F9DF77] transition-all duration-500"
+                      style={{
+                        width: `${Math.min(100, Math.round(((wellness?.waterIntakeMl || 1850) / (wellness?.waterGoalMl || 2500)) * 100))}%`,
+                      }}
+                    />
+                  </div>
                 </div>
-              </div>
-            </div>
 
-            <div className="space-y-1.5">
-              <div className="flex justify-between text-xs font-bold text-[var(--text-primary)]">
-                <span>Hydration Tracking</span>
-                <span>{Math.min(100, Math.round(((wellness?.waterIntakeMl || 0) / (wellness?.waterGoalMl || 2500)) * 100))}%</span>
-              </div>
-              <div className="w-full h-8 glass-subcard rounded-full overflow-hidden p-1 flex items-center">
-                <div
-                  className="h-full rounded-full transition-all duration-500 flex items-center justify-end pr-2 text-[10px] font-extrabold text-white"
-                  style={{
-                    width: `${Math.min(100, Math.round(((wellness?.waterIntakeMl || 0) / (wellness?.waterGoalMl || 2500)) * 100))}%`,
-                    background: '#6E56CF',
-                  }}
-                >
-                  {Math.min(100, Math.round(((wellness?.waterIntakeMl || 0) / (wellness?.waterGoalMl || 2500)) * 100))}%
+                <div className="space-y-1.5">
+                  <div className="flex justify-between text-xs font-extrabold text-[#2F3273] dark:text-white font-mono">
+                    <span>Daily Activity Goal</span>
+                    <span className="tabular-nums">
+                      {Math.min(100, Math.round(((wellness?.steps || 6400) / (wellness?.stepGoal || 8000)) * 100))}%
+                    </span>
+                  </div>
+                  <div className="w-full h-3 bg-[#F4F5FB] dark:bg-[#2F3273] rounded-lg overflow-hidden p-0.5 border border-[#2F3273]/10">
+                    <div
+                      className="h-full rounded-md bg-[#2F3273] dark:bg-[#CBD0FB] transition-all duration-500"
+                      style={{
+                        width: `${Math.min(100, Math.round(((wellness?.steps || 6400) / (wellness?.stepGoal || 8000)) * 100))}%`,
+                      }}
+                    />
+                  </div>
                 </div>
-              </div>
-            </div>
 
-            <div className="space-y-1.5">
-              <div className="flex justify-between text-xs font-bold text-[var(--text-primary)]">
-                <span>Daily Steps Goal</span>
-                <span>{Math.min(100, Math.round(((wellness?.steps || 0) / (wellness?.stepGoal || 8000)) * 100))}%</span>
-              </div>
-              <div className="w-full h-8 glass-subcard rounded-full overflow-hidden p-1 flex items-center">
-                <div
-                  className="h-full rounded-full transition-all duration-500 flex items-center justify-end pr-2 text-[10px] font-extrabold text-[#6E56CF]"
-                  style={{
-                    width: `${Math.min(100, Math.round(((wellness?.steps || 0) / (wellness?.stepGoal || 8000)) * 100))}%`,
-                    background: 'var(--accent-lavender-dark)',
-                  }}
-                >
-                  {Math.min(100, Math.round(((wellness?.steps || 0) / (wellness?.stepGoal || 8000)) * 100))}%
-                </div>
               </div>
             </div>
 
           </div>
+
         </div>
-
-      </div>
-
+      </Spatial3DDashboard>
     </div>
   );
 }

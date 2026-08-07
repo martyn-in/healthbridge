@@ -75,10 +75,10 @@ export default function CareDiscoveryPage() {
             </span>
           </div>
           
-          <h1 className="text-2xl font-extrabold tracking-tight text-[#0D1B2A]">
+          <h1 className="text-2xl font-extrabold tracking-tight text-[var(--text-primary)]">
             Nearby Healthcare
           </h1>
-          <p className="text-sm text-[#9BAABF] mt-1 max-w-xl leading-relaxed font-medium">
+          <p className="text-sm text-[var(--text-secondary)] mt-1 max-w-xl leading-relaxed font-semibold">
             Find 24/7 emergency trauma centers, verified hospitals, neighborhood pharmacies, and diagnostic laboratories.
           </p>
         </div>
@@ -86,14 +86,14 @@ export default function CareDiscoveryPage() {
         <div className="relative z-10 flex items-center gap-3 flex-wrap sm:flex-nowrap">
           <button
             onClick={requestUserLocation}
-            className="pill-btn pill-btn-ghost text-xs flex items-center gap-1.5 bg-white/50 border border-white"
+            className="btn-rect btn-rect-glass text-xs"
           >
-            <Compass className="h-4 w-4" style={{ color: '#0066FF' }} /> Refresh GPS
+            <Compass className="h-4 w-4 text-indigo-500" /> Refresh GPS
           </button>
           <button
             onClick={triggerSos}
-            className="pill-btn text-xs text-white shadow-md flex items-center gap-1.5"
-            style={{ background: '#FF3366', boxShadow: '0 4px 12px rgba(255,51,102,0.3)' }}
+            className="sos-btn flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-white text-xs font-extrabold uppercase tracking-wider"
+            style={{ background: '#EF4444' }}
           >
             <ShieldAlert className="h-4 w-4" /> SOS
           </button>
@@ -101,16 +101,16 @@ export default function CareDiscoveryPage() {
       </div>
 
       {/* Filter Toolbar & View Toggle */}
-      <div className="frosted-card rounded-2xl p-3 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-sm anim-fade-up delay-100">
+      <div className="glass-panel p-3 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-sm anim-fade-up delay-100">
         {/* Search */}
         <div className="relative flex-1 w-full">
-          <Search className="absolute left-3.5 top-2.5 h-4 w-4 text-[#9BAABF]" />
+          <Search className="absolute left-3.5 top-2.5 h-4 w-4 text-[var(--text-muted)]" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder={`Search hospital name, area near ${userAddress}...`}
-            className="w-full pl-10 pr-4 py-2 text-xs font-medium rounded-xl bg-white/50 border border-white/60 text-[#0D1B2A] placeholder-[#9BAABF] focus:bg-white outline-none transition-all focus:border-[#0066FF]/30 focus:shadow-[0_0_0_2px_rgba(0,102,255,0.1)]"
+            className="w-full pl-10 pr-4 py-2 text-xs font-semibold rounded-xl glass-subcard text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:border-indigo-500/50"
           />
         </div>
 
@@ -120,10 +120,10 @@ export default function CareDiscoveryPage() {
             <button
               key={cat}
               onClick={() => setCategory(cat)}
-              className={`px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all ${
+              className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all border ${
                 category === cat
-                  ? 'bg-[#0066FF] text-white shadow-md'
-                  : 'bg-white/40 text-[#9BAABF] hover:bg-white/80 hover:text-[#0D1B2A]'
+                  ? 'bg-indigo-600 text-white border-indigo-500 shadow-md'
+                  : 'glass-subcard text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
               }`}
             >
               {cat === 'Emergency' ? '24/7 ER' : cat}
@@ -132,11 +132,11 @@ export default function CareDiscoveryPage() {
         </div>
 
         {/* Map / List Toggle */}
-        <div className="flex items-center bg-slate-200/50 p-1 rounded-xl shrink-0 backdrop-blur-sm border border-white/40">
+        <div className="flex items-center glass-subcard p-1 rounded-xl shrink-0 border border-white/20">
           <button
             onClick={() => setViewMode('list')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-              viewMode === 'list' ? 'bg-white text-[#0066FF] shadow-sm' : 'text-[#9BAABF] hover:text-[#0D1B2A]'
+              viewMode === 'list' ? 'bg-indigo-600 text-white shadow-sm' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
             }`}
           >
             <List className="h-3.5 w-3.5" /> List
@@ -144,7 +144,7 @@ export default function CareDiscoveryPage() {
           <button
             onClick={() => setViewMode('map')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-              viewMode === 'map' ? 'bg-white text-[#0066FF] shadow-sm' : 'text-[#9BAABF] hover:text-[#0D1B2A]'
+              viewMode === 'map' ? 'bg-indigo-600 text-white shadow-sm' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
             }`}
           >
             <MapIcon className="h-3.5 w-3.5" /> Map
@@ -162,60 +162,60 @@ export default function CareDiscoveryPage() {
             return (
               <div
                 key={fac.id}
-                className={`neu-card card-lift p-5 rounded-3xl flex flex-col justify-between space-y-4 anim-fade-up delay-${delay}`}
+                className={`glass-panel p-5 rounded-2xl flex flex-col justify-between space-y-4 anim-fade-up delay-${delay}`}
               >
                 <div className="space-y-3">
                   <div className="flex items-start justify-between">
                     <span
-                      className="px-3 py-1 rounded-full text-[10px] font-extrabold flex items-center gap-1"
+                      className="px-3 py-1 rounded-lg text-[10px] font-black flex items-center gap-1"
                       style={{ backgroundColor: colors.bg, color: colors.text, border: `1px solid ${colors.border}` }}
                     >
                       {fac.isEmergencyAvailable && <div className="h-1.5 w-1.5 rounded-full animate-pulse" style={{ backgroundColor: colors.text }} />}
                       {fac.type}
                     </span>
 
-                    <span className="px-2.5 py-1 rounded-full bg-white/70 backdrop-blur-md border border-white text-[10px] font-mono font-bold text-[#0D1B2A] shadow-sm flex items-center gap-1">
-                      <Navigation className="h-3 w-3" style={{ color: '#0066FF' }}/>
+                    <span className="px-2.5 py-1 rounded-lg glass-subcard text-[10px] font-mono font-bold text-[var(--text-primary)] shadow-sm flex items-center gap-1">
+                      <Navigation className="h-3 w-3 text-indigo-500"/>
                       {fac.distanceKm} km
                     </span>
                   </div>
 
-                  <h3 className="text-sm font-extrabold text-[#0D1B2A] flex items-center gap-2">
-                    <div className="p-1.5 rounded-lg bg-blue-50">
-                      <Building2 className="h-4 w-4" style={{ color: '#0066FF' }} />
+                  <h3 className="text-sm font-extrabold text-[var(--text-primary)] flex items-center gap-2">
+                    <div className="p-1.5 rounded-lg bg-indigo-500/10 text-indigo-400">
+                      <Building2 className="h-4 w-4" />
                     </div>
                     {fac.name}
                   </h3>
 
-                  <p className="text-xs font-medium text-[#9BAABF] line-clamp-2 leading-relaxed flex items-start gap-1.5">
-                    <MapPin className="h-3.5 w-3.5 shrink-0 mt-0.5 opacity-70" />
+                  <p className="text-xs font-semibold text-[var(--text-secondary)] line-clamp-2 leading-relaxed flex items-start gap-1.5">
+                    <MapPin className="h-3.5 w-3.5 shrink-0 mt-0.5 text-indigo-400" />
                     {fac.address}
                   </p>
 
                   <div className="flex items-center gap-3 text-xs font-semibold pt-1">
-                    <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-50" style={{ color: '#FF9500' }}>
+                    <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-500/10 text-amber-500 font-bold">
                       <Star className="h-3.5 w-3.5 fill-current" /> {fac.rating}
                     </span>
-                    <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100 text-[#0D1B2A]">
-                      <Clock className="h-3.5 w-3.5 text-[#9BAABF]" /> {fac.openHours}
+                    <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg glass-subcard text-[var(--text-primary)] font-bold">
+                      <Clock className="h-3.5 w-3.5 text-indigo-400" /> {fac.openHours}
                     </span>
                   </div>
                 </div>
 
                 {/* Action buttons */}
-                <div className="flex gap-3 pt-4 border-t border-[#9BAABF]/10">
+                <div className="flex gap-3 pt-4 border-t border-white/10">
                   <a
                     href={`tel:${fac.phone}`}
-                    className="flex-1 pill-btn pill-btn-ghost text-xs flex items-center justify-center gap-1.5"
+                    className="flex-1 btn-rect btn-rect-glass text-xs justify-center"
                   >
-                    <PhoneCall className="h-3.5 w-3.5" style={{ color: '#00D4AA' }} /> Call
+                    <PhoneCall className="h-3.5 w-3.5 text-emerald-500" /> Call
                   </a>
 
                   <a
                     href={`https://maps.google.com/?q=${encodeURIComponent(fac.name + ' ' + fac.address)}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex-1 pill-btn pill-btn-primary text-xs flex items-center justify-center gap-1.5"
+                    className="flex-1 btn-rect btn-rect-primary text-xs justify-center"
                   >
                     <Navigation className="h-3.5 w-3.5" /> Navigate
                   </a>
@@ -226,29 +226,29 @@ export default function CareDiscoveryPage() {
         </div>
       ) : (
         /* Map Preview View */
-        <div className="frosted-card rounded-3xl p-8 text-center space-y-6 anim-fade-up">
+        <div className="glass-panel p-8 text-center space-y-6 anim-fade-up rounded-2xl">
           <div className="max-w-md mx-auto space-y-3 relative z-10">
-            <div className="h-16 w-16 mx-auto rounded-full bg-blue-50 flex items-center justify-center shadow-inner border border-blue-100/50">
-               <Compass className="h-8 w-8" style={{ color: '#0066FF' }} />
+            <div className="h-16 w-16 mx-auto rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400">
+               <Compass className="h-8 w-8" />
             </div>
-            <h3 className="text-lg font-extrabold text-[#0D1B2A]">Geographic Map View</h3>
-            <p className="text-sm font-medium text-[#9BAABF] leading-relaxed">
-              Showing {facilities.length} healthcare facilities within 10 km radius of <span className="font-bold" style={{ color: '#0066FF' }}>{userAddress}</span>.
+            <h3 className="text-lg font-extrabold text-[var(--text-primary)]">Geographic Map View</h3>
+            <p className="text-sm font-semibold text-[var(--text-secondary)] leading-relaxed">
+              Showing {facilities.length} healthcare facilities within 10 km radius of <span className="font-bold text-indigo-400">{userAddress}</span>.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-left pt-6 border-t border-[#9BAABF]/10 relative z-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-left pt-6 border-t border-white/10 relative z-10">
             {facilities.slice(0, 6).map((fac) => {
                const colors = getTypeColor(fac.type, fac.isEmergencyAvailable);
                return (
-                <div key={fac.id} className="p-4 rounded-2xl bg-white/60 border border-white shadow-sm hover:shadow-md transition-shadow text-xs space-y-2 backdrop-blur-md">
-                  <div className="font-extrabold text-[#0D1B2A] flex items-center justify-between">
+                <div key={fac.id} className="p-4 rounded-xl glass-subcard text-xs space-y-2">
+                  <div className="font-extrabold text-[var(--text-primary)] flex items-center justify-between">
                     <span className="truncate pr-2">{fac.name}</span>
-                    <span className="font-mono font-bold px-2 py-0.5 rounded bg-blue-50 shrink-0" style={{ color: '#0066FF' }}>{fac.distanceKm} km</span>
+                    <span className="font-mono font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 shrink-0">{fac.distanceKm} km</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="px-2 py-0.5 rounded-md text-[10px] font-bold" style={{ backgroundColor: colors.bg, color: colors.text }}>{fac.type}</span>
-                    <span className="font-medium text-[#9BAABF]">{fac.phone}</span>
+                    <span className="font-semibold text-[var(--text-secondary)]">{fac.phone}</span>
                   </div>
                 </div>
               );

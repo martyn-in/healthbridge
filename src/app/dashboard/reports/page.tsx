@@ -68,7 +68,7 @@ export default function ReportsPage() {
               <h1 className="text-3xl font-black" style={{ color: '#0D1B2A' }}>
                 Lab Report Analyzer
               </h1>
-              <p className="text-sm font-medium max-w-xl leading-relaxed" style={{ color: '#9BAABF' }}>
+              <p className="text-sm font-semibold max-w-xl leading-relaxed text-[var(--text-secondary)]">
                 Upload blood work or lab panels to instantly parse parameters, highlight out-of-range markers, and generate personalized doctor discussion points.
               </p>
             </div>

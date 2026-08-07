@@ -441,59 +441,44 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          messages: updatedMessages,
-          userProfile: activeProfile,
+          message: text,
+          conversationHistory: assistantMessages.map((m) => ({
+            sender: m.sender === 'user' ? 'user' : 'assistant',
+            text: m.text,
+          })),
+          patientProfileId: activeProfile.id,
         }),
       });
 
-      let responseText = '';
       if (res.ok) {
         const data = await res.json();
-        responseText = data.text;
-      } else {
-        const apiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY || '';
-        if (apiKey) {
-          const directRes = await fetch('https://api.openai.com/v1/chat/completions', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${apiKey.trim()}`,
-            },
-            body: JSON.stringify({
-              model: 'gpt-4o-mini',
-              messages: [
-                {
-                  role: 'system',
-                  content: `You are Aira, the clinical AI medical guide for HealthBridge AI. Provide empathetic, evidence-based medical information for patient ${activeProfile?.name || 'User'}. Keep responses clear and concise.`,
-                },
-                ...updatedMessages.map((m) => ({
-                  role: m.sender === 'user' ? 'user' : 'assistant',
-                  content: m.text,
-                })),
-              ],
-            }),
-          });
-          const directData = await directRes.json();
-          responseText = directData.choices?.[0]?.message?.content || 'I am ready to assist with your medical questions.';
-        } else {
-          responseText = 'I am ready to assist with your clinical queries.';
-        }
-      }
 
-      const airaMsg: AssistantMessage = {
-        id: `msg-${Date.now() + 1}`,
-        sender: 'aira',
-        text: responseText,
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      };
-      setAssistantMessages((prev) => [...prev, airaMsg]);
+        if (data.emergency || data.urgency === 'emergency') {
+          triggerSos();
+        }
+
+        const airaMsg: AssistantMessage = {
+          id: `msg-${Date.now() + 1}`,
+          sender: 'aira',
+          text: data.answer,
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          suggestedActions: data.suggestedActions || [],
+        };
+        setAssistantMessages((prev) => [...prev, airaMsg]);
+      } else {
+        throw new Error('API request failed');
+      }
     } catch (err) {
-      console.error('Assistant OpenAI Error:', err);
+      console.error('[HealthBridge AI Error]:', err);
       const fallbackMsg: AssistantMessage = {
         id: `msg-${Date.now() + 1}`,
         sender: 'aira',
-        text: "I am connected and ready to answer your health queries.",
+        text: 'HealthBridge AI is temporarily unavailable. Your core health tools and Emergency SOS remain active.',
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        suggestedActions: [
+          { label: 'Check Symptoms', actionPath: '/dashboard/symptoms' },
+          { label: 'Activate Emergency SOS', actionPath: '/dashboard', triggerSos: true },
+        ],
       };
       setAssistantMessages((prev) => [...prev, fallbackMsg]);
     }
