@@ -103,14 +103,15 @@ export default function DashboardPage() {
             <div className="absolute inset-0 bg-gradient-to-r from-[#0F172A]/95 via-[#0F172A]/65 to-transparent" />
           </div>
 
-          {/* Integrated Anatomical Heart Image (Fully Covering & Dominating Hero Card) */}
-          <div className="absolute right-0 top-0 bottom-0 w-full sm:w-[65%] pointer-events-none z-0 flex items-center justify-center opacity-90">
+          {/* Integrated Isolated Anatomical Heart Image (Seamlessly Blended) */}
+          <div className="absolute right-0 top-0 bottom-0 w-full sm:w-[60%] pointer-events-none z-0 flex items-center justify-center">
             <div className="relative w-full h-full">
               <Image
                 src="/hero_heart.png"
                 alt="Anatomical Glass Heart Telemetry"
                 fill
-                className="object-contain object-right drop-shadow-[0_25px_60px_rgba(59,130,246,0.6)] animate-float"
+                className="object-contain object-right drop-shadow-[0_25px_60px_rgba(59,130,246,0.8)] animate-float"
+                style={{ mixBlendMode: 'screen' }}
                 priority
               />
             </div>
