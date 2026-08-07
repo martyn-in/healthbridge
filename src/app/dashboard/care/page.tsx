@@ -66,10 +66,10 @@ export default function CareDiscoveryPage() {
             </span>
           </div>
           
-          <h1 className="text-2xl font-extrabold tracking-tight text-[var(--text-primary)]">
+          <h1 className="text-2xl font-extrabold tracking-tight text-[#1E1B2E] dark:text-white">
             Nearby Healthcare
           </h1>
-          <p className="text-xs font-medium text-[var(--text-secondary)] mt-1">
+          <p className="text-xs font-medium text-[#6B677E] dark:text-[#D1CBDD] mt-1">
             Discover verified hospitals, urgent care clinics, and pharmacies near your location.
           </p>
         </div>
@@ -96,13 +96,13 @@ export default function CareDiscoveryPage() {
       {/* Search & Category Filter Bar */}
       <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 anim-fade-up delay-100">
         <div className="relative flex-1">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--text-secondary)]" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-[#6B677E] dark:text-[#D1CBDD]" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search hospitals, doctors, specialties..."
-            className="w-full pl-11 pr-4 py-3 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-subtle)] text-sm font-medium text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[#6E56CF]"
+            className="w-full pl-11 pr-4 py-3 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-subtle)] text-sm font-medium text-[#1E1B2E] dark:text-white placeholder-[#6B677E] dark:placeholder-[#A39DB5] focus:outline-none focus:ring-2 focus:ring-[#6E56CF]"
           />
         </div>
 
@@ -114,7 +114,7 @@ export default function CareDiscoveryPage() {
               className={`p-2 rounded-xl text-xs font-bold transition-all ${
                 viewMode === 'list'
                   ? 'bg-[#6E56CF] text-white shadow-sm'
-                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                  : 'text-[#6B677E] dark:text-[#D1CBDD] hover:text-white'
               }`}
             >
               <List className="h-4 w-4" />
@@ -124,7 +124,7 @@ export default function CareDiscoveryPage() {
               className={`p-2 rounded-xl text-xs font-bold transition-all ${
                 viewMode === 'map'
                   ? 'bg-[#6E56CF] text-white shadow-sm'
-                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                  : 'text-[#6B677E] dark:text-[#D1CBDD] hover:text-white'
               }`}
             >
               <MapIcon className="h-4 w-4" />
@@ -140,7 +140,7 @@ export default function CareDiscoveryPage() {
               className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap border border-[var(--border-subtle)] ${
                 category === cat
                   ? 'bg-[#6E56CF] text-white shadow-sm'
-                  : 'bg-[var(--bg-card)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                  : 'bg-[var(--bg-card)] text-[#6B677E] dark:text-[#D1CBDD] hover:text-white'
               }`}
             >
               {cat}
@@ -161,11 +161,11 @@ export default function CareDiscoveryPage() {
                 <div className="flex items-start justify-between gap-2">
                   <div>
                     <span
-                      className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider mb-1.5 bg-[#6E56CF]/15 text-[#6E56CF]"
+                      className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider mb-1.5 bg-[#6E56CF]/15 text-[#6E56CF] dark:text-[#9D8CFF]"
                     >
                       {fac.type}
                     </span>
-                    <h3 className="font-extrabold text-base leading-snug text-[var(--text-primary)]">
+                    <h3 className="font-extrabold text-base leading-snug text-[#1E1B2E] dark:text-white">
                       {fac.name}
                     </h3>
                   </div>
