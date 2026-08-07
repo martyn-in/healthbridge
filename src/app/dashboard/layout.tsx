@@ -7,42 +7,43 @@ import { JudgeDemoBar } from '@/components/ui/JudgeDemoBar';
 import { EmergencySosModal } from '@/components/ui/EmergencySosModal';
 import { DigitalHealthCardModal } from '@/components/ui/DigitalHealthCardModal';
 import { DisclaimerBanner } from '@/components/ui/DisclaimerBanner';
+import { AuthGuard } from '@/components/auth/AuthGuard';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [isHealthCardOpen, setIsHealthCardOpen] = useState(false);
 
   return (
-    <div className="min-h-screen flex flex-col font-sans transition-colors relative"
-      style={{ background: '#F3F5F8', color: '#0D1B2A' }}>
+    <AuthGuard>
+      <div className="min-h-screen flex flex-col font-sans transition-colors relative"
+        style={{ background: '#F3F5F8', color: '#0D1B2A' }}>
 
-      {/* Ambient background orbs */}
-      <div className="fixed top-0 right-0 w-96 h-96 rounded-full pointer-events-none z-0"
-        style={{ background: 'radial-gradient(circle, rgba(0,102,255,0.08) 0%, transparent 70%)', transform: 'translate(30%,-30%)' }} />
-      <div className="fixed bottom-0 left-0 w-80 h-80 rounded-full pointer-events-none z-0"
-        style={{ background: 'radial-gradient(circle, rgba(255,51,102,0.07) 0%, transparent 70%)', transform: 'translate(-30%,30%)' }} />
+        {/* Ambient background orbs */}
+        <div className="fixed top-0 right-0 w-96 h-96 rounded-full pointer-events-none z-0"
+          style={{ background: 'radial-gradient(circle, rgba(0,102,255,0.08) 0%, transparent 70%)', transform: 'translate(30%,-30%)' }} />
+        <div className="fixed bottom-0 left-0 w-80 h-80 rounded-full pointer-events-none z-0"
+          style={{ background: 'radial-gradient(circle, rgba(255,51,102,0.07) 0%, transparent 70%)', transform: 'translate(-30%,30%)' }} />
 
+        <div className="flex flex-1 relative z-10">
+          {/* Desktop Sidebar */}
+          <Sidebar />
 
+          {/* Main Workspace */}
+          <div className="flex-1 flex flex-col min-w-0 pb-16 lg:pb-0">
+            {/* Header */}
+            <Header onOpenHealthCard={() => setIsHealthCardOpen(true)} />
 
-      <div className="flex flex-1 relative z-10">
-        {/* Desktop Sidebar */}
-        <Sidebar />
-
-        {/* Main Workspace */}
-        <div className="flex-1 flex flex-col min-w-0 pb-16 lg:pb-0">
-          {/* Header */}
-          <Header onOpenHealthCard={() => setIsHealthCardOpen(true)} />
-
-          {/* Scrollable Content */}
-          <main className="flex-1 p-4 sm:p-6 max-w-7xl mx-auto w-full space-y-6">
-            <DisclaimerBanner />
-            {children}
-          </main>
+            {/* Scrollable Content */}
+            <main className="flex-1 p-4 sm:p-6 max-w-7xl mx-auto w-full space-y-6">
+              <DisclaimerBanner />
+              {children}
+            </main>
+          </div>
         </div>
-      </div>
 
-      {/* Global Modals */}
-      <EmergencySosModal />
-      <DigitalHealthCardModal isOpen={isHealthCardOpen} onClose={() => setIsHealthCardOpen(false)} />
-    </div>
+        {/* Global Modals */}
+        <EmergencySosModal />
+        <DigitalHealthCardModal isOpen={isHealthCardOpen} onClose={() => setIsHealthCardOpen(false)} />
+      </div>
+    </AuthGuard>
   );
 }

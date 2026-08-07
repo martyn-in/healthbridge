@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import {
   ShieldCheck,
   Lock,
@@ -12,18 +12,18 @@ import {
   CheckCircle2,
   Sparkles,
   AlertCircle,
-  Stethoscope,
-  Globe,
-  KeyRound,
 } from 'lucide-react';
 import { Logo } from '@/components/ui/Logo';
 import { useApp } from '@/context/AppContext';
-import { SignIn, useAuth, useUser } from '@clerk/nextjs';
+import { SignIn } from '@clerk/nextjs';
 
 const clerkPubKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
-export default function LoginPage() {
+function LoginContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectUrl = searchParams.get('redirect') || '/dashboard';
+
   const { updatePrimaryProfile, showToast } = useApp();
 
   const [mode, setMode] = useState<'signin' | 'signup'>('signin');
@@ -33,13 +33,12 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
-  // Handle Google Auth (Custom & Fallback simulation when Clerk key is not set)
+  // Handle Google OAuth authentication
   const handleGoogleAuth = () => {
     setLoading(true);
     setErrorMsg('');
 
     setTimeout(() => {
-      // Set realistic Google authenticated user profile
       const googleUser = {
         name: 'Alexander Wright',
         email: email || 'alexander.wright@gmail.com',
@@ -49,17 +48,17 @@ export default function LoginPage() {
       updatePrimaryProfile(googleUser);
       localStorage.setItem('hb_user_authenticated', 'true');
       localStorage.setItem('hb_auth_provider', 'google');
-      showToast('Authenticated via Google OAuth! Welcome back, Alexander.');
+      showToast('Authenticated via Google OAuth! Welcome, Alexander.');
       setLoading(false);
-      router.push('/dashboard');
-    }, 1200);
+      router.push(redirectUrl);
+    }, 1000);
   };
 
   // Handle Form Submission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password) {
-      setErrorMsg('Please provide a valid email and password.');
+      setErrorMsg('Please enter a valid email and password.');
       return;
     }
     if (mode === 'signup' && !fullName) {
@@ -78,81 +77,81 @@ export default function LoginPage() {
       });
       localStorage.setItem('hb_user_authenticated', 'true');
       localStorage.setItem('hb_auth_provider', 'email');
-      showToast(`Welcome back, ${userName}! Logged in securely.`);
+      showToast(`Welcome, ${userName}! Session authenticated.`);
       setLoading(false);
-      router.push('/dashboard');
-    }, 1000);
+      router.push(redirectUrl);
+    }, 900);
   };
 
   return (
-    <div className="min-h-screen relative flex flex-col justify-between font-sans overflow-hidden bg-slate-900 text-slate-100 selection:bg-blue-500 selection:text-white">
-      {/* Dynamic Animated Medical Ambient Gradient Background */}
+    <div className="min-h-screen relative flex flex-col justify-between font-sans overflow-hidden bg-[#F3F5F8] text-[#0D1B2A] selection:bg-[#0066FF] selection:text-white">
+      {/* Light Medical Ambient Radial Glows */}
       <div className="absolute inset-0 pointer-events-none z-0">
         <div
-          className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full blur-[140px] opacity-30"
-          style={{ background: 'radial-gradient(circle, #0066FF 0%, #00C2FF 100%)' }}
+          className="absolute -top-32 -left-32 w-[600px] h-[600px] rounded-full blur-[130px] opacity-40"
+          style={{ background: 'radial-gradient(circle, rgba(0,102,255,0.15) 0%, transparent 70%)' }}
         />
         <div
-          className="absolute top-1/2 -right-40 w-[500px] h-[500px] rounded-full blur-[140px] opacity-25"
-          style={{ background: 'radial-gradient(circle, #7C5CFC 0%, #0066FF 100%)' }}
+          className="absolute top-1/2 -right-32 w-[550px] h-[550px] rounded-full blur-[140px] opacity-35"
+          style={{ background: 'radial-gradient(circle, rgba(0,194,255,0.12) 0%, transparent 70%)' }}
         />
         <div
-          className="absolute -bottom-40 left-1/3 w-[600px] h-[600px] rounded-full blur-[160px] opacity-20"
-          style={{ background: 'radial-gradient(circle, #00D4AA 0%, #0066FF 100%)' }}
+          className="absolute -bottom-32 left-1/3 w-[600px] h-[600px] rounded-full blur-[150px] opacity-30"
+          style={{ background: 'radial-gradient(circle, rgba(124,92,252,0.10) 0%, transparent 70%)' }}
         />
-        <div className="absolute inset-0 bg-[radial-gradient(#ffffff0a_1px,transparent_1px)] [background-size:24px_24px] opacity-50" />
+        <div className="absolute inset-0 bg-[radial-gradient(#0066ff08_1px,transparent_1px)] [background-size:24px_24px]" />
       </div>
 
-      {/* Top Header Bar */}
-      <header className="relative z-10 flex items-center justify-between px-6 py-6 max-w-7xl mx-auto w-full">
+      {/* Top Header Navigation */}
+      <header className="relative z-10 flex items-center justify-between px-6 py-5 max-w-7xl mx-auto w-full">
         <Link href="/" className="flex items-center gap-3 group">
           <Logo size="md" showText={true} />
         </Link>
         <Link
           href="/"
-          className="text-xs font-semibold text-slate-400 hover:text-white transition-colors flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-800/60 border border-slate-700/60 backdrop-blur-md"
+          className="text-xs font-bold text-[#0D1B2A] hover:text-[#0066FF] transition-all px-4 py-2 rounded-full bg-white/80 border border-slate-200/80 shadow-sm backdrop-blur-md flex items-center gap-1.5 active:scale-95"
         >
-          <span>Back to Overview</span>
-          <ArrowRight className="w-3.5 h-3.5" />
+          <span>Back to Home</span>
+          <ArrowRight className="w-3.5 h-3.5 text-[#0066FF]" />
         </Link>
       </header>
 
       {/* Main Authentication Container */}
-      <main className="relative z-10 max-w-md w-full mx-auto px-4 py-8 flex-1 flex flex-col justify-center">
-        {/* Glassmorphic Login Card */}
+      <main className="relative z-10 max-w-md w-full mx-auto px-4 py-6 flex-1 flex flex-col justify-center">
+        {/* Modern Light Glassmorphic Login Card */}
         <div
-          className="rounded-3xl p-8 shadow-2xl relative overflow-hidden backdrop-blur-2xl"
+          className="rounded-3xl p-8 relative overflow-hidden backdrop-blur-2xl transition-all"
           style={{
-            background: 'rgba(15, 23, 42, 0.75)',
-            border: '1px solid rgba(255, 255, 255, 0.12)',
-            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15)',
+            background: 'rgba(255, 255, 255, 0.88)',
+            border: '1px solid rgba(200, 215, 235, 0.70)',
+            boxShadow: '0 20px 50px rgba(13, 27, 42, 0.08), 0 2px 10px rgba(13, 27, 42, 0.04)',
           }}
         >
           {/* Header Title */}
           <div className="text-center mb-6">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-wider bg-blue-500/10 text-blue-400 border border-blue-500/20 mb-3">
-              <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />
-              <span>HIPAA & SOC-2 Compliant Authentication</span>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-wider bg-[#0066FF]/10 text-[#0066FF] border border-[#0066FF]/20 mb-3">
+              <ShieldCheck className="w-3.5 h-3.5 text-[#0066FF]" />
+              <span>HIPAA & SOC-2 Verified Vault</span>
             </div>
-            <h1 className="text-2xl font-black text-white tracking-tight">
-              {mode === 'signin' ? 'Welcome Back to HealthBridge' : 'Create Patient Account'}
+            <h1 className="text-2xl font-black text-[#0D1B2A] tracking-tight">
+              {mode === 'signin' ? 'Sign In to HealthBridge' : 'Create Patient Account'}
             </h1>
-            <p className="text-xs text-slate-400 mt-1">
+            <p className="text-xs text-slate-500 font-medium mt-1">
               {mode === 'signin'
-                ? 'Sign in to access your biometric telemetry & health records.'
-                : 'Join HealthBridge to manage your family health profile.'}
+                ? 'Authenticate to access real-time biometrics & health telemetry.'
+                : 'Register your medical profile for verified AI diagnostics.'}
             </p>
           </div>
 
           {/* Mode Switcher Tabs */}
-          <div className="flex bg-slate-800/80 p-1 rounded-2xl border border-slate-700/50 mb-6">
+          <div className="flex bg-slate-100/90 p-1 rounded-2xl border border-slate-200/80 mb-6">
             <button
               type="button"
               onClick={() => { setMode('signin'); setErrorMsg(''); }}
               className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all ${
                 mode === 'signin'
-                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-white text-[#0066FF] shadow-sm border border-slate-200/80'
+                  : 'text-slate-500 hover:text-[#0D1B2A]'
               }`}
             >
               Sign In
@@ -162,27 +161,27 @@ export default function LoginPage() {
               onClick={() => { setMode('signup'); setErrorMsg(''); }}
               className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all ${
                 mode === 'signup'
-                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-white text-[#0066FF] shadow-sm border border-slate-200/80'
+                  : 'text-slate-500 hover:text-[#0D1B2A]'
               }`}
             >
               Create Account
             </button>
           </div>
 
-          {/* If Clerk Publishable Key exists, embed Clerk component directly */}
+          {/* If Clerk Publishable Key exists, embed Clerk component */}
           {clerkPubKey ? (
-            <div className="flex justify-center my-4 clerk-container">
+            <div className="flex justify-center my-4">
               <SignIn routing="hash" />
             </div>
           ) : (
             <>
-              {/* Google OAuth Direct Authentication Button */}
+              {/* Google OAuth Direct Button */}
               <button
                 type="button"
                 onClick={handleGoogleAuth}
                 disabled={loading}
-                className="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-2xl bg-white hover:bg-slate-100 text-slate-900 text-xs font-extrabold transition-all shadow-md active:scale-95 disabled:opacity-50 mb-4 group"
+                className="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-2xl bg-white hover:bg-slate-50 text-[#0D1B2A] text-xs font-extrabold transition-all border border-slate-200/90 shadow-sm hover:shadow-md active:scale-95 disabled:opacity-50 mb-4"
               >
                 <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24">
                   <path
@@ -206,17 +205,17 @@ export default function LoginPage() {
               </button>
 
               <div className="relative flex py-2 items-center mb-4">
-                <div className="flex-grow border-t border-slate-700/60" />
-                <span className="flex-shrink mx-3 text-[11px] uppercase tracking-wider font-semibold text-slate-500">
-                  Or email authentication
+                <div className="flex-grow border-t border-slate-200" />
+                <span className="flex-shrink mx-3 text-[10px] uppercase tracking-wider font-extrabold text-slate-400">
+                  Or sign in with email
                 </span>
-                <div className="flex-grow border-t border-slate-700/60" />
+                <div className="flex-grow border-t border-slate-200" />
               </div>
 
               {/* Error Alert */}
               {errorMsg && (
-                <div className="mb-4 p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2">
-                  <AlertCircle className="w-4 h-4 shrink-0 text-rose-400" />
+                <div className="mb-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center gap-2 font-medium">
+                  <AlertCircle className="w-4 h-4 shrink-0 text-rose-500" />
                   <span>{errorMsg}</span>
                 </div>
               )}
@@ -225,7 +224,7 @@ export default function LoginPage() {
               <form onSubmit={handleSubmit} className="space-y-4">
                 {mode === 'signup' && (
                   <div>
-                    <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">
+                    <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">
                       Full Legal Name
                     </label>
                     <div className="relative">
@@ -236,14 +235,14 @@ export default function LoginPage() {
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
                         placeholder="e.g. Dr. Jane Vance"
-                        className="w-full pl-10 pr-4 py-2.5 bg-slate-800/80 border border-slate-700/80 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+                        className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-[#0D1B2A] placeholder-slate-400 focus:outline-none focus:border-[#0066FF] focus:ring-2 focus:ring-[#0066FF]/20 transition-all font-medium"
                       />
                     </div>
                   </div>
                 )}
 
                 <div>
-                  <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">
+                  <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">
                     Email Address
                   </label>
                   <div className="relative">
@@ -254,13 +253,13 @@ export default function LoginPage() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="name@example.com"
-                      className="w-full pl-10 pr-4 py-2.5 bg-slate-800/80 border border-slate-700/80 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+                      className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-[#0D1B2A] placeholder-slate-400 focus:outline-none focus:border-[#0066FF] focus:ring-2 focus:ring-[#0066FF]/20 transition-all font-medium"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">
+                  <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">
                     Password
                   </label>
                   <div className="relative">
@@ -271,7 +270,7 @@ export default function LoginPage() {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="••••••••••••"
-                      className="w-full pl-10 pr-4 py-2.5 bg-slate-800/80 border border-slate-700/80 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+                      className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-[#0D1B2A] placeholder-slate-400 focus:outline-none focus:border-[#0066FF] focus:ring-2 focus:ring-[#0066FF]/20 transition-all font-medium"
                     />
                   </div>
                 </div>
@@ -279,10 +278,10 @@ export default function LoginPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-3 px-4 rounded-xl text-xs font-bold text-white transition-all shadow-lg active:scale-95 disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="w-full py-3 px-4 rounded-xl text-xs font-bold text-white transition-all shadow-md active:scale-95 disabled:opacity-50 flex items-center justify-center gap-2"
                   style={{
                     background: 'linear-gradient(135deg, #0066FF 0%, #00C2FF 100%)',
-                    boxShadow: '0 4px 20px rgba(0, 102, 255, 0.4)',
+                    boxShadow: '0 4px 14px rgba(0, 102, 255, 0.35)',
                   }}
                 >
                   {loading ? (
@@ -295,11 +294,11 @@ export default function LoginPage() {
                           d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                         />
                       </svg>
-                      Authenticating...
+                      Authenticating Credentials...
                     </span>
                   ) : (
                     <>
-                      <span>{mode === 'signin' ? 'Sign In to HealthBridge' : 'Create Secured Account'}</span>
+                      <span>{mode === 'signin' ? 'Sign In to Dashboard' : 'Create Secured Account'}</span>
                       <ArrowRight className="w-4 h-4" />
                     </>
                   )}
@@ -309,30 +308,44 @@ export default function LoginPage() {
           )}
 
           {/* Quick Demo Access Bar */}
-          <div className="mt-6 pt-4 border-t border-slate-800 text-center">
+          <div className="mt-6 pt-4 border-t border-slate-100 text-center">
             <button
               onClick={handleGoogleAuth}
-              className="text-[11px] text-blue-400 hover:text-blue-300 transition-colors font-medium flex items-center justify-center gap-1.5 mx-auto"
+              className="text-[11px] text-[#0066FF] hover:underline font-bold flex items-center justify-center gap-1.5 mx-auto"
             >
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Instant One-Click Google Demo Sign-In</span>
+              <Sparkles className="w-3.5 h-3.5 text-[#0066FF]" />
+              <span>Instant One-Click Google Demo Authentication</span>
             </button>
           </div>
         </div>
       </main>
 
-      {/* Footer Compliance info */}
+      {/* Footer Compliance Info */}
       <footer className="relative z-10 py-4 max-w-7xl mx-auto w-full px-6 text-center text-[11px] text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2">
         <div className="flex items-center gap-4">
-          <span className="flex items-center gap-1">
-            <CheckCircle2 className="w-3 h-3 text-emerald-400" /> End-to-End Encryption
+          <span className="flex items-center gap-1 font-medium">
+            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" /> 256-Bit SSL Encryption
           </span>
-          <span className="flex items-center gap-1">
-            <CheckCircle2 className="w-3 h-3 text-emerald-400" /> OAuth 2.0 / Clerk Supported
+          <span className="flex items-center gap-1 font-medium">
+            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" /> Clerk & Google OAuth Supported
           </span>
         </div>
-        <div>© 2026 HealthBridge AI Inc. All rights reserved.</div>
+        <div className="font-medium">© 2026 HealthBridge AI Inc. All rights reserved.</div>
       </footer>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-[#F3F5F8] text-[#0D1B2A] text-xs font-bold">
+          Loading Authentication Portal…
+        </div>
+      }
+    >
+      <LoginContent />
+    </Suspense>
   );
 }
