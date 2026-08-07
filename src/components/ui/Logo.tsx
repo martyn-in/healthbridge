@@ -40,11 +40,11 @@ export const Logo: React.FC<LogoProps> = ({ className = '', size = 'md', showTex
 
       {showText && (
         <div className="flex flex-col leading-tight select-none">
-          <span className={`font-extrabold tracking-tight text-[#1E1B2E] dark:text-white ${textSize}`}>
+          <span className={`font-extrabold tracking-tight text-[#1E1B2E] ${textSize}`}>
             HealthBridge
           </span>
           {size !== 'sm' && (
-            <span className="text-[10px] uppercase font-bold tracking-wider text-[#6B677E] dark:text-[#D1CBDD]">
+            <span className="text-[10px] uppercase font-bold tracking-wider text-[#6B677E]">
               Clinical Platform
             </span>
           )}

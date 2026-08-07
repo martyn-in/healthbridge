@@ -4,120 +4,71 @@ import React, { useState } from 'react';
 import {
   FileText,
   Upload,
-  Activity,
-  AlertTriangle,
-  CheckCircle2,
-  HelpCircle,
   Download,
   Trash2,
+  HelpCircle,
+  FileCheck,
   ScanLine,
-  CloudLightning,
   Bot,
+  Activity,
+  CloudLightning,
+  ChevronRight,
+  AlertCircle
 } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
-import { MedicalReport, ExtractedParameter } from '@/types';
-import Tesseract from 'tesseract.js';
+import { processFileOCR, parseReportFromText } from '@/services/ocrService';
+import { MedicalReport } from '@/types';
 
 export default function ReportsPage() {
   const { activeProfile, reports, addReport, deleteReport, showToast } = useApp();
-  const [activeReport, setActiveReport] = useState<MedicalReport | null>(reports[0] || null);
+
   const [isProcessing, setIsProcessing] = useState(false);
-  const [rawTextValue, setRawTextValue] = useState<string>('');
+  const [activeReport, setActiveReport] = useState<MedicalReport | null>(reports[0] || null);
+  const [editingRawText, setEditingRawText] = useState(false);
+  const [rawTextValue, setRawTextValue] = useState(reports[0]?.rawText || '');
 
   const handleFileUpload = async (file: File) => {
     setIsProcessing(true);
-    showToast('Extracting lab parameters using Tesseract OCR...');
-    
     try {
-      let extractedText = '';
-      if (file.type.startsWith('image/')) {
-        const result = await Tesseract.recognize(file, 'eng');
-        extractedText = result.data.text;
-      } else {
-        extractedText = `Sample parsed parameters from PDF: ${file.name}. Hemoglobin: 14.2 g/dL, Fasting Glucose: 110 mg/dL (High), Total Cholesterol: 215 mg/dL (High).`;
-      }
-
-      setRawTextValue(extractedText);
-
-      const parsedValues: ExtractedParameter[] = [
-        {
-          parameter: 'Fasting Blood Glucose',
-          value: '110',
-          unit: 'mg/dL',
-          referenceRange: '70 - 99 mg/dL',
-          status: 'High',
-          explanation: 'Mildly elevated fasting blood sugar levels. Recommend monitoring carbohydrate intake and re-testing in 3 months.',
-        },
-        {
-          parameter: 'Total Cholesterol',
-          value: '215',
-          unit: 'mg/dL',
-          referenceRange: '< 200 mg/dL',
-          status: 'High',
-          explanation: 'Slightly above optimal limit. Dietary modifications and exercise recommended.',
-        },
-        {
-          parameter: 'Hemoglobin (Hb)',
-          value: '14.2',
-          unit: 'g/dL',
-          referenceRange: '13.5 - 17.5 g/dL',
-          status: 'Normal',
-          explanation: 'Normal red blood cell oxygen-carrying capacity.',
-        },
-      ];
-
-      const newRep: MedicalReport = {
-        id: `rep-${Date.now()}`,
-        profileId: activeProfile?.id || 'primary',
-        fileName: file.name,
-        fileType: file.type || 'PDF',
-        fileSize: `${(file.size / 1024 / 1024).toFixed(2)} MB`,
-        labName: 'Clinical Diagnostic Lab',
-        uploadedAt: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
-        testDate: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
-        summary: `Lab analysis for ${file.name} shows 2 out-of-range parameters (Fasting Glucose: 110 mg/dL, Total Cholesterol: 215 mg/dL). Hemoglobin levels are healthy at 14.2 g/dL.`,
-        ocrConfidence: 98,
-        extractedValues: parsedValues,
-        questionsForDoctor: [
-          'Should I schedule a 3-month follow-up HbA1c test for fasting glucose 110 mg/dL?',
-          'What dietary or lifestyle adjustments are recommended for Total Cholesterol 215 mg/dL?',
-          'Are any fasting lipid panels required before my next annual exam?'
-        ],
-        rawText: extractedText,
-      };
-
-      addReport(newRep);
-      setIsProcessing(false);
-      showToast('Lab report successfully parsed!');
+      const ocrResult = await processFileOCR(file);
+      const report = parseReportFromText(activeProfile.id, file.name, ocrResult);
+      addReport(report);
+      setActiveReport(report);
+      setRawTextValue(report.rawText);
+      showToast('Medical report analyzed successfully!');
     } catch (err) {
       console.error(err);
+      showToast('Error processing report.');
+    } finally {
       setIsProcessing(false);
-      showToast('OCR processing failed. Please try a clearer image or PDF.');
     }
   };
 
   return (
-    <div className="space-y-8">
-      {/* Top Banner */}
+    <div className="space-y-8 font-sans pb-12">
+      {/* Top Banner - Hero Header */}
       <div className="frosted-card rounded-3xl p-8 relative overflow-hidden anim-fade-up">
+        <div className="absolute inset-0 bg-grid-slate-200/50 [mask-image:linear-gradient(0deg,transparent,black)] pointer-events-none" />
+        
         <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div className="flex items-center gap-5">
             <div 
-              className="p-4 rounded-2xl neu-card flex items-center justify-center bg-[var(--bg-card)] border border-[var(--border-subtle)]"
+              className="p-4 rounded-2xl neu-card flex items-center justify-center"
+              style={{ background: 'rgba(255,255,255,0.8)' }}
             >
-              <ScanLine className="h-8 w-8 text-[#7C5CFC]" />
+              <ScanLine className="h-8 w-8" style={{ color: '#7C5CFC' }} />
             </div>
             <div className="space-y-2">
               <div 
                 className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold shadow-sm"
-                style={{ background: 'rgba(124, 92, 252, 0.15)', color: '#7C5CFC' }}
+                style={{ background: 'rgba(124, 92, 252, 0.1)', color: '#7C5CFC' }}
               >
                 <Activity className="h-3.5 w-3.5" /> AI-Powered OCR
               </div>
-              <h1 className="text-3xl font-black text-[var(--text-primary)]">
+              <h1 className="text-3xl font-black" style={{ color: '#0D1B2A' }}>
                 Lab Report Analyzer
               </h1>
-              <p className="text-sm font-medium max-w-xl leading-relaxed text-[var(--text-secondary)]">
+              <p className="text-sm font-medium max-w-xl leading-relaxed" style={{ color: '#9BAABF' }}>
                 Upload blood work or lab panels to instantly parse parameters, highlight out-of-range markers, and generate personalized doctor discussion points.
               </p>
             </div>
@@ -137,18 +88,23 @@ export default function ReportsPage() {
           
           {/* Upload Zone */}
           <div 
-            className="frosted-card rounded-3xl p-8 text-center space-y-5 transition-all bg-[var(--bg-card)] border-2 border-dashed border-[#6E56CF]/30"
+            className="frosted-card rounded-3xl p-8 text-center space-y-5 transition-all anim-slide-right delay-100"
+            style={{ 
+              border: '2px dashed rgba(0,102,255,0.25)', 
+              background: 'rgba(255, 255, 255, 0.6)'
+            }}
           >
             <label className="flex flex-col items-center justify-center cursor-pointer group">
               <div 
-                className="h-16 w-16 rounded-full flex items-center justify-center mb-4 transition-transform group-hover:scale-110 bg-[#6E56CF]/15 text-[#6E56CF]"
+                className="h-16 w-16 rounded-full flex items-center justify-center mb-4 transition-transform group-hover:scale-110"
+                style={{ background: 'rgba(0,102,255,0.1)', color: '#0066FF' }}
               >
                 <CloudLightning className="h-8 w-8" />
               </div>
-              <span className="text-base font-bold mb-1 text-[var(--text-primary)]">
+              <span className="text-base font-bold mb-1" style={{ color: '#0D1B2A' }}>
                 Drag & Drop Report
               </span>
-              <span className="text-xs font-medium mb-5 text-[var(--text-secondary)]">
+              <span className="text-xs font-medium mb-5" style={{ color: '#9BAABF' }}>
                 Supports PDF, JPG, PNG up to 10MB
               </span>
               
@@ -169,11 +125,12 @@ export default function ReportsPage() {
             </label>
 
             {isProcessing && (
-              <div className="neu-card rounded-2xl p-4 mt-4 overflow-hidden relative bg-[var(--bg-card-subtle)]">
+              <div className="neu-card rounded-2xl p-4 mt-4 overflow-hidden relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full animate-[shimmer_1.5s_infinite]" />
                 <div className="flex flex-col items-center gap-2 relative z-10">
-                  <div className="text-xs font-bold text-[#6E56CF]">Processing Document...</div>
+                  <div className="text-xs font-bold" style={{ color: '#0066FF' }}>Processing Document...</div>
                   <div className="flex gap-2">
-                    <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-purple-100 text-purple-700">Extracting</span>
+                    <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-blue-100 text-blue-700">Extracting</span>
                     <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-amber-100 text-amber-700 animate-pulse">Parsing</span>
                   </div>
                 </div>
@@ -182,37 +139,39 @@ export default function ReportsPage() {
           </div>
 
           {/* Report History */}
-          <div className="frosted-card rounded-3xl p-6 space-y-4 bg-[var(--bg-card)] border border-[var(--border-subtle)]">
+          <div className="frosted-card rounded-3xl p-6 space-y-4 anim-slide-right delay-200">
             <div className="flex items-center justify-between mb-2">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)]">
+              <h3 className="text-xs font-bold uppercase tracking-wider" style={{ color: '#9BAABF' }}>
                 Report History ({reports.length})
               </h3>
             </div>
 
             <div className="space-y-3">
-              {reports.map((rep) => (
+              {reports.map((rep, idx) => (
                 <div
                   key={rep.id}
                   onClick={() => {
                     setActiveReport(rep);
-                    setRawTextValue(rep.rawText || '');
+                    setRawTextValue(rep.rawText);
                   }}
-                  className={`neu-card rounded-2xl p-4 cursor-pointer transition-all card-lift flex flex-col gap-3 border border-[var(--border-subtle)] ${
-                    activeReport?.id === rep.id ? 'bg-[var(--accent-lavender)] ring-2 ring-[#6E56CF]' : 'bg-[var(--bg-card)]'
+                  className={`neu-card rounded-2xl p-4 cursor-pointer transition-all card-lift flex flex-col gap-3 ${
+                    activeReport?.id === rep.id ? 'ring-2 ring-blue-500/50' : ''
                   }`}
+                  style={{ background: activeReport?.id === rep.id ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.7)' }}
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
                       <div 
-                        className="h-10 w-10 rounded-full flex items-center justify-center shrink-0 bg-[#7C5CFC]/15 text-[#7C5CFC]"
+                        className="h-10 w-10 rounded-full flex items-center justify-center shrink-0"
+                        style={{ background: 'rgba(124, 92, 252, 0.1)', color: '#7C5CFC' }}
                       >
                         <FileText className="h-5 w-5" />
                       </div>
                       <div className="overflow-hidden">
-                        <div className="text-sm font-bold truncate text-[var(--text-primary)]">
+                        <div className="text-sm font-bold truncate" style={{ color: '#0D1B2A' }}>
                           {rep.fileName}
                         </div>
-                        <div className="text-[11px] font-medium mt-0.5 text-[var(--text-secondary)]">
+                        <div className="text-[11px] font-medium mt-0.5" style={{ color: '#9BAABF' }}>
                           {rep.uploadedAt}
                         </div>
                       </div>
@@ -227,14 +186,15 @@ export default function ReportsPage() {
                         }
                         showToast('Report deleted.');
                       }}
-                      className="p-1.5 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-lg transition-colors text-red-500"
+                      className="p-1.5 hover:bg-red-50 rounded-lg transition-colors"
+                      style={{ color: '#FF3366' }}
                     >
                       <Trash2 className="h-4 w-4" />
                     </button>
                   </div>
                   
                   {rep.summary && (
-                    <div className="text-[11px] font-medium line-clamp-2 text-[var(--text-secondary)] pl-12">
+                    <div className="text-[11px] font-medium line-clamp-2 pl-13" style={{ color: '#9BAABF', marginLeft: '52px' }}>
                       {rep.summary.substring(0, 80)}...
                     </div>
                   )}
@@ -242,7 +202,7 @@ export default function ReportsPage() {
               ))}
               
               {reports.length === 0 && (
-                <div className="text-center py-6 text-sm font-medium text-[var(--text-secondary)]">
+                <div className="text-center py-6 text-sm font-medium" style={{ color: '#9BAABF' }}>
                   No reports parsed yet.
                 </div>
               )}
@@ -256,14 +216,18 @@ export default function ReportsPage() {
             <div className="space-y-8 anim-fade-up delay-200">
               
               {/* AI Summary Card */}
-              <div className="frosted-card rounded-3xl p-8 shadow-sm relative overflow-hidden bg-[var(--bg-card)] border border-[var(--border-subtle)]">
+              <div className="frosted-card rounded-3xl p-8 shadow-sm relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-8 opacity-5">
+                  <Bot className="w-32 h-32" />
+                </div>
+                
                 <div className="relative z-10 space-y-6">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="p-2.5 rounded-xl bg-[#6E56CF]/15 text-[#6E56CF]">
-                        <Bot className="h-5 w-5" />
+                      <div className="p-2.5 rounded-xl bg-blue-50">
+                        <Bot className="h-5 w-5" style={{ color: '#0066FF' }} />
                       </div>
-                      <h2 className="text-lg font-bold text-[var(--text-primary)]">AI Clinical Summary</h2>
+                      <h2 className="text-lg font-bold" style={{ color: '#0D1B2A' }}>AI Clinical Summary</h2>
                     </div>
                     
                     <button
@@ -274,14 +238,14 @@ export default function ReportsPage() {
                     </button>
                   </div>
                   
-                  <div className="p-5 neu-card rounded-2xl text-sm font-medium leading-relaxed bg-[var(--bg-card-subtle)] text-[var(--text-primary)] border border-[var(--border-subtle)]">
+                  <div className="p-5 neu-card rounded-2xl text-sm font-medium leading-relaxed" style={{ color: '#0D1B2A' }}>
                     {activeReport.summary}
                   </div>
                   
                   {/* Actionable Chips */}
                   <div className="flex flex-wrap gap-2">
                     {activeReport.questionsForDoctor.slice(0, 3).map((q, i) => (
-                      <div key={i} className="px-4 py-2 rounded-full text-[11px] font-bold shadow-sm flex items-center gap-2 bg-[var(--accent-lavender)] text-[var(--accent-purple)] border border-[var(--border-subtle)]">
+                      <div key={i} className="px-4 py-2 rounded-full text-[11px] font-bold shadow-sm flex items-center gap-2" style={{ background: 'rgba(255,255,255,0.9)', color: '#0066FF', border: '1px solid rgba(0,102,255,0.1)' }}>
                         <HelpCircle className="h-3.5 w-3.5" />
                         {q.substring(0, 45)}{q.length > 45 ? '...' : ''}
                       </div>
@@ -293,12 +257,12 @@ export default function ReportsPage() {
               {/* Extracted Metrics Grid */}
               <div className="space-y-4">
                 <div className="flex items-center justify-between px-2">
-                  <h3 className="text-base font-bold text-[var(--text-primary)]">
+                  <h3 className="text-base font-bold" style={{ color: '#0D1B2A' }}>
                     Extracted Biomarkers
                   </h3>
                   <div className="flex items-center gap-2 text-xs font-bold">
-                    <span className="w-2 h-2 rounded-full bg-rose-500 inline-block"></span>
-                    <span className="text-[var(--text-secondary)]">
+                    <span className="dot-crimson w-2 h-2 rounded-full inline-block"></span>
+                    <span style={{ color: '#9BAABF' }}>
                       {activeReport.extractedValues.filter((p) => p.status !== 'Normal').length} Abnormal
                     </span>
                   </div>
@@ -308,12 +272,12 @@ export default function ReportsPage() {
                   {activeReport.extractedValues.map((param, i) => {
                     const isNormal = param.status === 'Normal';
                     const statusColor = isNormal ? '#00C875' : param.status === 'High' ? '#FF3366' : '#FF9500';
-                    const statusBg = isNormal ? 'rgba(0, 200, 117, 0.15)' : param.status === 'High' ? 'rgba(255, 51, 102, 0.15)' : 'rgba(255, 149, 0, 0.15)';
+                    const statusBg = isNormal ? 'rgba(0, 200, 117, 0.1)' : param.status === 'High' ? 'rgba(255, 51, 102, 0.1)' : 'rgba(255, 149, 0, 0.1)';
                     
                     return (
-                      <div key={i} className="neu-card rounded-2xl p-5 space-y-3 card-lift bg-[var(--bg-card)] border border-[var(--border-subtle)]">
+                      <div key={i} className="neu-card rounded-2xl p-5 space-y-3 card-lift bg-white/60">
                         <div className="flex items-start justify-between">
-                          <h4 className="font-bold text-sm text-[var(--text-primary)]">{param.parameter}</h4>
+                          <h4 className="font-bold text-sm" style={{ color: '#0D1B2A' }}>{param.parameter}</h4>
                           <span 
                             className="px-2.5 py-1 rounded-full text-[10px] font-extrabold"
                             style={{ backgroundColor: statusBg, color: statusColor }}
@@ -323,16 +287,16 @@ export default function ReportsPage() {
                         </div>
                         
                         <div className="flex items-baseline gap-1.5">
-                          <span className="text-2xl font-black text-[var(--accent-purple)]">{param.value}</span>
-                          <span className="text-xs font-bold text-[var(--text-secondary)]">{param.unit}</span>
+                          <span className="text-2xl font-black" style={{ color: '#0066FF' }}>{param.value}</span>
+                          <span className="text-xs font-bold" style={{ color: '#9BAABF' }}>{param.unit}</span>
                         </div>
                         
-                        <div className="pt-3 border-t border-[var(--border-subtle)] flex justify-between items-center">
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">Ref Range</span>
-                          <span className="text-xs font-medium text-[var(--text-primary)]">{param.referenceRange}</span>
+                        <div className="pt-3 border-t border-slate-200/50 flex justify-between items-center">
+                          <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: '#9BAABF' }}>Ref Range</span>
+                          <span className="text-xs font-medium" style={{ color: '#0D1B2A' }}>{param.referenceRange}</span>
                         </div>
                         
-                        <div className="text-[11px] font-medium leading-tight mt-2 text-[var(--text-secondary)]">
+                        <div className="text-[11px] font-medium leading-tight mt-2" style={{ color: '#9BAABF' }}>
                           {param.explanation}
                         </div>
                       </div>
@@ -342,23 +306,23 @@ export default function ReportsPage() {
               </div>
               
               {/* Doctor Questions List */}
-              <div className="frosted-card rounded-3xl p-6 space-y-4 bg-[var(--bg-card)] border border-[var(--border-subtle)]">
+              <div className="frosted-card rounded-3xl p-6 space-y-4">
                 <div className="flex items-center gap-2">
-                  <div className="p-2 rounded-xl bg-[#7C5CFC]/15 text-[#7C5CFC]">
-                    <HelpCircle className="h-5 w-5" />
+                  <div className="p-2 rounded-xl" style={{ background: 'rgba(124, 92, 252, 0.1)' }}>
+                    <HelpCircle className="h-5 w-5" style={{ color: '#7C5CFC' }} />
                   </div>
-                  <h3 className="text-base font-bold text-[var(--text-primary)]">
+                  <h3 className="text-base font-bold" style={{ color: '#0D1B2A' }}>
                     Questions to Ask Your Doctor
                   </h3>
                 </div>
                 
                 <div className="space-y-3">
                   {activeReport.questionsForDoctor.map((q, i) => (
-                    <div key={i} className="neu-card rounded-2xl p-4 flex gap-4 items-start bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)]">
-                      <div className="h-6 w-6 rounded-full flex items-center justify-center shrink-0 font-bold text-xs shadow-sm bg-[#7C5CFC] text-white">
+                    <div key={i} className="neu-card rounded-2xl p-4 flex gap-4 items-start bg-white/40">
+                      <div className="h-6 w-6 rounded-full flex items-center justify-center shrink-0 font-bold text-xs shadow-sm" style={{ background: '#7C5CFC', color: 'white' }}>
                         {i + 1}
                       </div>
-                      <p className="text-sm font-medium pt-0.5 leading-relaxed text-[var(--text-primary)]">
+                      <p className="text-sm font-medium pt-0.5 leading-relaxed" style={{ color: '#0D1B2A' }}>
                         {q}
                       </p>
                     </div>
@@ -368,14 +332,14 @@ export default function ReportsPage() {
 
             </div>
           ) : (
-            <div className="frosted-card rounded-3xl p-16 text-center space-y-4 h-full flex flex-col items-center justify-center anim-fade-up delay-200 min-h-[400px] bg-[var(--bg-card)] border border-[var(--border-subtle)]">
-              <div className="h-24 w-24 rounded-full neu-card flex items-center justify-center mb-4 bg-[var(--accent-lavender)] text-[var(--accent-purple)]">
-                <ScanLine className="h-10 w-10 opacity-60" />
+            <div className="frosted-card rounded-3xl p-16 text-center space-y-4 h-full flex flex-col items-center justify-center anim-fade-up delay-200 min-h-[400px]">
+              <div className="h-24 w-24 rounded-full neu-card flex items-center justify-center mb-4">
+                <ScanLine className="h-10 w-10 opacity-20" />
               </div>
-              <h3 className="text-xl font-bold text-[var(--text-primary)]">
+              <h3 className="text-xl font-bold" style={{ color: '#0D1B2A' }}>
                 No Report Selected
               </h3>
-              <p className="text-sm font-medium max-w-sm mx-auto text-[var(--text-secondary)]">
+              <p className="text-sm font-medium max-w-sm mx-auto" style={{ color: '#9BAABF' }}>
                 Upload a laboratory report or select an existing one to view AI-parsed clinical parameters and insights.
               </p>
             </div>

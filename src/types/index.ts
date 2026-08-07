@@ -35,15 +35,6 @@ export interface SymptomAssessment {
   recommendedDoctorType: string;
 }
 
-export interface ExtractedParameter {
-  parameter: string;
-  value: string;
-  unit: string;
-  referenceRange: string;
-  status: 'Normal' | 'High' | 'Low';
-  explanation: string;
-}
-
 export interface MedicalReport {
   id: string;
   profileId: string;
@@ -56,7 +47,14 @@ export interface MedicalReport {
   testDate: string;
   summary: string;
   ocrConfidence: number;
-  extractedValues: ExtractedParameter[];
+  extractedValues: {
+    parameter: string;
+    value: string;
+    unit: string;
+    referenceRange: string;
+    status: 'Normal' | 'High' | 'Low';
+    explanation: string;
+  }[];
   questionsForDoctor: string[];
   rawText: string;
 }
@@ -135,7 +133,6 @@ export interface Facility {
   longitude: number;
   isEmergencyAvailable: boolean;
   wheelchairAccessible: boolean;
-  specialties?: string[];
 }
 
 export interface HealthRecord {
