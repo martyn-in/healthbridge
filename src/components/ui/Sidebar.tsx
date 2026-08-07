@@ -26,6 +26,7 @@ export const Sidebar: React.FC = () => {
 
   const managementNav = [
     { name: t(language, 'navHome'),         path: '/dashboard',                icon: LayoutDashboard, color: '#0066FF', bg: 'rgba(0,102,255,0.12)' },
+    { name: 'Progress & Insights',          path: '/dashboard/progress',       icon: Activity,        color: '#8C73FF', bg: '#EEEAFE' },
     { name: t(language, 'navRecords'),      path: '/dashboard/records',        icon: FolderHeart,     color: '#7C5CFC', bg: 'rgba(124,92,252,0.12)' },
     { name: t(language, 'navAppointments'), path: '/dashboard/appointments',   icon: Calendar,        color: '#FF9500', bg: 'rgba(255,149,0,0.12)' },
     { name: t(language, 'navFamily'),       path: '/dashboard/family',         icon: Users,           color: '#00D4AA', bg: 'rgba(0,212,170,0.12)' },

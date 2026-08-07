@@ -5,36 +5,33 @@
 
 /* ─── DESIGN TOKENS ───────────────────────────────────────────────── */
 :root {
-  --bg-base:        #F3F5F8;
-  --bg-surface:     #ECEEF2;
+  --bg-base:        #F4F4F0;
+  --bg-surface:     #EBEBE6;
   --bg-card:        #FFFFFF;
-  --bg-card-frost:  rgba(255,255,255,0.72);
+  --bg-card-dark:   #1F1F1F;
+  --bg-card-dark-secondary: #2A2A2A;
 
-  --text-primary:   #0D1B2A;
-  --text-secondary: #4A5568;
-  --text-muted:     #8896A7;
-  --text-label:     #9BAABF;
+  --text-primary:   #111111;
+  --text-secondary: #6F6F70;
+  --text-muted:     #88888C;
+  --text-dark-mode: #F6F6F4;
 
-  --accent-blue:    #0066FF;
-  --accent-blue-lt: #EBF3FF;
-  --accent-cyan:    #00C2FF;
-  --accent-crimson: #FF3366;
-  --accent-teal:    #00D4AA;
-  --accent-violet:  #7C5CFC;
+  --accent-lime:    #D8FF57;
+  --accent-lime-light: #F2FFC2;
+  --accent-lavender: #B9ACFF;
+  --accent-violet:  #8C73FF;
+  --accent-lavender-bg: #EEEAFE;
   --accent-amber:   #FF9500;
-  --accent-green:   #00C875;
+  --accent-red:     #FF3366;
 
-  --border-subtle:  rgba(200,210,230,0.55);
-  --border-card:    rgba(255,255,255,0.90);
-  --shadow-sm:      0 2px 8px rgba(10,20,60,0.06), 0 1px 2px rgba(10,20,60,0.04);
-  --shadow-md:      0 8px 32px rgba(10,20,60,0.09), 0 2px 8px rgba(10,20,60,0.05);
-  --shadow-lg:      0 20px 60px rgba(10,20,60,0.13), 0 6px 24px rgba(10,20,60,0.07);
-  --shadow-xl:      0 32px 80px rgba(10,20,60,0.16), 0 12px 36px rgba(10,20,60,0.09);
+  --border-subtle:  rgba(0, 0, 0, 0.07);
+  --border-dark:    rgba(255, 255, 255, 0.10);
+  --shadow-sm:      0 2px 10px rgba(0, 0, 0, 0.04);
+  --shadow-md:      0 8px 30px rgba(0, 0, 0, 0.06);
+  --shadow-lg:      0 20px 50px rgba(0, 0, 0, 0.08);
 
-  /* Neumorphic shadows (light mode) */
-  --neu-out:        6px 6px 16px rgba(166,180,200,0.45), -6px -6px 16px rgba(255,255,255,0.95);
-  --neu-in:         inset 3px 3px 8px rgba(166,180,200,0.35), inset -3px -3px 8px rgba(255,255,255,0.85);
-  --neu-out-hover:  8px 8px 20px rgba(166,180,200,0.50), -8px -8px 20px rgba(255,255,255,0.98);
+  --radius-card:    24px;
+  --radius-pill:    999px;
 }
 
 /* ─── RESET & BASE ────────────────────────────────────────────────── */
