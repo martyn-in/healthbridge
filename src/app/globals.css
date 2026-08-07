@@ -75,12 +75,37 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   letter-spacing: -0.02em;
 }
 
-/* ─── DARK MODE OVERRIDES FOR PERFECT VISIBILITY ────────────────────────── */
-.dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
+/* ─── ULTIMATE HIGH-CONTRAST DARK MODE OVERRIDES (OVERRIDE ALL HARDCODED TAILWIND COLORS) ── */
+.dark, .dark body, .dark html {
+  background-color: #090710 !important;
   color: #FFFFFF !important;
 }
 
-.dark .frosted-card, .dark .soft-card, .dark .neu-card {
+/* Force all headings and titles to brilliant white in dark mode */
+.dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6,
+.dark [class*="text-[#0D1B2A]"],
+.dark [class*="text-[#1E1B2E]"],
+.dark [class*="text-[#000000]"],
+.dark [class*="text-slate-900"],
+.dark [class*="text-slate-800"],
+.dark [class*="text-slate-700"] {
+  color: #FFFFFF !important;
+}
+
+/* Force all secondary metadata text to crisp soft silver/white */
+.dark [class*="text-[#9BAABF]"],
+.dark [class*="text-[#6B677E]"],
+.dark [class*="text-[#78758A]"],
+.dark [class*="text-[#4A5568]"],
+.dark [class*="text-slate-400"],
+.dark [class*="text-slate-500"],
+.dark [class*="text-slate-600"] {
+  color: #D1CBDD !important;
+}
+
+/* Force all cards, sidebars, headers, and modals to deep charcoal/violet */
+.dark .frosted-card, .dark .soft-card, .dark .neu-card, .dark aside, .dark header,
+.dark [class*="bg-white"] {
   background-color: #1A1628 !important;
   border-color: rgba(255, 255, 255, 0.15) !important;
   color: #FFFFFF !important;
