@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { AppProvider } from '@/context/AppContext';
+import { ClerkAuthProvider, ClerkUserSync } from '@/components/auth/ClerkAuthProvider';
 
 export const metadata: Metadata = {
   title: 'HealthBridge — Award-Winning Medical AI Platform',
@@ -41,7 +42,12 @@ export default function RootLayout({
           fontFamily: "'Inter', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif",
         }}
       >
-        <AppProvider>{children}</AppProvider>
+        <ClerkAuthProvider>
+          <AppProvider>
+            <ClerkUserSync />
+            {children}
+          </AppProvider>
+        </ClerkAuthProvider>
       </body>
     </html>
   );

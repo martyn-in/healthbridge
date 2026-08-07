@@ -268,6 +268,14 @@ export default function HealthBridgeDashboard() {
             </button>
 
             <Link
+              href="/login"
+              className="px-3.5 py-1.5 rounded-full text-xs font-bold text-slate-700 hover:text-blue-600 bg-white border border-slate-200 shadow-sm transition-all flex items-center gap-1.5"
+            >
+              <User className="h-3.5 w-3.5 text-blue-600" />
+              <span>Sign In</span>
+            </Link>
+
+            <Link
               href="/dashboard/settings"
               title="Edit Profile"
               className="w-9 h-9 rounded-full flex items-center justify-center font-extrabold text-white text-xs shadow-md transition-transform hover:scale-105"

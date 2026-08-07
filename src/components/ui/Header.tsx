@@ -255,13 +255,24 @@ export const Header: React.FC<{ onOpenHealthCard?: () => void }> = ({ onOpenHeal
                     </button>
                   );
                 })}
-                <div className="pt-2 mt-1 border-t border-slate-200/50">
+                <div className="pt-2 mt-1 border-t border-slate-200/50 space-y-1">
                   <a
                     href="/dashboard/settings"
                     onClick={() => setShowProfileMenu(false)}
-                    className="w-full text-center py-2 px-3 block rounded-xl text-xs font-bold text-[#0066FF] bg-[#0066FF]/10 hover:bg-[#0066FF]/20 transition-colors"
+                    className="w-full text-center py-1.5 px-3 block rounded-xl text-xs font-bold text-[#0066FF] bg-[#0066FF]/10 hover:bg-[#0066FF]/20 transition-colors"
                   >
                     Edit Profile Details
+                  </a>
+                  <a
+                    href="/login"
+                    onClick={() => {
+                      localStorage.removeItem('hb_user_authenticated');
+                      localStorage.removeItem('hb_auth_provider');
+                      setShowProfileMenu(false);
+                    }}
+                    className="w-full text-center py-1.5 px-3 block rounded-xl text-xs font-bold text-rose-600 bg-rose-50 hover:bg-rose-100 transition-colors"
+                  >
+                    Sign Out / Switch Account
                   </a>
                 </div>
               </div>

@@ -12,6 +12,7 @@ export interface FamilyMember {
   allergies: string[];
   conditions: string[];
   avatarUrl?: string;
+  email?: string;
   isPrimary?: boolean;
 }
 
