@@ -164,10 +164,10 @@ export default function AssistantPage() {
                 }`}
               >
                 <div
-                  className="flex h-8 w-8 items-center justify-center rounded-full shrink-0 shadow-sm"
+                  className="flex h-8 w-8 items-center justify-center rounded-full shrink-0 shadow-sm font-bold"
                   style={{
-                    background: msg.sender === 'user' ? '#F3F5F8' : 'linear-gradient(135deg, #0066FF 0%, #00C2FF 100%)',
-                    color: msg.sender === 'user' ? '#0D1B2A' : '#ffffff'
+                    background: msg.sender === 'user' ? 'var(--accent-lavender)' : 'linear-gradient(135deg, #6E56CF 0%, #7C5CFC 100%)',
+                    color: msg.sender === 'user' ? '#6E56CF' : '#ffffff'
                   }}
                 >
                   {msg.sender === 'user' ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4" />}
@@ -176,15 +176,9 @@ export default function AssistantPage() {
                 <div
                   className={`max-w-md sm:max-w-lg rounded-2xl p-4 text-sm space-y-2 shadow-sm ${
                     msg.sender === 'user'
-                      ? 'rounded-br-sm'
-                      : 'rounded-bl-sm'
+                      ? 'bg-[#6E56CF] text-white rounded-br-sm'
+                      : 'glass-subcard text-[var(--text-primary)] rounded-bl-sm'
                   }`}
-                  style={{
-                    background: msg.sender === 'user' ? 'linear-gradient(135deg, #0066FF 0%, #0052CC 100%)' : 'rgba(255, 255, 255, 0.65)',
-                    color: msg.sender === 'user' ? '#ffffff' : '#0D1B2A',
-                    backdropFilter: msg.sender === 'user' ? 'none' : 'blur(12px)',
-                    border: msg.sender === 'user' ? 'none' : '1px solid rgba(255, 255, 255, 0.95)'
-                  }}
                 >
                   <p className="leading-relaxed whitespace-pre-line">{msg.text}</p>
 

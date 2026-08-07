@@ -67,10 +67,10 @@ export const Header: React.FC<{ onOpenHealthCard?: () => void }> = ({ onOpenHeal
     <header
       className="sticky top-0 z-40 font-sans transition-colors duration-300"
       style={{
-        background: darkMode ? "rgba(24, 24, 29, 0.75)" : "rgba(255, 255, 255, 0.72)",
+        background: darkMode ? "rgba(18, 18, 24, 0.68)" : "rgba(246, 247, 254, 0.68)",
         backdropFilter: "blur(28px) saturate(180%)",
         WebkitBackdropFilter: "blur(28px) saturate(180%)",
-        borderBottom: darkMode ? "1px solid rgba(255, 255, 255, 0.12)" : "1px solid rgba(110, 86, 207, 0.14)",
+        borderBottom: darkMode ? "1px solid rgba(255, 255, 255, 0.10)" : "1px solid rgba(255, 255, 255, 0.60)",
       }}
     >
       {toastMessage && (
@@ -93,7 +93,7 @@ export const Header: React.FC<{ onOpenHealthCard?: () => void }> = ({ onOpenHeal
         </div>
 
         {/* Center: Centered Pill Navigation Tabs */}
-        <nav className="hidden md:flex items-center gap-1 p-1 rounded-full bg-white/80 dark:bg-[#23232A]/80 border border-[#6E56CF]/10 dark:border-white/10 shadow-sm backdrop-blur-md">
+        <nav className="hidden md:flex items-center gap-1 p-1 rounded-full glass-subcard shadow-sm">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
             return (
@@ -102,8 +102,8 @@ export const Header: React.FC<{ onOpenHealthCard?: () => void }> = ({ onOpenHeal
                 href={item.href}
                 className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold transition-all duration-200 ${
                   isActive
-                    ? "bg-white dark:bg-[#18181D] text-[#1E1B2E] dark:text-[#F6F6F8] shadow-sm scale-100 border border-[#6E56CF]/10 dark:border-white/10"
-                    : "text-[#78758A] dark:text-[#A0A0A8] hover:text-[#1E1B2E] dark:hover:text-[#F6F6F8] hover:bg-[#E8E3FF]/50 dark:hover:bg-white/5"
+                    ? "bg-[#6E56CF] dark:bg-[#8C73FF] text-white shadow-sm scale-100"
+                    : "text-[#6B677E] dark:text-[#A0A0A8] hover:text-[var(--text-primary)] hover:bg-[#E8E3FF]/40 dark:hover:bg-white/5"
                 }`}
               >
                 {item.icon}

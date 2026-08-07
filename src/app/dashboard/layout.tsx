@@ -33,9 +33,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <Header onOpenHealthCard={() => setIsHealthCardOpen(true)} />
 
             {/* Scrollable Content */}
-            <main className="flex-1 p-4 sm:p-6 max-w-[1600px] mx-auto w-full space-y-6">
-              {children}
+            <main className="flex-1 p-4 sm:p-6 max-w-7xl mx-auto w-full space-y-6">
               <DisclaimerBanner />
+              {children}
             </main>
           </div>
         </div>
