@@ -1,40 +1,52 @@
 import { NextResponse } from 'next/server';
-import { gemini, getGeminiModel, isGeminiConfigured } from '@/lib/ai/gemini';
+import { z } from 'zod';
+import { gemini, getGeminiModel } from '@/lib/ai/gemini';
 import { evaluateSafetyEscalation } from '@/lib/localSafetyRouter';
-import { EmergencyAssistResponseSchema } from '@/lib/validation';
 
-const EMERGENCY_SYSTEM_PROMPT = `You are HealthBridge Emergency Guidance Assistant.
+const DynamicEmergencyResponseSchema = z.object({
+  problem: z.string().default('Emergency condition requiring immediate evaluation'),
+  urgency: z.enum(['routine', 'urgent', 'emergency']).default('emergency'),
+  headline: z.string(),
+  immediateActions: z.array(z.string()).min(1),
+  avoid: z.array(z.string()).default([]),
+  warningSigns: z.array(z.string()).default([]),
+  seekEmergencyCare: z.boolean().default(true),
+});
 
-STRICT EMERGENCY RULES:
-1. Use ONLY the retrieved approved medical evidence (WHO / MoHFW corpus) for medical instructions.
-2. Do NOT invent treatments, medication doses, antidotes, diagnoses, procedures, or home remedies.
-3. If the retrieved material does not support an instruction, do NOT provide it.
-4. If evidence is insufficient or missing, state clearly that reliable guidance could not be retrieved.
-5. Never recommend delaying emergency transport or medical evaluation.
-6. Keep instructions brief, unambiguous, and immediately actionable.
+type DynamicEmergencyResponse = z.infer<typeof DynamicEmergencyResponseSchema>;
 
-You MUST respond strictly in valid JSON format adhering to this structure:
+const EMERGENCY_SYSTEM_PROMPT = `You are HealthBridge Emergency AI Assistance.
+
+Provide concise first-aid information for the user's stated emergency.
+Prioritize immediate safety and professional emergency care.
+
+RULES:
+1. Do NOT make definitive medical diagnoses.
+2. Do NOT prescribe medication doses or antidotes.
+3. Do NOT recommend dangerous home remedies.
+4. Do NOT recommend delaying emergency medical services.
+5. Provide clear, accurate first-aid guidance tailored specifically to the patient's query.
+
+You MUST respond strictly in valid JSON format matching this exact schema:
 {
-  "emergencyType": "snakebite | trauma | burn | poisoning | stroke | cardiac | general_emergency",
+  "problem": "Brief description of what this condition may represent",
   "urgency": "emergency",
-  "headline": "Short primary directive",
+  "headline": "Short, highly clear primary directive for this specific emergency",
   "immediateActions": ["Action step 1", "Action step 2", "Action step 3"],
   "avoid": ["Dangerous practice 1 to avoid", "Dangerous practice 2 to avoid"],
   "warningSigns": ["Critical warning sign 1", "Critical warning sign 2"],
-  "requiresEmergencyCare": true,
-  "sources": [
-    { "title": "WHO Guidelines for Snakebite Management", "url": "https://www.who.int" }
-  ]
+  "seekEmergencyCare": true
 }`;
 
 export async function POST(req: Request) {
   try {
     const body = await req.json().catch(() => null);
+
     if (!body || typeof body !== 'object') {
       return NextResponse.json(
         {
           success: false,
-          error: 'Invalid request body.',
+          error: 'Invalid JSON request payload.',
           guidance: null,
         },
         { status: 400 }
@@ -58,107 +70,110 @@ export async function POST(req: Request) {
       return NextResponse.json(
         {
           success: false,
-          error: 'Query length exceeds 1000 characters limit.',
+          error: 'Query exceeds maximum allowed limit of 1000 characters.',
           guidance: null,
         },
         { status: 400 }
       );
     }
 
-    // 1. Immediate Safety Router Evaluation (Instant Red Flags)
+    // 1. Instant Safety Router Check for Emergency Dialers Display
     const safetyEscalation = evaluateSafetyEscalation(query);
-
-    // 2. Check Gemini & File Search Store Configuration
-    const fileSearchStore = process.env.GEMINI_FILE_SEARCH_STORE?.trim();
-    const isAiAvailable = isGeminiConfigured();
-
-    if (!isAiAvailable || !fileSearchStore) {
-      return NextResponse.json({
-        success: false,
-        error: 'Emergency guidance is temporarily unavailable. Contact emergency medical services immediately.',
-        guidance: null,
-        safetyEscalation,
-        diagnostic: process.env.NODE_ENV === 'development' ? {
-          ragEnabled: false,
-          reason: !isAiAvailable ? 'GEMINI_API_KEY missing' : 'GEMINI_FILE_SEARCH_STORE missing',
-        } : undefined,
-      });
-    }
 
     const modelName = getGeminiModel();
 
-    // 3. Call Gemini with File Search RAG Tool & Grounded System Instruction
+    // 2. Request Timeout (12 seconds)
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 12000);
 
-    let geminiResult;
+    let geminiResult: any;
+
     try {
+      // Try calling Gemini with Google Search tool first
       geminiResult = await gemini.models.generateContent({
         model: modelName,
         contents: [
           {
             role: 'user',
-            parts: [{ text: `EMERGENCY QUERY FROM PATIENT: "${query}"` }],
+            parts: [{ text: `PATIENT EMERGENCY QUERY: "${query}"` }],
           },
         ],
         config: {
           systemInstruction: EMERGENCY_SYSTEM_PROMPT,
           responseMimeType: 'application/json',
-          temperature: 0.1,
+          temperature: 0.2,
           maxOutputTokens: 1000,
           abortSignal: controller.signal,
           tools: [
             {
-              fileSearch: {
-                fileSearchStoreNames: [fileSearchStore],
-              },
+              googleSearch: {},
             },
           ],
         },
       });
-    } catch (apiError: any) {
-      clearTimeout(timeoutId);
-      console.error('[HealthBridge Emergency RAG API Error]:', apiError?.message || apiError);
-      return NextResponse.json({
-        success: false,
-        error: 'Emergency guidance is temporarily unavailable. Contact emergency medical services immediately.',
-        guidance: null,
-        safetyEscalation,
-      });
+    } catch (toolError: any) {
+      // If Search tool is rate limited (429) or unavailable, fallback to standard Gemini generation
+      try {
+        geminiResult = await gemini.models.generateContent({
+          model: modelName,
+          contents: [
+            {
+              role: 'user',
+              parts: [{ text: `PATIENT EMERGENCY QUERY: "${query}"` }],
+            },
+          ],
+          config: {
+            systemInstruction: EMERGENCY_SYSTEM_PROMPT,
+            responseMimeType: 'application/json',
+            temperature: 0.2,
+            maxOutputTokens: 1000,
+            abortSignal: controller.signal,
+          },
+        });
+      } catch (apiErr: any) {
+        clearTimeout(timeoutId);
+        const errMsg = apiErr?.message || 'Gemini API Error';
+        console.error(`[HealthBridge Emergency AI API Failure] provider: Gemini, model: ${modelName}, error: ${errMsg}`);
+
+        return NextResponse.json(
+          {
+            success: false,
+            error: 'AI_ASSISTANCE_UNAVAILABLE',
+            message: 'AI emergency assistance is temporarily unavailable. Contact emergency medical services if needed.',
+            guidance: null,
+            safetyEscalation,
+          },
+          { status: 500 }
+        );
+      }
     }
 
     clearTimeout(timeoutId);
 
     const rawResponseText = geminiResult.text || '';
-    
-    // Extract Grounding / Source Metadata from Gemini Response
+
+    // 3. Extract Real Grounding / Citation Metadata returned by Gemini
     const candidate = geminiResult.candidates?.[0];
     const groundingMetadata = (candidate as any)?.groundingMetadata;
     const groundingChunks = groundingMetadata?.groundingChunks || [];
-    
-    const retrievedSources: { title: string; url?: string }[] = [];
+
+    const realSources: { title: string; url?: string }[] = [];
+
     if (Array.isArray(groundingChunks) && groundingChunks.length > 0) {
       for (const chunk of groundingChunks) {
-        const title = chunk?.web?.title || chunk?.document?.title || chunk?.document?.displayName || 'Approved Clinical Emergency Document';
-        const url = chunk?.web?.uri || chunk?.document?.uri || 'https://www.who.int';
-        if (title && !retrievedSources.some((s) => s.title === title)) {
-          retrievedSources.push({ title, url });
+        const title = chunk?.web?.title || chunk?.document?.title || '';
+        const url = chunk?.web?.uri || chunk?.document?.uri || '';
+        if (title && !realSources.some((s) => s.title === title)) {
+          realSources.push({ title, url });
         }
       }
     }
 
-    if (retrievedSources.length === 0) {
-      retrievedSources.push({
-        title: 'WHO & MoHFW Emergency Care Protocols',
-        url: 'https://www.who.int/emergencies',
-      });
-    }
-
+    // Parse Dynamic JSON Response
     let parsedJson: any = null;
     try {
       parsedJson = JSON.parse(rawResponseText);
     } catch {
-      // Fallback if model returned markdown code block
       const jsonMatch = rawResponseText.match(/```json\s*([\s\S]*?)\s*```/);
       if (jsonMatch && jsonMatch[1]) {
         try {
@@ -170,50 +185,53 @@ export async function POST(req: Request) {
     }
 
     if (!parsedJson || typeof parsedJson !== 'object') {
-      return NextResponse.json({
-        success: false,
-        error: 'Reliable first-aid guidance could not be retrieved. Contact emergency medical services immediately.',
-        guidance: null,
-        safetyEscalation,
-      });
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'AI_ASSISTANCE_UNAVAILABLE',
+          message: 'AI emergency assistance is temporarily unavailable. Contact emergency medical services if needed.',
+          guidance: null,
+          safetyEscalation,
+        },
+        { status: 500 }
+      );
     }
 
-    // Merge real retrieved sources into guidance if missing
-    if (!parsedJson.sources || !Array.isArray(parsedJson.sources) || parsedJson.sources.length === 0) {
-      parsedJson.sources = retrievedSources;
+    // 4. Validate output with Zod
+    const validation = DynamicEmergencyResponseSchema.safeParse(parsedJson);
+
+    if (!validation.success) {
+      console.warn('[HealthBridge Emergency Zod Validation Warning]:', validation.error.format());
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'AI_ASSISTANCE_UNAVAILABLE',
+          message: 'AI emergency assistance is temporarily unavailable. Contact emergency medical services if needed.',
+          guidance: null,
+          safetyEscalation,
+        },
+        { status: 500 }
+      );
     }
 
-    // 4. Validate output with Zod schema
-    const validationResult = EmergencyAssistResponseSchema.safeParse(parsedJson);
-
-    if (!validationResult.success) {
-      console.warn('[HealthBridge Emergency Assist Zod Validation Warning]:', validationResult.error.format());
-      return NextResponse.json({
-        success: false,
-        error: 'Reliable first-aid guidance could not be retrieved. Contact emergency medical services immediately.',
-        guidance: null,
-        safetyEscalation,
-      });
-    }
-
-    const validatedGuidance = validationResult.data;
+    const guidanceData = validation.data;
 
     return NextResponse.json({
       success: true,
-      guidance: validatedGuidance,
+      guidance: {
+        ...guidanceData,
+        sources: realSources, // Genuine sources from Gemini grounding (or empty array if none)
+      },
       safetyEscalation,
-      diagnostic: process.env.NODE_ENV === 'development' ? {
-        ragEnabled: true,
-        fileSearchStore,
-        retrievedSourceCount: retrievedSources.length,
-      } : undefined,
+      staticTemplateUsed: false,
     });
   } catch (err: any) {
-    console.error('[HealthBridge Emergency Assist Route Crash]:', err);
+    console.error('[HealthBridge Emergency Assist Route Crash]:', err?.message || err);
     return NextResponse.json(
       {
         success: false,
-        error: 'Emergency guidance is temporarily unavailable. Contact emergency medical services immediately.',
+        error: 'AI_ASSISTANCE_UNAVAILABLE',
+        message: 'AI emergency assistance is temporarily unavailable. Contact emergency medical services if needed.',
         guidance: null,
       },
       { status: 500 }

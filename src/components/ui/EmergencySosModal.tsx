@@ -20,7 +20,16 @@ import {
 import { useApp } from '@/context/AppContext';
 import { t } from '@/lib/i18n';
 import { evaluateSafetyEscalation, SafetyClassification } from '@/lib/localSafetyRouter';
-import { EmergencyGuidanceCardData } from '@/lib/emergencyKnowledgeBase';
+
+export interface DynamicEmergencyGuidance {
+  problem?: string;
+  headline: string;
+  immediateActions: string[];
+  avoid?: string[];
+  warningSigns?: string[];
+  seekEmergencyCare?: boolean;
+  sources?: { title: string; url?: string }[];
+}
 
 export const EmergencySosModal: React.FC = () => {
   const {
@@ -40,7 +49,7 @@ export const EmergencySosModal: React.FC = () => {
   // Emergency Quick Assist state
   const [quickInput, setQuickInput] = useState<string>('');
   const [isLoadingGuidance, setIsLoadingGuidance] = useState<boolean>(false);
-  const [activeGuidance, setActiveGuidance] = useState<EmergencyGuidanceCardData | null>(null);
+  const [activeGuidance, setActiveGuidance] = useState<DynamicEmergencyGuidance | null>(null);
   const [safetyEscalation, setSafetyEscalation] = useState<SafetyClassification | null>(null);
   const [fallbackWarning, setFallbackWarning] = useState<string | null>(null);
 
@@ -73,7 +82,7 @@ export const EmergencySosModal: React.FC = () => {
 
   const primaryContact = emergencyContacts.find((c) => c.isPrimary) || emergencyContacts[0];
 
-  // Real Gemini RAG Emergency Assistance Call
+  // Real Gemini Grounded Emergency Assistance Call
   const handleQuickAssistSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const query = quickInput.trim();
@@ -87,7 +96,7 @@ export const EmergencySosModal: React.FC = () => {
       const localSafety = evaluateSafetyEscalation(query);
       setSafetyEscalation(localSafety);
 
-      // 2. Call server-side RAG Emergency Assist endpoint
+      // 2. Call server-side real Gemini Emergency Assist endpoint
       const res = await fetch('/api/emergency/assist', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -100,31 +109,28 @@ export const EmergencySosModal: React.FC = () => {
         setSafetyEscalation(data.safetyEscalation);
       }
 
-      if (data.success && data.guidance) {
+      if (res.ok && data.success && data.guidance) {
         setActiveGuidance({
-          emergencyType: (data.guidance.emergencyType?.toUpperCase() as any) || 'SNAKE_BITE',
-          severity: 'EMERGENCY',
+          problem: data.guidance.problem,
           headline: data.guidance.headline,
-          immediateActions: data.guidance.immediateActions,
-          doNotDo: data.guidance.avoid || [],
+          immediateActions: data.guidance.immediateActions || [],
+          avoid: data.guidance.avoid || [],
           warningSigns: data.guidance.warningSigns || [],
-          callEmergencyServices: data.guidance.requiresEmergencyCare !== false,
-          retrievalConfidence: 0.95,
-          sourceTitles: (data.guidance.sources || []).map((s: any) => s.title || 'Approved Medical Source'),
-          sourceUrls: (data.guidance.sources || []).map((s: any) => s.url || 'https://www.who.int'),
+          seekEmergencyCare: data.guidance.seekEmergencyCare !== false,
+          sources: data.guidance.sources || [],
         });
-        showToast('Verified emergency guidance retrieved.');
+        showToast('Gemini AI Emergency Guidance generated.');
       } else {
         setActiveGuidance(null);
         setFallbackWarning(
-          data.error || 'Reliable guidance could not be retrieved. Contact emergency medical services immediately.'
+          data.message || 'AI emergency assistance is temporarily unavailable. Contact emergency medical services if needed.'
         );
-        showToast('Contact emergency medical services immediately.');
+        showToast('Contact emergency medical services if needed.');
       }
     } catch (err) {
-      console.error('[HealthBridge Emergency Quick Assist Error]:', err);
+      console.error('[HealthBridge Emergency Quick Assist Client Error]:', err);
       setActiveGuidance(null);
-      setFallbackWarning('Emergency guidance is temporarily unavailable. Contact emergency medical services immediately.');
+      setFallbackWarning('AI emergency assistance is temporarily unavailable. Contact emergency medical services if needed.');
     } finally {
       setIsLoadingGuidance(false);
     }
@@ -198,7 +204,7 @@ export const EmergencySosModal: React.FC = () => {
                     <Zap className="h-4 w-4" /> Emergency Quick Assist
                   </span>
                   <span className="text-[10px] font-bold text-red-600 dark:text-red-300">
-                    WHO / MoHFW Grounded RAG
+                    Gemini AI Grounded Assist
                   </span>
                 </div>
 
@@ -211,7 +217,7 @@ export const EmergencySosModal: React.FC = () => {
                       type="text"
                       value={quickInput}
                       onChange={(e) => setQuickInput(e.target.value)}
-                      placeholder="e.g. snake bit my leg, severe chest pain"
+                      placeholder="e.g. legs broken, snake bit my hand"
                       disabled={isLoadingGuidance}
                       className="flex-1 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-red-500 shadow-sm disabled:opacity-50"
                     />
@@ -223,7 +229,7 @@ export const EmergencySosModal: React.FC = () => {
                       {isLoadingGuidance ? (
                         <>
                           <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                          <span>Searching RAG...</span>
+                          <span>Generating AI...</span>
                         </>
                       ) : (
                         <span>Get Guidance</span>
@@ -237,7 +243,7 @@ export const EmergencySosModal: React.FC = () => {
               {isLoadingGuidance && (
                 <div className="rounded-2xl bg-amber-50 dark:bg-amber-950/30 p-4 border border-amber-200 dark:border-amber-900/50 flex items-center gap-3 text-xs font-semibold text-amber-800 dark:text-amber-300 animate-pulse">
                   <Loader2 className="w-5 h-5 animate-spin text-amber-600" />
-                  <span>Retrieving verified emergency guidance from WHO & MoHFW corpus...</span>
+                  <span>Gemini AI is analyzing your stated emergency...</span>
                 </div>
               )}
 
@@ -254,7 +260,7 @@ export const EmergencySosModal: React.FC = () => {
                 </div>
               )}
 
-              {/* 2. Low Confidence / RAG Fallback Notice */}
+              {/* 2. Fallback Warning on API Failure */}
               {fallbackWarning && (
                 <div className="rounded-2xl bg-amber-50 dark:bg-amber-950/40 p-4 border border-amber-300 dark:border-amber-900/50 space-y-2 text-xs">
                   <div className="flex items-center gap-2 font-extrabold text-amber-800 dark:text-amber-300">
@@ -267,57 +273,61 @@ export const EmergencySosModal: React.FC = () => {
                 </div>
               )}
 
-              {/* 3. Dedicated Emergency Guidance Card (WHO / MoHFW Retrieval) */}
+              {/* 3. Real Dynamic Gemini Emergency Guidance Card */}
               {activeGuidance && (
                 <div className="rounded-2xl bg-white dark:bg-slate-800 p-4 sm:p-5 border-2 border-red-500 shadow-xl space-y-4 text-xs anim-fade-in">
                   {/* Title */}
                   <div className="border-b border-red-100 dark:border-slate-700 pb-3">
-                    <span className="text-[10px] font-black uppercase text-red-600 dark:text-red-400 tracking-wider block">
-                      Authoritative Guidance • {activeGuidance.emergencyType.replace('_', ' ')}
-                    </span>
+                    {activeGuidance.problem && (
+                      <span className="text-[10px] font-black uppercase text-red-600 dark:text-red-400 tracking-wider block">
+                        Assessment: {activeGuidance.problem}
+                      </span>
+                    )}
                     <h3 className="text-base font-extrabold text-[#0D1B2A] dark:text-white mt-1">
                       {activeGuidance.headline}
                     </h3>
                   </div>
 
-                  {/* Call Emergency Services Banner */}
-                  {activeGuidance.callEmergencyServices && (
+                  {/* Seek Emergency Care Banner */}
+                  {activeGuidance.seekEmergencyCare && (
                     <a
                       href="tel:112"
                       className="flex items-center justify-between p-3 rounded-xl bg-red-600 text-white font-bold hover:bg-red-700 transition-colors shadow-md text-xs"
                     >
                       <span className="flex items-center gap-2">
-                        <PhoneCall className="w-4 h-4 shrink-0" /> Call 112 / 108 Services Now
+                        <PhoneCall className="w-4 h-4 shrink-0" /> Call 112 / 108 Emergency Services Immediately
                       </span>
                       <ArrowRight className="w-4 h-4 shrink-0" />
                     </a>
                   )}
 
                   {/* Immediate Actions */}
-                  <div className="space-y-2">
-                    <span className="font-extrabold text-slate-900 dark:text-white block uppercase text-[11px] flex items-center gap-1.5">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" /> Immediate Actions (Do This Now)
-                    </span>
-                    <ul className="space-y-1.5 text-slate-800 dark:text-slate-200 font-semibold pl-1">
-                      {activeGuidance.immediateActions.map((step, idx) => (
-                        <li key={idx} className="flex items-start gap-2">
-                          <span className="w-4 h-4 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-extrabold text-[10px] flex items-center justify-center shrink-0 mt-0.5">
-                            {idx + 1}
-                          </span>
-                          <span>{step}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+                  {activeGuidance.immediateActions && activeGuidance.immediateActions.length > 0 && (
+                    <div className="space-y-2">
+                      <span className="font-extrabold text-slate-900 dark:text-white block uppercase text-[11px] flex items-center gap-1.5">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" /> Immediate Precautions (Do This Now)
+                      </span>
+                      <ul className="space-y-1.5 text-slate-800 dark:text-slate-200 font-semibold pl-1">
+                        {activeGuidance.immediateActions.map((step, idx) => (
+                          <li key={idx} className="flex items-start gap-2">
+                            <span className="w-4 h-4 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-extrabold text-[10px] flex items-center justify-center shrink-0 mt-0.5">
+                              {idx + 1}
+                            </span>
+                            <span>{step}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
 
-                  {/* Dangerous Practices to Avoid */}
-                  {activeGuidance.doNotDo && activeGuidance.doNotDo.length > 0 && (
+                  {/* What NOT to do */}
+                  {activeGuidance.avoid && activeGuidance.avoid.length > 0 && (
                     <div className="p-3 rounded-xl bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/50 space-y-1.5">
                       <span className="font-extrabold text-red-700 dark:text-red-400 uppercase text-[11px] flex items-center gap-1.5">
                         <Ban className="w-4 h-4 text-red-600 shrink-0" /> Do NOT (Dangerous Practices to Avoid)
                       </span>
                       <ul className="space-y-1 text-red-950 dark:text-red-200 font-semibold list-disc list-inside">
-                        {activeGuidance.doNotDo.map((item, idx) => (
+                        {activeGuidance.avoid.map((item, idx) => (
                           <li key={idx}>{item}</li>
                         ))}
                       </ul>
@@ -336,26 +346,29 @@ export const EmergencySosModal: React.FC = () => {
                     </div>
                   )}
 
-                  {/* Sources Citation */}
-                  <div className="pt-2 border-t border-slate-200 dark:border-slate-700 text-[10px] text-slate-500 font-medium space-y-1">
-                    <span className="font-bold text-slate-700 dark:text-slate-300 block flex items-center gap-1">
-                      <ShieldCheck className="w-3.5 h-3.5 text-teal-600" /> Guidance based on approved clinical sources:
-                    </span>
-                    {activeGuidance.sourceTitles.map((title, idx) => (
-                      <p key={idx} className="italic text-slate-600 dark:text-slate-400">
-                        • {title} {activeGuidance.sourceUrls[idx] && (
-                          <a
-                            href={activeGuidance.sourceUrls[idx]}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="underline text-teal-600 dark:text-teal-400 ml-1"
-                          >
-                            [Verify Source]
-                          </a>
-                        )}
-                      </p>
-                    ))}
-                  </div>
+                  {/* Real Sources Citation from Gemini Grounding */}
+                  {activeGuidance.sources && activeGuidance.sources.length > 0 && (
+                    <div className="pt-2 border-t border-slate-200 dark:border-slate-700 text-[10px] text-slate-500 font-medium space-y-1">
+                      <span className="font-bold text-slate-700 dark:text-slate-300 block flex items-center gap-1">
+                        <ShieldCheck className="w-3.5 h-3.5 text-teal-600" /> Grounded Search Sources:
+                      </span>
+                      {activeGuidance.sources.map((src, idx) => (
+                        <p key={idx} className="italic text-slate-600 dark:text-slate-400">
+                          • {src.title}{' '}
+                          {src.url && (
+                            <a
+                              href={src.url}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="underline text-teal-600 dark:text-teal-400 ml-1"
+                            >
+                              [Link]
+                            </a>
+                          )}
+                        </p>
+                      ))}
+                    </div>
+                  )}
                 </div>
               )}
 
