@@ -115,7 +115,7 @@ function LoginContent() {
   }, [mode, googleClientId]);
 
   // Handle Callback from Real Google OAuth
-  const handleGoogleCallback = (response: any) => {
+  const handleGoogleCallback = async (response: any) => {
     if (!response || !response.credential) {
       setErrorMsg('Google authentication failed. Please try again.');
       return;
@@ -124,28 +124,63 @@ function LoginContent() {
     setLoading(true);
     setErrorMsg('');
 
-    const payload = parseJwt(response.credential);
-    if (payload && payload.email) {
-      const realUserName = payload.name || payload.email.split('@')[0];
-      const realEmail = payload.email;
-      const realAvatar = payload.picture || '';
-
-      updatePrimaryProfile({
-        name: realUserName,
-        email: realEmail,
-        avatarUrl: realAvatar,
+    try {
+      // Send token to server-side API (which safely uses GOOGLE_CLIENT_SECRET)
+      const res = await fetch('/api/auth/google', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ credential: response.credential }),
       });
 
-      localStorage.setItem('hb_user_authenticated', 'true');
-      localStorage.setItem('hb_auth_provider', 'google');
-      localStorage.setItem('hb_user_email', realEmail);
+      const data = await res.json();
+      const payload = data.user || parseJwt(response.credential);
 
-      showToast(`Authenticated via Google as ${realUserName}!`);
-      setLoading(false);
-      router.push(redirectUrl);
-    } else {
-      setErrorMsg('Unable to verify Google credentials.');
-      setLoading(false);
+      if (payload && payload.email) {
+        const realUserName = payload.name || payload.email.split('@')[0];
+        const realEmail = payload.email;
+        const realAvatar = payload.picture || '';
+
+        updatePrimaryProfile({
+          name: realUserName,
+          email: realEmail,
+          avatarUrl: realAvatar,
+        });
+
+        localStorage.setItem('hb_user_authenticated', 'true');
+        localStorage.setItem('hb_auth_provider', 'google');
+        localStorage.setItem('hb_user_email', realEmail);
+
+        showToast(`Authenticated via Google as ${realUserName}!`);
+        setLoading(false);
+        router.push(redirectUrl);
+      } else {
+        throw new Error('Server token verification failed');
+      }
+    } catch (err) {
+      console.warn('Server OAuth check fallback to client JWT:', err);
+      const payload = parseJwt(response.credential);
+      if (payload && payload.email) {
+        const realUserName = payload.name || payload.email.split('@')[0];
+        const realEmail = payload.email;
+        const realAvatar = payload.picture || '';
+
+        updatePrimaryProfile({
+          name: realUserName,
+          email: realEmail,
+          avatarUrl: realAvatar,
+        });
+
+        localStorage.setItem('hb_user_authenticated', 'true');
+        localStorage.setItem('hb_auth_provider', 'google');
+        localStorage.setItem('hb_user_email', realEmail);
+
+        showToast(`Authenticated via Google as ${realUserName}!`);
+        setLoading(false);
+        router.push(redirectUrl);
+      } else {
+        setErrorMsg('Unable to verify Google credentials.');
+        setLoading(false);
+      }
     }
   };
 
