@@ -157,19 +157,21 @@ function LoginContent() {
     setLoading(true);
     setErrorMsg('');
 
+    const defaultName = activeProfile?.name || 'Patient User';
+    const defaultEmail = activeProfile?.email || 'patient@healthbridge.ai';
+
     if (window.google?.accounts?.id) {
       try {
         window.google.accounts.id.prompt((notification: any) => {
           if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-            // Fallback to verified Google session for Martin P
-            handleDirectGoogleLogin('Martin P', 'martinjohn3454@gmail.com');
+            handleDirectGoogleLogin(defaultName, defaultEmail);
           }
         });
       } catch (e) {
-        handleDirectGoogleLogin('Martin P', 'martinjohn3454@gmail.com');
+        handleDirectGoogleLogin(defaultName, defaultEmail);
       }
     } else {
-      handleDirectGoogleLogin('Martin P', 'martinjohn3454@gmail.com');
+      handleDirectGoogleLogin(defaultName, defaultEmail);
     }
   };
 
@@ -316,7 +318,7 @@ function LoginContent() {
                 d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
               />
             </svg>
-            <span>Continue with Google (Martin P)</span>
+            <span>Continue with Google</span>
           </button>
 
           {/* Render Google Identity SDK Button Container */}
