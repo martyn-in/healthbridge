@@ -14,6 +14,8 @@ import {
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
+export const dynamic = 'force-dynamic';
+
 export default async function AdminDashboard() {
   const session = await getSession();
   const adminSecret = process.env.CONVEX_ADMIN_SECRET || '';

@@ -6,6 +6,8 @@ import { redirect } from 'next/navigation';
 import { ShieldCheck, Mail, Building, MapPin, Hash, CheckCircle2, XCircle, Calendar } from 'lucide-react';
 import DoctorVerificationActions from './DoctorVerificationActions';
 
+export const dynamic = 'force-dynamic';
+
 export default async function DoctorVerificationQueue() {
   const session = await getSession();
   const adminSecret = process.env.CONVEX_ADMIN_SECRET || '';

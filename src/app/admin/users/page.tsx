@@ -7,6 +7,8 @@ import { ShieldAlert, User, ShieldCheck, Mail, Calendar, Clock, MoreVertical, XC
 import Link from 'next/link';
 import UserActions from './UserActions';
 
+export const dynamic = 'force-dynamic';
+
 export default async function AdminUsersPage() {
   const session = await getSession();
   const adminSecret = process.env.CONVEX_ADMIN_SECRET || '';
