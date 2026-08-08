@@ -7,12 +7,7 @@ import { User, Stethoscope } from 'lucide-react';
 
 export default function RootPage() {
   const handleLogoClick = () => {
-    const pin = window.prompt("Enter Administration PIN:");
-    if (pin === "2026") {
-      window.location.href = "/login/admin";
-    } else if (pin !== null) {
-      alert("Invalid PIN");
-    }
+    window.location.href = "/login/admin";
   };
 
   return (
