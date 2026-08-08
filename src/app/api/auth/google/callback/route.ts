@@ -44,6 +44,10 @@ export async function GET(req: Request) {
 
     // Clear state cookie
     cookieStore.set('hb_oauth_state', '', { maxAge: 0, path: '/' });
+    
+    // Read auth intent
+    const authIntent = cookieStore.get('hb_auth_intent')?.value || 'patient';
+    cookieStore.set('hb_auth_intent', '', { maxAge: 0, path: '/' });
 
     const clientId = getValidGoogleClientId();
     const clientSecret = getValidGoogleClientSecret();
@@ -96,15 +100,20 @@ export async function GET(req: Request) {
       email,
       name,
       avatarUrl,
-      role: 'patient', // Server-assigned safe default role
+      role: authIntent === 'doctor' ? 'doctor' : 'patient',
+      doctorVerified: authIntent === 'doctor' ? false : undefined, // Doctors default to unverified
       createdAt: new Date().toISOString(),
     };
 
     // 5. Set Secure HTTP-Only Session Cookie
     await setSessionCookie(sessionUser);
 
-    // 6. Redirect to Dashboard
-    return NextResponse.redirect(new URL('/dashboard', req.url));
+    // 6. Redirect to appropriate dashboard based on intent and verification
+    if (sessionUser.role === 'doctor') {
+      return NextResponse.redirect(new URL('/doctor/verification', req.url));
+    } else {
+      return NextResponse.redirect(new URL('/dashboard', req.url));
+    }
   } catch (err: any) {
     console.error('[Google OAuth Callback Exception]:', err?.message || err);
     return NextResponse.redirect(new URL('/login?error=auth_failed', req.url));

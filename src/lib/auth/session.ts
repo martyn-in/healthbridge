@@ -8,6 +8,7 @@ export interface SessionUser {
   name: string;
   avatarUrl: string;
   role: 'patient' | 'doctor' | 'admin';
+  doctorVerified?: boolean;
   createdAt: string;
 }
 
@@ -29,6 +30,7 @@ export async function createSessionToken(user: SessionUser): Promise<string> {
     name: user.name,
     avatarUrl: user.avatarUrl,
     role: user.role,
+    doctorVerified: user.doctorVerified,
   })
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
@@ -49,6 +51,7 @@ export async function verifySessionToken(token: string): Promise<SessionUser | n
       name: payload.name as string,
       avatarUrl: payload.avatarUrl as string,
       role: (payload.role as 'patient' | 'doctor' | 'admin') || 'patient',
+      doctorVerified: payload.doctorVerified as boolean | undefined,
       createdAt: (payload.createdAt as string) || new Date().toISOString(),
     };
   } catch (err) {

@@ -23,6 +23,9 @@ function getValidGoogleClientSecret(): string {
 }
 
 export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url);
+  const roleIntent = searchParams.get('role') === 'doctor' ? 'doctor' : 'patient';
+
   try {
     const clientId = getValidGoogleClientId();
     const clientSecret = getValidGoogleClientSecret();
@@ -43,6 +46,15 @@ export async function GET(req: Request) {
     // Store state in temporary HTTP-only cookie
     const cookieStore = await cookies();
     cookieStore.set('hb_oauth_state', state, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 10 * 60, // 10 minutes
+    });
+
+    // Store auth intent in temporary HTTP-only cookie
+    cookieStore.set('hb_auth_intent', roleIntent, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',

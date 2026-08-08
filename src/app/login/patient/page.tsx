@@ -10,8 +10,8 @@ function LoginContent() {
   const errorParam = searchParams.get('error');
 
   const handleGoogleLogin = () => {
-    // Navigate to server-side Google OAuth 2.0 Authorization Code flow
-    window.location.href = '/api/auth/google/start';
+    // Navigate to server-side Google OAuth 2.0 Authorization Code flow with patient intent
+    window.location.href = '/api/auth/google/start?role=patient';
   };
 
   return (
