@@ -1,20 +1,32 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { AppProvider } from '@/context/AppContext';
+import { PwaInstallBanner } from '@/components/ui/PwaInstallBanner';
+
+export const viewport: Viewport = {
+  themeColor: '#2F3273',
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: 'cover',
+};
 
 export const metadata: Metadata = {
   title: 'HealthBridge — Award-Winning Medical AI Platform',
   description:
-    'HealthBridge is a next-generation medical AI platform with real-time biometric telemetry, 3D anatomical visualization, and clinical-grade diagnostics. Monitor heart rate, SpO₂, blood pressure, and more.',
+    'HealthBridge is a next-generation medical AI platform with real-time biometric telemetry, 3D anatomical visualization, and clinical-grade diagnostics.',
   keywords: ['medical AI', 'health dashboard', 'biometric monitoring', 'clinical AI', 'heart health'],
   authors: [{ name: 'HealthBridge Medical AI' }],
-  openGraph: {
-    title: 'HealthBridge — Award-Winning Medical AI Platform',
-    description: 'Real-time biometric telemetry, 3D anatomical visualization, and clinical-grade diagnostics.',
-    type: 'website',
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'HealthBridge',
   },
   icons: {
     icon: '/favicon.ico',
+    apple: '/icons/apple-touch-icon.png',
   },
 };
 
@@ -26,6 +38,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
@@ -43,7 +59,25 @@ export default function RootLayout({
       >
         <AppProvider>
           {children}
+          <PwaInstallBanner />
         </AppProvider>
+
+        {/* Service Worker Registration Script */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if ('serviceWorker' in navigator && window.location.protocol === 'https:') {
+                window.addEventListener('load', function() {
+                  navigator.serviceWorker.register('/sw.js').then(function(reg) {
+                    console.log('HealthBridge Service Worker registered cleanly:', reg.scope);
+                  }).catch(function(err) {
+                    console.warn('Service Worker registration failed:', err);
+                  });
+                });
+              }
+            `,
+          }}
+        />
       </body>
     </html>
   );

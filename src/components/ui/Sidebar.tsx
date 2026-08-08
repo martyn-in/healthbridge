@@ -134,9 +134,9 @@ export const Sidebar: React.FC = () => {
         </div>
       </aside>
 
-      {/* ── MOBILE BOTTOM NAV ───────────────────────────────────── */}
+      {/* ── MOBILE BOTTOM NAV (SAFE AREA INSET COVERAGE) ───────────────────────────────────── */}
       <nav
-        className="lg:hidden fixed bottom-0 left-0 right-0 z-40 flex justify-around items-center px-2 py-2 bg-white/95 dark:bg-[#18181D]/95 backdrop-blur-xl border-t border-[#4D50A2]/10 dark:border-white/10 shadow-lg"
+        className="lg:hidden fixed bottom-0 left-0 right-0 z-40 flex justify-around items-center px-2 pt-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))] bg-white/95 dark:bg-[#18181D]/95 backdrop-blur-xl border-t border-[#4D50A2]/10 dark:border-white/10 shadow-lg"
       >
         {[
           { href: '/dashboard', icon: LayoutDashboard, label: 'Overview' },

@@ -357,6 +357,31 @@ export default function SettingsPage() {
               </button>
             </div>
 
+            {/* HealthBridge App PWA Status Card */}
+            <div className="neu-card rounded-2xl p-5 bg-white/40 space-y-2">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="flex items-start sm:items-center gap-3">
+                  <div className="p-2.5 bg-[#2F3273] text-[#F9DF77] rounded-xl font-bold text-xs shrink-0">
+                    <Download className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <p className="font-bold text-[#0D1B2A]">HealthBridge App (PWA)</p>
+                      <span className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">
+                        {typeof window !== 'undefined' &&
+                        (window.matchMedia('(display-mode: standalone)').matches || (navigator as any).standalone)
+                          ? 'Installed'
+                          : 'Available to install'}
+                      </span>
+                    </div>
+                    <p className="text-xs font-medium text-[#9BAABF] mt-1">
+                      Install HealthBridge on your home screen for instant biometric telemetry and offline Emergency SOS access.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* Data Portability */}
             <div className="flex items-center justify-between neu-card rounded-2xl p-4 bg-white/40">
               <div>
