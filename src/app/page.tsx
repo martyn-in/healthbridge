@@ -1,16 +1,27 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
 import { Logo } from '@/components/ui/Logo';
 import { User, Stethoscope } from 'lucide-react';
 
 export default function RootPage() {
+  const handleLogoClick = () => {
+    const pin = window.prompt("Enter Administration PIN:");
+    if (pin === "2026") {
+      window.location.href = "/login/admin";
+    } else if (pin !== null) {
+      alert("Invalid PIN");
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-[#F4F5FB] flex flex-col items-center justify-center p-6 font-sans">
+    <div className="min-h-screen bg-[#F4F5FB] flex flex-col items-center justify-center p-6 font-sans relative">
       <div className="max-w-2xl w-full text-center space-y-12">
         {/* Header */}
         <div className="space-y-6">
           <div className="w-16 h-16 rounded-2xl bg-[#2F3273] text-white flex items-center justify-center mx-auto shadow-xl">
-            <Logo size="lg" showText={false} />
+            <Logo size="lg" showText={false} onClick={handleLogoClick} />
           </div>
           <div className="space-y-3">
             <h1 className="text-4xl md:text-5xl font-extrabold text-[var(--text-primary)] tracking-tight">

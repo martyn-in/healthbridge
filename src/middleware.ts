@@ -10,13 +10,19 @@ const SESSION_SECRET_KEY = new TextEncoder().encode(
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Protect /dashboard and /doctor routes
-  if (pathname.startsWith('/dashboard') || pathname.startsWith('/doctor')) {
+  // Protect /dashboard, /doctor, and /admin routes
+  if (pathname.startsWith('/dashboard') || pathname.startsWith('/doctor') || pathname.startsWith('/admin')) {
     const token = request.cookies.get(SESSION_COOKIE_NAME)?.value;
 
     if (!token) {
       const isDoctorRoute = pathname.startsWith('/doctor');
-      const loginUrl = new URL(isDoctorRoute ? '/login/doctor' : '/login/patient', request.url);
+      const isAdminRoute = pathname.startsWith('/admin');
+      
+      let loginUrl;
+      if (isAdminRoute) loginUrl = new URL('/login/admin', request.url);
+      else if (isDoctorRoute) loginUrl = new URL('/login/doctor', request.url);
+      else loginUrl = new URL('/login/patient', request.url);
+      
       loginUrl.searchParams.set('redirect', pathname);
       return NextResponse.redirect(loginUrl);
     }
@@ -30,12 +36,24 @@ export async function middleware(request: NextRequest) {
 
       const role = payload.role as string;
       const doctorVerified = payload.doctorVerified as boolean | undefined;
+      const accountStatus = payload.accountStatus as string | undefined;
+
+      if (accountStatus === 'suspended') {
+        throw new Error('Account suspended');
+      }
+
+      // Role check for Admin routes
+      if (pathname.startsWith('/admin')) {
+        if (role !== 'admin') {
+          return NextResponse.redirect(new URL('/dashboard', request.url));
+        }
+      }
 
       // Role check for Doctor routes
       if (pathname.startsWith('/doctor')) {
         if (role !== 'doctor') {
-          // If a patient tries to access doctor portal, kick them back
-          return NextResponse.redirect(new URL('/dashboard', request.url));
+          // If a patient or admin tries to access doctor portal, kick them back
+          return NextResponse.redirect(new URL(role === 'admin' ? '/admin' : '/dashboard', request.url));
         }
 
         // If they are a doctor but NOT verified, restrict to /doctor/verification
@@ -51,9 +69,8 @@ export async function middleware(request: NextRequest) {
 
       // Role check for Patient routes
       if (pathname.startsWith('/dashboard')) {
-        if (role !== 'patient' && role !== 'admin') {
-          // If a doctor tries to access patient dashboard, redirect to their portal
-          return NextResponse.redirect(new URL('/doctor', request.url));
+        if (role !== 'patient') {
+          return NextResponse.redirect(new URL(role === 'admin' ? '/admin' : '/doctor', request.url));
         }
       }
 
@@ -73,5 +90,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*', '/doctor/:path*'],
+  matcher: ['/dashboard/:path*', '/doctor/:path*', '/admin/:path*'],
 };

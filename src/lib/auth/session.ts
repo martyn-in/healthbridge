@@ -2,13 +2,14 @@ import { cookies } from 'next/headers';
 import { SignJWT, jwtVerify } from 'jose';
 
 export interface SessionUser {
-  id: string;
+  id: string; // The Convex _id
   googleSub: string;
   email: string;
   name: string;
   avatarUrl: string;
   role: 'patient' | 'doctor' | 'admin';
   doctorVerified?: boolean;
+  accountStatus: 'active' | 'suspended';
   createdAt: string;
 }
 
@@ -31,6 +32,7 @@ export async function createSessionToken(user: SessionUser): Promise<string> {
     avatarUrl: user.avatarUrl,
     role: user.role,
     doctorVerified: user.doctorVerified,
+    accountStatus: user.accountStatus,
   })
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
@@ -52,6 +54,7 @@ export async function verifySessionToken(token: string): Promise<SessionUser | n
       avatarUrl: payload.avatarUrl as string,
       role: (payload.role as 'patient' | 'doctor' | 'admin') || 'patient',
       doctorVerified: payload.doctorVerified as boolean | undefined,
+      accountStatus: (payload.accountStatus as 'active' | 'suspended') || 'active',
       createdAt: (payload.createdAt as string) || new Date().toISOString(),
     };
   } catch (err) {

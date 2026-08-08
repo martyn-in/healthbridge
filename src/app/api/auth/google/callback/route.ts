@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { OAuth2Client } from 'google-auth-library';
 import { setSessionCookie, SessionUser } from '@/lib/auth/session';
+import { convex } from '@/lib/convex';
+import { api } from '@convex/_generated/api';
 
 function getValidGoogleClientId(): string {
   const envId = (process.env.GOOGLE_CLIENT_ID || process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '').replace(/["']/g, '').trim();
@@ -93,23 +95,39 @@ export async function GET(req: Request) {
     const name = payload.name || payload.email.split('@')[0] || 'Patient User';
     const avatarUrl = payload.picture || '';
 
-    // Create or retrieve verified HealthBridge user session object
-    const sessionUser: SessionUser = {
-      id: `hb_user_${googleSub.slice(-8)}`,
+    // 5. Sync with Convex Backend (Single Source of Truth)
+    const convexUser = await convex.mutation(api.users.syncUser, {
       googleSub,
       email,
       name,
       avatarUrl,
-      role: authIntent === 'doctor' ? 'doctor' : 'patient',
-      doctorVerified: authIntent === 'doctor' ? false : undefined, // Doctors default to unverified
+      roleIntent: authIntent,
+    });
+
+    if (convexUser.accountStatus === 'suspended') {
+      return NextResponse.redirect(new URL('/login?error=account_suspended', req.url));
+    }
+
+    // Create or retrieve verified HealthBridge user session object
+    const sessionUser: SessionUser = {
+      id: convexUser.id,
+      googleSub,
+      email,
+      name,
+      avatarUrl,
+      role: convexUser.role as "patient" | "doctor" | "admin",
+      doctorVerified: convexUser.doctorVerified,
+      accountStatus: convexUser.accountStatus as "active" | "suspended",
       createdAt: new Date().toISOString(),
     };
 
-    // 5. Set Secure HTTP-Only Session Cookie
+    // 6. Set Secure HTTP-Only Session Cookie
     await setSessionCookie(sessionUser);
 
-    // 6. Redirect to appropriate dashboard based on intent and verification
-    if (sessionUser.role === 'doctor') {
+    // 7. Redirect to appropriate dashboard based on Convex verified role
+    if (sessionUser.role === 'admin') {
+      return NextResponse.redirect(new URL('/admin', req.url));
+    } else if (sessionUser.role === 'doctor') {
       return NextResponse.redirect(new URL('/doctor/verification', req.url));
     } else {
       return NextResponse.redirect(new URL('/dashboard', req.url));

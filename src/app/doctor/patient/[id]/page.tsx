@@ -1,5 +1,7 @@
 import React from 'react';
-import { getPatientById } from '@/services/doctorMockData';
+import { convex } from '@/lib/convex';
+import { api } from '@convex/_generated/api';
+import { Id } from '@convex/_generated/dataModel';
 import { notFound } from 'next/navigation';
 import { 
   Activity, 
@@ -15,7 +17,10 @@ import Link from 'next/link';
 
 export default async function PatientClinicalView({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = await params;
-  const patient = getPatientById(resolvedParams.id);
+  
+  // Need to cast the string ID to a Convex Id
+  const patientId = resolvedParams.id as Id<"patients">;
+  const patient = await convex.query(api.patients.getById, { id: patientId });
 
   if (!patient) {
     notFound();
@@ -44,7 +49,7 @@ export default async function PatientClinicalView({ params }: { params: Promise<
                 <span className="w-1.5 h-1.5 rounded-full bg-slate-300" />
                 <span className="text-rose-500 font-bold">Blood: {patient.bloodGroup}</span>
                 <span className="w-1.5 h-1.5 rounded-full bg-slate-300" />
-                <span>ID: <span className="font-mono">{patient.id}</span></span>
+                <span>ID: <span className="font-mono">{patient._id}</span></span>
               </div>
             </div>
           </div>
@@ -133,7 +138,7 @@ export default async function PatientClinicalView({ params }: { params: Promise<
             {patient.medications.length > 0 ? (
               <div className="space-y-3">
                 {patient.medications.map(med => (
-                  <div key={med.id} className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                  <div key={med._id} className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100">
                     <div className="flex items-center gap-4">
                       <div className="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-500 flex items-center justify-center">
                         <Pill className="w-5 h-5" />
@@ -171,7 +176,7 @@ export default async function PatientClinicalView({ params }: { params: Promise<
             {patient.reports.length > 0 ? (
               <div className="space-y-3">
                 {patient.reports.map(rep => (
-                  <div key={rep.id} className="p-4 rounded-xl border border-slate-100 hover:border-indigo-200 hover:bg-indigo-50/50 transition-colors cursor-pointer group">
+                  <div key={rep._id} className="p-4 rounded-xl border border-slate-100 hover:border-indigo-200 hover:bg-indigo-50/50 transition-colors cursor-pointer group">
                     <div className="flex items-start gap-3">
                       <FileText className="w-5 h-5 text-indigo-400 shrink-0 mt-0.5" />
                       <div>

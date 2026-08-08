@@ -1,10 +1,11 @@
 import React from 'react';
-import { getDoctorAppointments } from '@/services/doctorMockData';
+import { convex } from '@/lib/convex';
+import { api } from '@convex/_generated/api';
 import { Calendar, Clock, Video, MapPin, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 
-export default function AppointmentsPage() {
-  const appointments = getDoctorAppointments();
+export default async function AppointmentsPage() {
+  const appointments = await convex.query(api.appointments.getByDate, {});
   
   // Simple grouping for prototype
   const todayStr = new Date().toISOString().split('T')[0];
@@ -35,7 +36,7 @@ export default function AppointmentsPage() {
             
             {todayAppointments.length > 0 ? (
               <div className="space-y-3">
-                {todayAppointments.map(apt => <AppointmentCard key={apt.id} apt={apt} active />)}
+                {todayAppointments.map(apt => <AppointmentCard key={apt._id} apt={apt} active />)}
               </div>
             ) : (
               <div className="p-8 text-center border-2 border-dashed border-slate-200 rounded-3xl">
@@ -52,7 +53,7 @@ export default function AppointmentsPage() {
             
             {upcomingAppointments.length > 0 ? (
               <div className="space-y-3">
-                {upcomingAppointments.map(apt => <AppointmentCard key={apt.id} apt={apt} />)}
+                {upcomingAppointments.map(apt => <AppointmentCard key={apt._id} apt={apt} />)}
               </div>
             ) : (
               <div className="p-8 text-center border-2 border-dashed border-slate-200 rounded-3xl">

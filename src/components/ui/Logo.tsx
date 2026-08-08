@@ -4,15 +4,19 @@ interface LogoProps {
   className?: string;
   size?: 'sm' | 'md' | 'lg';
   showText?: boolean;
+  onClick?: () => void;
 }
 
-export const Logo: React.FC<LogoProps> = ({ className = '', size = 'md', showText = true }) => {
+export const Logo: React.FC<LogoProps> = ({ className = '', size = 'md', showText = true, onClick }) => {
   const iconBox = size === 'sm' ? 'w-8 h-8 rounded-xl' : size === 'md' ? 'w-10 h-10 rounded-2xl' : 'w-13 h-13 rounded-2xl';
   const iconSize = size === 'sm' ? 18 : size === 'md' ? 24 : 30;
   const textSize = size === 'sm' ? 'text-base' : size === 'md' ? 'text-lg' : 'text-2xl';
 
   return (
-    <div className={`flex items-center gap-3 ${className}`}>
+    <div 
+      className={`flex items-center gap-3 ${className} ${onClick ? 'cursor-pointer' : ''}`}
+      onClick={onClick}
+    >
       {/* Icon container with hands securing heart image / vector fallback */}
       <div className={`flex items-center justify-center bg-[#4D50A2] text-white shadow-sm overflow-hidden p-1 shrink-0 ${iconBox}`}>
         <svg

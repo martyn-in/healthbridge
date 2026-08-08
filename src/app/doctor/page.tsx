@@ -1,6 +1,7 @@
 import React from 'react';
 import { getSession } from '@/lib/auth/session';
-import { getDoctorAppointments, getAuthorizedPatients } from '@/services/doctorMockData';
+import { convex } from '@/lib/convex';
+import { api } from '@convex/_generated/api';
 import { Calendar, Users, QrCode, FileText, AlertCircle, ChevronRight, Clock, UserCircle } from 'lucide-react';
 import Link from 'next/link';
 
@@ -8,11 +9,17 @@ export default async function DoctorDashboard() {
   const session = await getSession();
   const doctorName = session?.name || 'Doctor';
 
-  // Fetch data
+  // Fetch data from Convex
   const todayStr = new Date().toISOString().split('T')[0];
-  const appointments = getDoctorAppointments(todayStr);
-  const patientQueue = getAuthorizedPatients().slice(0, 3); // Just show top 3 as recent/queue
-  const recentPatients = getAuthorizedPatients().slice(0, 2);
+  
+  // Use Promise.all for parallel fetching
+  const [appointments, allPatients] = await Promise.all([
+    convex.query(api.appointments.getByDate, { date: todayStr }),
+    convex.query(api.patients.getAll)
+  ]);
+
+  const patientQueue = allPatients.slice(0, 3); // Just show top 3 as recent/queue
+  const recentPatients = allPatients.slice(0, 2);
 
   return (
     <div className="space-y-8 animate-fade-in pb-12">
@@ -43,7 +50,7 @@ export default async function DoctorDashboard() {
             {appointments.length > 0 ? (
               <div className="space-y-3">
                 {appointments.map(apt => (
-                  <div key={apt.id} className="flex items-center justify-between p-4 rounded-2xl bg-white border border-slate-200 shadow-sm hover:border-slate-300 transition-colors">
+                  <div key={apt._id} className="flex items-center justify-between p-4 rounded-2xl bg-white border border-slate-200 shadow-sm hover:border-slate-300 transition-colors">
                     <div className="flex items-center gap-4">
                       <div className="w-12 h-12 rounded-xl bg-slate-50 flex flex-col items-center justify-center border border-slate-100">
                         <span className="text-[10px] font-bold text-slate-400 uppercase">{apt.time.split(' ')[1]}</span>
@@ -73,7 +80,7 @@ export default async function DoctorDashboard() {
              {patientQueue.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {patientQueue.map(p => (
-                   <Link key={p.id} href={`/doctor/patient/${p.id}`} className="flex items-center gap-3 p-4 rounded-2xl bg-white border border-slate-200 shadow-sm hover:border-[#4D50A2]/30 transition-colors group">
+                   <Link key={p._id} href={`/doctor/patient/${p._id}`} className="flex items-center gap-3 p-4 rounded-2xl bg-white border border-slate-200 shadow-sm hover:border-[#4D50A2]/30 transition-colors group">
                      <div className="w-10 h-10 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center font-bold text-sm shrink-0">
                        {p.name.split(' ').map(n => n[0]).join('')}
                      </div>
@@ -101,7 +108,7 @@ export default async function DoctorDashboard() {
             {recentPatients.length > 0 ? (
               <div className="space-y-3">
                  {recentPatients.map(p => (
-                   <Link key={p.id} href={`/doctor/patient/${p.id}`} className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 transition-colors">
+                   <Link key={p._id} href={`/doctor/patient/${p._id}`} className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 transition-colors">
                      <div className="w-8 h-8 rounded-full bg-indigo-50 text-[#4D50A2] flex items-center justify-center font-bold text-xs shrink-0">
                        {p.name.split(' ').map(n => n[0]).join('')}
                      </div>

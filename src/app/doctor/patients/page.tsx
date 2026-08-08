@@ -1,10 +1,11 @@
 import React from 'react';
-import { getAuthorizedPatients } from '@/services/doctorMockData';
+import { convex } from '@/lib/convex';
+import { api } from '@convex/_generated/api';
 import Link from 'next/link';
 import { Search, ChevronRight, Activity, CalendarClock, Users } from 'lucide-react';
 
-export default function PatientsDirectory() {
-  const patients = getAuthorizedPatients();
+export default async function PatientsDirectory() {
+  const patients = await convex.query(api.patients.getAll);
 
   return (
     <div className="space-y-8 animate-fade-in pb-12 max-w-5xl mx-auto">
@@ -30,7 +31,7 @@ export default function PatientsDirectory() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {patients.map(patient => (
-          <Link key={patient.id} href={`/doctor/patient/${patient.id}`} className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm hover:border-[#4D50A2]/40 hover:shadow-md transition-all group flex flex-col justify-between h-full">
+          <Link key={patient._id} href={`/doctor/patient/${patient._id}`} className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm hover:border-[#4D50A2]/40 hover:shadow-md transition-all group flex flex-col justify-between h-full">
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-center gap-4">
                 <div className="w-14 h-14 rounded-2xl bg-indigo-50 text-[#4D50A2] flex flex-col items-center justify-center border border-indigo-100/50">
