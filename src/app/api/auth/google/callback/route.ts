@@ -3,6 +3,14 @@ import { cookies } from 'next/headers';
 import { OAuth2Client } from 'google-auth-library';
 import { setSessionCookie, SessionUser } from '@/lib/auth/session';
 
+function getValidGoogleClientId(): string {
+  const envId = (process.env.GOOGLE_CLIENT_ID || process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '').replace(/["']/g, '').trim();
+  if (envId && envId.endsWith('.apps.googleusercontent.com')) {
+    return envId;
+  }
+  return '213155484261-pp5npa2jurhqds55lk0oevh8ppbj47f0.apps.googleusercontent.com';
+}
+
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const code = searchParams.get('code');
@@ -27,12 +35,7 @@ export async function GET(req: Request) {
     // Clear state cookie
     cookieStore.set('hb_oauth_state', '', { maxAge: 0, path: '/' });
 
-    const rawClientId =
-      process.env.GOOGLE_CLIENT_ID ||
-      process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ||
-      '213155484261-pp5npa2jurhqds55lk0oevh8ppbj47f0.apps.googleusercontent.com';
-    const clientId = rawClientId.replace(/["']/g, '').trim();
-
+    const clientId = getValidGoogleClientId();
     const rawClientSecret = process.env.GOOGLE_CLIENT_SECRET || '';
     const clientSecret = rawClientSecret.replace(/["']/g, '').trim();
 
