@@ -21,11 +21,11 @@ export default async function AdminUsersPage() {
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-        <div className="overflow-x-auto">
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm">
+        <div className="w-full">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-slate-50 border-b border-slate-200">
+              <tr className="bg-slate-50 border-b border-slate-200 [&>th:first-child]:rounded-tl-2xl [&>th:last-child]:rounded-tr-2xl">
                 <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500">User</th>
                 <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500">Role</th>
                 <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500">Status</th>
@@ -33,7 +33,7 @@ export default async function AdminUsersPage() {
                 <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-slate-100 [&>tr:last-child>td:first-child]:rounded-bl-2xl [&>tr:last-child>td:last-child]:rounded-br-2xl">
               {users.map((user) => (
                 <tr key={user._id} className="hover:bg-slate-50/50 transition-colors">
                   <td className="px-6 py-4">
