@@ -79,15 +79,15 @@ function MultiSeriesProgressChart() {
           <circle cx={points3[points3.length - 1].x} cy={points3[points3.length - 1].y} r="5" fill="#DED8FF" />
         </svg>
 
-        <div className="absolute right-0 top-6 flex flex-col gap-3 pointer-events-none">
-          <div className="glass-pill text-[#6E56CF] dark:text-[#8C73FF] text-[10px] font-extrabold px-3 py-1 rounded-full shadow-sm">
-            Mood Balance
+        <div className="absolute right-0 top-2 sm:top-6 flex flex-row sm:flex-col gap-1.5 sm:gap-3 pointer-events-none">
+          <div className="glass-pill text-[#6E56CF] dark:text-[#8C73FF] text-[9px] sm:text-[10px] font-extrabold px-2 sm:px-3 py-0.5 sm:py-1 rounded-full shadow-sm">
+            Mood
           </div>
-          <div className="glass-pill text-[#6E56CF] dark:text-[#8C73FF] text-[10px] font-extrabold px-3 py-1 rounded-full shadow-sm">
-            Stress Level
+          <div className="glass-pill text-[#6E56CF] dark:text-[#8C73FF] text-[9px] sm:text-[10px] font-extrabold px-2 sm:px-3 py-0.5 sm:py-1 rounded-full shadow-sm">
+            Stress
           </div>
-          <div className="glass-pill text-[#6E56CF] dark:text-[#8C73FF] text-[10px] font-extrabold px-3 py-1 rounded-full shadow-sm">
-            Sleep Quality
+          <div className="glass-pill text-[#6E56CF] dark:text-[#8C73FF] text-[9px] sm:text-[10px] font-extrabold px-2 sm:px-3 py-0.5 sm:py-1 rounded-full shadow-sm">
+            Sleep
           </div>
         </div>
 

@@ -27,7 +27,7 @@ export const DigitalHealthCardModal: React.FC<{ isOpen: boolean; onClose: () => 
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="w-full max-w-md overflow-hidden rounded-2xl bg-white dark:bg-slate-900 shadow-2xl border border-slate-200 dark:border-slate-800">
+      <div className="w-full max-w-md overflow-hidden rounded-2xl bg-white dark:bg-slate-900 shadow-2xl border border-slate-200 dark:border-slate-800 max-h-[90vh] flex flex-col">
         {/* Header */}
         <div className="bg-gradient-to-r from-navy-900 via-navy-700 to-teal-700 p-5 text-white flex items-center justify-between">
           <Logo size="sm" />
@@ -39,7 +39,7 @@ export const DigitalHealthCardModal: React.FC<{ isOpen: boolean; onClose: () => 
           </button>
         </div>
 
-        <div className="p-6 space-y-6">
+        <div className="p-6 space-y-6 overflow-y-auto flex-1">
           {/* Card Preview */}
           <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-slate-900 to-navy-900 p-5 text-white shadow-lg space-y-4 border border-teal-500/30">
             <div className="flex items-start justify-between">

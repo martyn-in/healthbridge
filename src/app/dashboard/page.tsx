@@ -180,7 +180,19 @@ export default function DashboardPage() {
                 </p>
               </div>
 
-              {/* Right Side Futuristic Vital Telemetry Matrix (Clean High-Tech Visualization) */}
+              {/* Mobile Telemetry Badges (<sm screens) */}
+              <div className="flex sm:hidden items-center gap-2 pt-3 z-20">
+                <div className="px-3 py-1.5 rounded-xl glass-subcard border border-white/10 flex items-center gap-2 text-xs font-mono font-bold text-emerald-400">
+                  <Zap className="h-3.5 w-3.5 text-emerald-400 animate-pulse" />
+                  <span>78 BPM</span>
+                </div>
+                <div className="px-3 py-1.5 rounded-xl glass-subcard border border-white/10 flex items-center gap-2 text-xs font-mono font-bold text-cyan-400">
+                  <ShieldCheck className="h-3.5 w-3.5 text-cyan-400" />
+                  <span>98% SpO2</span>
+                </div>
+              </div>
+
+              {/* Right Side Futuristic Vital Telemetry Matrix (Desktop Visualization) */}
               <div className="absolute right-6 top-6 sm:top-8 z-10 hidden sm:flex flex-col gap-2 pointer-events-none">
                 <div className="p-3.5 rounded-xl glass-subcard border border-white/10 space-y-1 backdrop-blur-xl">
                   <div className="flex items-center gap-2 text-[10px] font-mono text-[var(--text-muted)] uppercase tracking-wider">

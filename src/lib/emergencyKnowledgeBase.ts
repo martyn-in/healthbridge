@@ -12,6 +12,9 @@ export interface MedicalKnowledgeChunk {
   documentVersion: string;
   sourceUrl: string;
   content: string;
+  immediateActions?: string[];
+  doNotDo?: string[];
+  warningSigns?: string[];
 }
 
 export interface EmergencyGuidanceCardData {

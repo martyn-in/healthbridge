@@ -53,7 +53,7 @@ function LoginContent() {
           </h1>
 
           <p className="text-sm font-semibold text-white/80 leading-relaxed">
-            Access your secure patient workspace, track real-time vital telemetry, review diagnostic reports, and consult with OpenAI-powered clinical guidance.
+            Access your secure patient workspace, track real-time vital telemetry, review diagnostic reports, and consult with Google Gemini AI clinical guidance.
           </p>
         </div>
 

@@ -2,6 +2,7 @@ const CACHE_NAME = 'healthbridge-v1.0.0';
 const STATIC_ASSETS = [
   '/',
   '/manifest.json',
+  '/data/emergency-corpus.json',
   '/icons/icon-192x192.png',
   '/icons/icon-512x512.png',
   '/icons/maskable-512x512.png',

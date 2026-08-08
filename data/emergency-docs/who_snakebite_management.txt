@@ -1,0 +1,28 @@
+WORLD HEALTH ORGANIZATION (WHO) - GUIDELINES FOR THE CLINICAL MANAGEMENT OF SNAKEBITES
+
+DOCUMENT SUMMARY:
+Authoritative WHO emergency protocol for venomous snakebite first-aid and pre-hospital emergency management.
+
+1. IMMEDIATE FIRST-AID STEPS FOR SNAKEBITE:
+- Immediate Actions:
+  1. Keep the victim calm and reassure them. Anxiety speeds up heart rate and accelerates venom systemic absorption.
+  2. Immediately immobilize the affected limb using a splint or sling, maintaining the bitten limb below or at heart level. Restrict all physical movement of the victim completely.
+  3. Remove rings, bangles, watches, tight clothing, or shoes from the bitten limb immediately before localized swelling develops.
+  4. Transport the victim immediately and safely to the nearest health facility equipped with anti-snake venom (ASV). Call 112 / 108 emergency transport immediately.
+  5. Try to note the snake's color, size, and head shape from a safe distance if possible, but NEVER attempt to catch or kill the snake.
+
+2. DANGEROUS PRACTICES TO AVOID (STRICT WHO CONTRAINDICATIONS):
+- What to Avoid (STRICTLY PROHIBITED):
+  1. Do NOT apply a tight tourniquet, arterial band, or rope above the bite site. This causes severe localized tissue ischemia, gangrene, and amputation.
+  2. Do NOT cut, incise, or slash the bite wound.
+  3. Do NOT suck the wound (by mouth or mechanical suction device).
+  4. Do NOT apply ice packs, cold compresses, chemical pastes, herbs, cow dung, or electrical shocks to the bite area.
+  5. Do NOT give the victim alcohol, sedatives, aspirin, or oral pain medication.
+
+3. WARNING SIGNS & SYSTEMIC ENVENOMATION SYMPTOMS:
+- Local Signs: Rapid swelling spreading up the limb, severe localized pain, blistering, bruising, active bleeding from puncture marks.
+- Systemic Neurotoxic Signs (Cobra / Krait): Ptosis (drooping eyelids), difficulty swallowing, slurred speech, progressive respiratory muscle paralysis, muscle weakness.
+- Systemic Hemotoxic Signs (Viper): Uncontrolled bleeding from gums or previous wounds, vomiting blood, dark urine (hemoglobinuria), sudden drop in blood pressure, shock.
+
+4. CRITICAL CARE NOTE:
+Immediate administration of polyvalent Anti-Snake Venom (ASV) at a hospital emergency room is the only definitive treatment for systemic snake envenomation. Pre-hospital first-aid must focus exclusively on immobilization and emergency transport.
