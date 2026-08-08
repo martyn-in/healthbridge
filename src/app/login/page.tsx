@@ -12,8 +12,7 @@ import {
   ArrowRight,
   CheckCircle2,
   AlertCircle,
-  Settings,
-  Key,
+  Activity,
 } from 'lucide-react';
 import { Logo } from '@/components/ui/Logo';
 import { useApp } from '@/context/AppContext';
@@ -222,56 +221,101 @@ function LoginContent() {
   };
 
   return (
-    <div className="min-h-screen relative flex flex-col justify-between font-sans overflow-hidden bg-[#F3F5F8] text-[#0D1B2A] selection:bg-[#6E56CF] selection:text-white">
-      {/* Multi-Layer Animated Pastel Mesh Gradient Background */}
-      <div className="mesh-gradient-container">
-        <div className="mesh-blob mesh-blob-pink" />
-        <div className="mesh-blob mesh-blob-blue" />
-        <div className="mesh-blob mesh-blob-lavender" />
-        <div className="mesh-blob mesh-blob-cyan" />
+    <div className="min-h-screen w-full flex flex-col md:flex-row font-sans overflow-hidden bg-[#F8FAFC] text-[var(--text-primary)]">
+      {/* LEFT COLUMN: Premium Medical Brand Hero & Ambient Visuals (50% Desktop) */}
+      <div className="w-full md:w-1/2 bg-[#2F3273] text-white p-8 lg:p-14 flex flex-col justify-between relative overflow-hidden shrink-0">
+        {/* Ambient WebGL Background Mesh Gradient */}
+        <div className="absolute inset-0 pointer-events-none opacity-40">
+          <div className="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-[#4D50A2] blur-[100px]" />
+          <div className="absolute top-1/2 -right-32 w-96 h-96 rounded-full bg-[#F9DF77] opacity-20 blur-[120px]" />
+          <div className="absolute -bottom-32 left-1/3 w-96 h-96 rounded-full bg-[#4D50A2] opacity-30 blur-[100px]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white/10 via-transparent to-transparent opacity-60" />
+        </div>
+
+        {/* Top Brand Header */}
+        <div className="relative z-10 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20 shadow-lg">
+              <Logo size="md" showText={false} />
+            </div>
+            <span className="text-xl font-black tracking-tight text-white">HealthBridge</span>
+          </div>
+
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-[#F9DF77] text-[#2F3273] text-[11px] font-black uppercase tracking-widest shadow-md">
+            <ShieldCheck className="w-3.5 h-3.5" />
+            <span>Clinical AI</span>
+          </div>
+        </div>
+
+        {/* Hero Middle Content */}
+        <div className="relative z-10 my-12 space-y-6 max-w-lg">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/10 border border-white/20 text-xs font-extrabold text-[#F9DF77] backdrop-blur-md">
+            <Activity className="w-4 h-4 text-[#F9DF77] animate-pulse" />
+            <span>Next-Generation Healthcare Intelligence</span>
+          </div>
+
+          <h1 className="text-3xl lg:text-5xl font-black text-white tracking-tight leading-tight">
+            Precision Telemetry & AI Diagnostics.
+          </h1>
+
+          <p className="text-sm font-semibold text-white/80 leading-relaxed">
+            Access your secure patient workspace, track real-time vital telemetry, review diagnostic reports, and consult with OpenAI-powered clinical guidance.
+          </p>
+
+          {/* Feature Badges Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-4">
+            <div className="p-3.5 rounded-xl bg-white/10 border border-white/15 backdrop-blur-md flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-[#4D50A2] text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-sm">
+                <Lock className="w-4 h-4" />
+              </div>
+              <div>
+                <div className="text-xs font-black text-white">256-Bit SSL</div>
+                <div className="text-[10px] font-medium text-white/70">Encrypted Health Vault</div>
+              </div>
+            </div>
+
+            <div className="p-3.5 rounded-xl bg-white/10 border border-white/15 backdrop-blur-md flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-[#F9DF77] text-[#2F3273] flex items-center justify-center font-bold text-xs shrink-0 shadow-sm">
+                <CheckCircle2 className="w-4 h-4" />
+              </div>
+              <div>
+                <div className="text-xs font-black text-white">Verified Security</div>
+                <div className="text-[10px] font-medium text-white/70">Google OAuth 2.0</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Hero Footer */}
+        <div className="relative z-10 pt-6 border-t border-white/15 flex items-center justify-between text-xs font-semibold text-white/60">
+          <span>© 2026 HealthBridge AI Inc.</span>
+          <span>Clinical Operating Platform</span>
+        </div>
       </div>
 
-      {/* Top Header Navigation */}
-      <header className="relative z-10 flex items-center justify-between px-6 py-5 max-w-7xl mx-auto w-full">
-        <Link href="/dashboard" className="flex items-center gap-3 group">
-          <Logo size="md" showText={true} />
-        </Link>
-        <Link
-          href="/dashboard"
-          className="text-xs font-bold text-[var(--text-primary)] transition-all px-4 py-2 rounded-xl glass-subcard shadow-sm border border-white/20 flex items-center gap-1.5 active:scale-95"
-        >
-          <span>Open Dashboard</span>
-          <ArrowRight className="w-3.5 h-3.5 text-[#4D50A2]" />
-        </Link>
-      </header>
-
-      {/* Main Authentication Container */}
-      <main className="relative z-10 max-w-md w-full mx-auto px-4 py-6 flex-1 flex flex-col justify-center">
-        <div
-          className="rounded-2xl p-8 relative overflow-hidden glass-panel border border-white/20 shadow-2xl transition-all"
-        >
+      {/* RIGHT COLUMN: Compact Authentication Portal (50% Desktop) */}
+      <div className="w-full md:w-1/2 p-6 sm:p-10 lg:p-16 flex flex-col justify-center items-center bg-[#F8FAFC]">
+        <div className="w-full max-w-md space-y-6">
           {/* Header Title */}
-          <div className="text-center mb-6">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-[11px] font-black uppercase tracking-widest bg-[#F9DF77] text-[#2F3273] shadow-sm mb-3">
-              <ShieldCheck className="w-3.5 h-3.5 text-[#2F3273]" />
-              <span>Real Google OAuth 2.0</span>
-            </div>
-            <h1 className="text-2xl font-black text-[var(--text-primary)] tracking-tight">
-              {mode === 'signin' ? 'Sign In to HealthBridge' : 'Create Patient Account'}
-            </h1>
-            <p className="text-xs text-[var(--text-secondary)] font-semibold mt-1">
-              Sign in with your Google Account or registered email.
+          <div className="space-y-2 text-left">
+            <h2 className="text-3xl font-black text-[var(--text-primary)] tracking-tight">
+              {mode === 'signin' ? 'Welcome Back' : 'Create Patient Account'}
+            </h2>
+            <p className="text-xs text-[var(--text-secondary)] font-semibold">
+              {mode === 'signin'
+                ? 'Sign in to access your medical records, dosages, and consultations.'
+                : 'Register a new profile to manage family healthcare & AI telemetry.'}
             </p>
           </div>
 
           {/* Mode Switcher Tabs */}
-          <div className="flex glass-subcard p-1 rounded-xl border border-white/20 mb-6">
+          <div className="flex bg-slate-200/70 p-1.5 rounded-xl border border-slate-300/60 shadow-inner">
             <button
               type="button"
               onClick={() => { setMode('signin'); setErrorMsg(''); }}
-              className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${
+              className={`flex-1 py-2.5 text-xs font-extrabold rounded-lg transition-all ${
                 mode === 'signin'
-                  ? 'bg-[#4D50A2] text-white shadow-sm font-extrabold'
+                  ? 'bg-[#4D50A2] text-white shadow-md'
                   : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
               }`}
             >
@@ -280,9 +324,9 @@ function LoginContent() {
             <button
               type="button"
               onClick={() => { setMode('signup'); setErrorMsg(''); }}
-              className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${
+              className={`flex-1 py-2.5 text-xs font-extrabold rounded-lg transition-all ${
                 mode === 'signup'
-                  ? 'bg-[#4D50A2] text-white shadow-sm font-extrabold'
+                  ? 'bg-[#4D50A2] text-white shadow-md'
                   : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
               }`}
             >
@@ -290,8 +334,8 @@ function LoginContent() {
             </button>
           </div>
 
-          {/* Single Unified Official Google Sign-In Control */}
-          <div className="w-full mb-4">
+          {/* Single Official Google Sign-In Control */}
+          <div className="w-full">
             <div ref={googleBtnRef} className="w-full flex justify-center" />
             
             {/* Fallback button if Google SDK iframe is initializing */}
@@ -300,7 +344,7 @@ function LoginContent() {
                 type="button"
                 onClick={handleGoogleLoginTrigger}
                 disabled={loading}
-                className="w-full py-3 px-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-[var(--text-primary)] text-xs font-bold transition-all flex items-center justify-center gap-3 active:scale-95 shadow-sm hover:shadow"
+                className="w-full py-3 px-4 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-[var(--text-primary)] text-xs font-bold transition-all flex items-center justify-center gap-3 active:scale-95 shadow-sm hover:shadow"
               >
                 <svg className="w-4 h-4" viewBox="0 0 24 24">
                   <path
@@ -325,17 +369,17 @@ function LoginContent() {
             )}
           </div>
 
-          <div className="relative flex py-2 items-center mb-4">
-            <div className="flex-grow border-t border-white/20" />
+          <div className="relative flex py-2 items-center">
+            <div className="flex-grow border-t border-slate-300/80" />
             <span className="flex-shrink mx-3 text-[10px] uppercase tracking-widest font-black text-[var(--text-muted)]">
               Or sign in with email
             </span>
-            <div className="flex-grow border-t border-white/20" />
+            <div className="flex-grow border-t border-slate-300/80" />
           </div>
 
           {/* Error Alert */}
           {errorMsg && (
-            <div className="mb-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center gap-2 font-medium">
+            <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center gap-2 font-medium">
               <AlertCircle className="w-4 h-4 shrink-0 text-rose-500" />
               <span>{errorMsg}</span>
             </div>
@@ -356,7 +400,7 @@ function LoginContent() {
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     placeholder="e.g. Dr. Jane Vance"
-                    className="w-full pl-10 pr-4 py-2.5 glass-subcard rounded-xl text-xs text-[var(--text-primary)] placeholder-[var(--text-muted)] outline-none focus:border-[#4D50A2] transition-all font-semibold"
+                    className="w-full pl-10 pr-4 py-3 bg-white border border-slate-300/80 rounded-xl text-xs text-[var(--text-primary)] placeholder-[var(--text-muted)] outline-none focus:border-[#4D50A2] focus:ring-2 focus:ring-[#4D50A2]/20 transition-all font-semibold shadow-sm"
                   />
                 </div>
               </div>
@@ -374,7 +418,7 @@ function LoginContent() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@example.com"
-                  className="w-full pl-10 pr-4 py-2.5 glass-subcard rounded-xl text-xs text-[var(--text-primary)] placeholder-[var(--text-muted)] outline-none focus:border-[#4D50A2] transition-all font-semibold"
+                  className="w-full pl-10 pr-4 py-3 bg-white border border-slate-300/80 rounded-xl text-xs text-[var(--text-primary)] placeholder-[var(--text-muted)] outline-none focus:border-[#4D50A2] focus:ring-2 focus:ring-[#4D50A2]/20 transition-all font-semibold shadow-sm"
                 />
               </div>
             </div>
@@ -391,7 +435,7 @@ function LoginContent() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••••••"
-                  className="w-full pl-10 pr-4 py-2.5 glass-subcard rounded-xl text-xs text-[var(--text-primary)] placeholder-[var(--text-muted)] outline-none focus:border-[#4D50A2] transition-all font-semibold"
+                  className="w-full pl-10 pr-4 py-3 bg-white border border-slate-300/80 rounded-xl text-xs text-[var(--text-primary)] placeholder-[var(--text-muted)] outline-none focus:border-[#4D50A2] focus:ring-2 focus:ring-[#4D50A2]/20 transition-all font-semibold shadow-sm"
                 />
               </div>
             </div>
@@ -399,7 +443,7 @@ function LoginContent() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full btn-rect btn-rect-primary justify-center py-3 text-xs font-bold"
+              className="w-full btn-rect btn-rect-primary justify-center py-3.5 text-xs font-bold shadow-lg"
             >
               {loading ? (
                 <span>Authenticating...</span>
@@ -411,30 +455,26 @@ function LoginContent() {
               )}
             </button>
           </form>
-        </div>
-      </main>
 
-      {/* Footer Disclaimer */}
-      <footer className="relative z-10 py-4 px-6 max-w-7xl mx-auto w-full flex items-center justify-between text-[11px] text-slate-400 font-medium">
-        <div className="flex items-center gap-4">
-          <span className="flex items-center gap-1">
-            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
-            256-Bit SSL Encryption
-          </span>
-          <span className="flex items-center gap-1">
-            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
-            Google OAuth 2.0 Verified
-          </span>
+          {/* Quick Direct Link to Dashboard */}
+          <div className="pt-2 text-center">
+            <Link
+              href="/dashboard"
+              className="inline-flex items-center gap-1.5 text-xs font-extrabold text-[#4D50A2] hover:underline"
+            >
+              <span>Explore Demo Dashboard</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
         </div>
-        <div>© 2026 HealthBridge AI Inc. All rights reserved.</div>
-      </footer>
+      </div>
     </div>
   );
 }
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-[#F3F5F8] text-[#0D1B2A] text-xs font-bold">Loading Auth Portal...</div>}>
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-[#F8FAFC] text-[#2F3273] text-xs font-bold">Loading Auth Portal...</div>}>
       <LoginContent />
     </Suspense>
   );
