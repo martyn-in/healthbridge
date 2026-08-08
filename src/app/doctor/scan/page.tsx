@@ -42,8 +42,19 @@ export default function DoctorScanPage() {
       if (!scannerRef.current) {
         scannerRef.current = new Html5Qrcode("reader");
       }
+
+      // Fetch available cameras first to avoid environment/facingMode constraint errors on devices without a back camera
+      const cameras = await Html5Qrcode.getCameras();
+      if (!cameras || cameras.length === 0) {
+        throw new Error("No cameras found on this device.");
+      }
+
+      // Try to select a back camera, otherwise default to the first available camera
+      const backCamera = cameras.find(c => c.label.toLowerCase().includes('back') || c.label.toLowerCase().includes('environment'));
+      const cameraIdToUse = backCamera ? backCamera.id : cameras[0].id;
+
       await scannerRef.current.start(
-        { facingMode: "environment" },
+        cameraIdToUse,
         { fps: 10, qrbox: { width: 250, height: 250 }, aspectRatio: 1.0 },
         async (decodedText) => {
           if (scannerRef.current && scannerRef.current.isScanning) {
@@ -53,9 +64,9 @@ export default function DoctorScanPage() {
         },
         () => { /* ignore */ }
       );
-    } catch (err) {
+    } catch (err: any) {
       setScanState('error');
-      setErrorMessage("Camera access denied or unavailable.");
+      setErrorMessage(err?.message || "Camera access denied or unavailable.");
     }
   };
 
