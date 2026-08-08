@@ -55,9 +55,8 @@ function LoginContent() {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
-  // Google OAuth Client ID (internal server/env setting, hidden from UI)
   const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '213155484261-meqs44mna8jdcunvhfmrirje4snoh43b.apps.googleusercontent.com';
-
+  const [isGoogleSdkReady, setIsGoogleSdkReady] = useState(false);
   const googleBtnRef = useRef<HTMLDivElement>(null);
 
   // Initialize Real Google OAuth 2.0 SDK
@@ -104,6 +103,7 @@ function LoginContent() {
               text: 'signin_with',
               logo_alignment: 'left',
             });
+            setIsGoogleSdkReady(true);
           }
         } catch (e) {
           console.warn('Google SDK init error:', e);
@@ -336,10 +336,10 @@ function LoginContent() {
 
           {/* Single Official Google Sign-In Control */}
           <div className="w-full">
-            <div ref={googleBtnRef} className="w-full flex justify-center" />
+            <div ref={googleBtnRef} className={`w-full flex justify-center ${isGoogleSdkReady ? 'block' : 'hidden'}`} />
             
-            {/* Fallback button if Google SDK iframe is initializing */}
-            {(!googleBtnRef.current || googleBtnRef.current.children.length === 0) && (
+            {/* Custom button shown ONLY when Google SDK iframe is not active */}
+            {!isGoogleSdkReady && (
               <button
                 type="button"
                 onClick={handleGoogleLoginTrigger}
