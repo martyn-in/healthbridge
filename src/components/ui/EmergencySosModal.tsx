@@ -23,11 +23,13 @@ import { evaluateSafetyEscalation, SafetyClassification } from '@/lib/localSafet
 
 export interface DynamicEmergencyGuidance {
   problem?: string;
+  urgency?: 'routine' | 'urgent' | 'emergency';
   headline: string;
   immediateActions: string[];
   avoid?: string[];
   warningSigns?: string[];
   seekEmergencyCare?: boolean;
+  // Only sources genuinely returned by Gemini grounding — never fabricated
   sources?: { title: string; url?: string }[];
 }
 
@@ -112,14 +114,24 @@ export const EmergencySosModal: React.FC = () => {
       if (res.ok && data.success && data.guidance) {
         setActiveGuidance({
           problem: data.guidance.problem,
+          urgency: data.guidance.urgency,
           headline: data.guidance.headline,
           immediateActions: data.guidance.immediateActions || [],
           avoid: data.guidance.avoid || [],
           warningSigns: data.guidance.warningSigns || [],
-          seekEmergencyCare: data.guidance.seekEmergencyCare !== false,
-          sources: data.guidance.sources || [],
+          // Real Gemini assessment — not forced to true
+          seekEmergencyCare: data.guidance.seekEmergencyCare === true,
+          // Only real grounding sources — empty array if none retrieved
+          sources: Array.isArray(data.guidance.sources) ? data.guidance.sources : [],
         });
-        showToast('Gemini AI Emergency Guidance generated.');
+        const srcCount = data.guidance.sources?.length || 0;
+        showToast(srcCount > 0 ? `Gemini AI guidance grounded with ${srcCount} source(s).` : 'Gemini AI guidance generated.');
+      } else if (data.error === 'NO_GROUNDING_EVIDENCE') {
+        setActiveGuidance(null);
+        setFallbackWarning(
+          'No medical evidence could be retrieved for this query. This query could not be safely grounded. Contact emergency medical services directly.'
+        );
+        showToast('Contact emergency medical services directly.');
       } else {
         setActiveGuidance(null);
         setFallbackWarning(
@@ -276,19 +288,32 @@ export const EmergencySosModal: React.FC = () => {
               {/* 3. Real Dynamic Gemini Emergency Guidance Card */}
               {activeGuidance && (
                 <div className="rounded-2xl bg-white dark:bg-slate-800 p-4 sm:p-5 border-2 border-red-500 shadow-xl space-y-4 text-xs anim-fade-in">
-                  {/* Title */}
+                  {/* Title + Urgency Badge */}
                   <div className="border-b border-red-100 dark:border-slate-700 pb-3">
-                    {activeGuidance.problem && (
-                      <span className="text-[10px] font-black uppercase text-red-600 dark:text-red-400 tracking-wider block">
-                        Assessment: {activeGuidance.problem}
-                      </span>
-                    )}
+                    <div className="flex items-center gap-2 mb-1">
+                      {activeGuidance.problem && (
+                        <span className="text-[10px] font-black uppercase text-red-600 dark:text-red-400 tracking-wider flex-1 block">
+                          {activeGuidance.problem}
+                        </span>
+                      )}
+                      {activeGuidance.urgency && (
+                        <span className={`text-[9px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-widest shrink-0 ${
+                          activeGuidance.urgency === 'emergency'
+                            ? 'bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-300'
+                            : activeGuidance.urgency === 'urgent'
+                            ? 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300'
+                            : 'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300'
+                        }`}>
+                          {activeGuidance.urgency}
+                        </span>
+                      )}
+                    </div>
                     <h3 className="text-base font-extrabold text-[#0D1B2A] dark:text-white mt-1">
                       {activeGuidance.headline}
                     </h3>
                   </div>
 
-                  {/* Seek Emergency Care Banner */}
+                  {/* Seek Emergency Care Banner — only shown if Gemini assessed it as needed */}
                   {activeGuidance.seekEmergencyCare && (
                     <a
                       href="tel:112"
@@ -346,11 +371,11 @@ export const EmergencySosModal: React.FC = () => {
                     </div>
                   )}
 
-                  {/* Real Sources Citation from Gemini Grounding */}
-                  {activeGuidance.sources && activeGuidance.sources.length > 0 && (
+                  {/* Genuine Grounding Sources — only shown when Gemini actually returned them */}
+                  {activeGuidance.sources && activeGuidance.sources.length > 0 ? (
                     <div className="pt-2 border-t border-slate-200 dark:border-slate-700 text-[10px] text-slate-500 font-medium space-y-1">
                       <span className="font-bold text-slate-700 dark:text-slate-300 block flex items-center gap-1">
-                        <ShieldCheck className="w-3.5 h-3.5 text-teal-600" /> Grounded Search Sources:
+                        <ShieldCheck className="w-3.5 h-3.5 text-teal-600" /> Grounding Sources ({activeGuidance.sources.length}):
                       </span>
                       {activeGuidance.sources.map((src, idx) => (
                         <p key={idx} className="italic text-slate-600 dark:text-slate-400">
@@ -368,6 +393,10 @@ export const EmergencySosModal: React.FC = () => {
                         </p>
                       ))}
                     </div>
+                  ) : (
+                    <p className="text-[10px] text-slate-400 dark:text-slate-500 italic pt-1 border-t border-slate-100 dark:border-slate-700">
+                      No grounding sources were returned for this query.
+                    </p>
                   )}
                 </div>
               )}
