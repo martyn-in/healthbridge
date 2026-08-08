@@ -251,28 +251,6 @@ function LoginContent() {
             Access your secure patient workspace, track real-time vital telemetry, review diagnostic reports, and consult with OpenAI-powered clinical guidance.
           </p>
 
-          {/* Feature Badges Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-4">
-            <div className="p-3.5 rounded-xl bg-white/10 border border-white/15 backdrop-blur-md flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-[#4D50A2] text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-sm">
-                <Lock className="w-4 h-4" />
-              </div>
-              <div>
-                <div className="text-xs font-black text-white">256-Bit SSL</div>
-                <div className="text-[10px] font-medium text-white/70">Encrypted Health Vault</div>
-              </div>
-            </div>
-
-            <div className="p-3.5 rounded-xl bg-white/10 border border-white/15 backdrop-blur-md flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-[#F9DF77] text-[#2F3273] flex items-center justify-center font-bold text-xs shrink-0 shadow-sm">
-                <CheckCircle2 className="w-4 h-4" />
-              </div>
-              <div>
-                <div className="text-xs font-black text-white">Verified Security</div>
-                <div className="text-[10px] font-medium text-white/70">Google OAuth 2.0</div>
-              </div>
-            </div>
-          </div>
         </div>
 
         {/* Hero Footer */}
