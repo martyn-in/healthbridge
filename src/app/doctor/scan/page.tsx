@@ -21,8 +21,8 @@ export default function DoctorScanPage() {
     fetch('/api/auth/me')
       .then(res => res.json())
       .then(data => {
-         if (data.payload?.sub) {
-           setDoctorGoogleSub(data.payload.sub);
+         if (data.user?.googleSub) {
+           setDoctorGoogleSub(data.user.googleSub);
          }
       })
       .catch(console.error);
