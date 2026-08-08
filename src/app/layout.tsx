@@ -41,6 +41,8 @@ export const metadata: Metadata = {
   },
 };
 
+import { ConvexClientProvider } from '@/components/ConvexClientProvider';
+
 export default function RootLayout({
   children,
 }: {
@@ -55,10 +57,12 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
       </head>
       <body className="antialiased min-h-screen relative font-sans">
-        <AppProvider>
-          {children}
-          <PwaInstallBanner />
-        </AppProvider>
+        <ConvexClientProvider>
+          <AppProvider>
+            {children}
+            <PwaInstallBanner />
+          </AppProvider>
+        </ConvexClientProvider>
 
         {/* Service Worker Registration */}
         <script

@@ -232,11 +232,11 @@ export const getAuthorizedPatientProfile = query({
     };
 
     // 4. Fetch related data using patientProfile._id if it exists, else empty
-    let vitals = [];
-    let medications = [];
-    let reports = [];
-    let appointments = [];
-    let clinicalNotes = [];
+    let vitals: any[] = [];
+    let medications: any[] = [];
+    let reports: any[] = [];
+    let appointments: any[] = [];
+    let clinicalNotes: any[] = [];
 
     if (patientProfile) {
       vitals = await ctx.db
