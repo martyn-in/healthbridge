@@ -55,7 +55,7 @@ function LoginContent() {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
-  const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '213155484261-pp5npa2jurhqds55lk0oevh8ppbj47f0.apps.googleusercontent.com';
+  const googleClientId = '213155484261-pp5npa2jurhqds55lk0oevh8ppbj47f0.apps.googleusercontent.com';
   const [isGoogleSdkReady, setIsGoogleSdkReady] = useState(false);
   const googleBtnRef = useRef<HTMLDivElement>(null);
 
