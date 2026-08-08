@@ -7,17 +7,13 @@ if (typeof window !== 'undefined') {
 const apiKey = process.env.GEMINI_API_KEY;
 
 if (!apiKey) {
-  console.warn('[HealthBridge Gemini AI]: WARNING - GEMINI_API_KEY environment variable is missing.');
+  throw new Error('GEMINI_API_KEY is not configured');
 }
 
 export const gemini = new GoogleGenAI({
-  apiKey: apiKey || '',
+  apiKey,
 });
 
-/**
- * Returns the configured Gemini model name from environment variables.
- * Defaults to 'gemini-2.5-flash' if GEMINI_MODEL is not explicitly set or invalid.
- */
 export function getGeminiModel(): string {
   const model = process.env.GEMINI_MODEL?.trim();
   if (!model) {
@@ -26,9 +22,6 @@ export function getGeminiModel(): string {
   return model;
 }
 
-/**
- * Validates whether the Gemini API key is configured.
- */
 export function isGeminiConfigured(): boolean {
   return Boolean(process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY.trim().length > 0);
 }
