@@ -62,24 +62,23 @@ export default function MedicationsPage() {
     <div className="space-y-6 font-sans">
       {/* Top Banner */}
       <Card3D depth={10}>
-        <div className="p-6 rounded-3xl frosted-card space-y-4 anim-fade-up">
+        <div className="p-6 rounded-2xl glass-panel space-y-4 anim-fade-up border border-white/15">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="space-y-2">
-              <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-white/80 text-[11px] font-bold shadow-sm" style={{ color: '#FF9500' }}>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#F9DF77] text-[#2F3273] text-[11px] font-black shadow-sm">
                 <Pill className="h-3.5 w-3.5" /> Medication Management
               </div>
-              <h1 className="text-2xl font-black text-slate-900">
+              <h1 className="text-2xl font-black text-[var(--text-primary)]">
                 Medication Schedule
               </h1>
-              <p className="text-xs font-medium text-slate-600 max-w-xl leading-relaxed">
-                Track daily dosages for patient <span className="font-extrabold text-slate-900">{activeProfile.name}</span>. Receive automated refill alerts and log verified adherence histories.
+              <p className="text-xs font-semibold text-[var(--text-secondary)] max-w-xl leading-relaxed">
+                Track daily dosages for patient <span className="font-extrabold text-[var(--text-primary)]">{activeProfile.name}</span>. Receive automated refill alerts and log verified adherence histories.
               </p>
             </div>
 
             <button
               onClick={() => setShowAddModal(true)}
-              className="pill-btn pill-btn-primary flex items-center gap-2 shrink-0 card-lift"
-              style={{ backgroundColor: '#0066FF' }}
+              className="btn-rect btn-rect-primary flex items-center gap-2 shrink-0"
             >
               <Plus className="h-4 w-4" /> Add Medication
             </button>

@@ -55,38 +55,31 @@ export default function AppointmentsPage() {
   return (
     <div className="space-y-8 pb-10 anim-fade-up">
       {/* Hero Header */}
-      <div className="frosted-card rounded-3xl p-8 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-[#0066FF] opacity-5 blur-[80px] rounded-full -translate-y-1/2 translate-x-1/2 pointer-events-none" />
-        
+      <div className="glass-panel rounded-2xl p-8 relative overflow-hidden border border-white/15">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/60 border border-white/80 shadow-sm mb-4">
-              <div style={{ color: '#FF9500' }}>
-                <CalendarIcon className="h-4 w-4" />
-              </div>
-              <span className="text-xs font-bold uppercase tracking-wider text-[#0D1B2A]">
-                Care Coordination
-              </span>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-[#F9DF77] text-[#2F3273] text-[11px] font-black shadow-sm mb-3">
+              <CalendarIcon className="h-3.5 w-3.5" />
+              <span className="uppercase tracking-widest">Care Coordination</span>
             </div>
             
             <div className="flex items-center gap-4">
-              <h1 className="text-3xl font-extrabold tracking-tight text-[#0D1B2A]">
+              <h1 className="text-3xl font-extrabold tracking-tight text-[var(--text-primary)]">
                 Consultations
               </h1>
-              <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-[#0066FF]/10 text-[#0066FF]">
+              <span className="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#4D50A2]/10 text-[#4D50A2]">
                 {appointments.length} Appointments
               </span>
             </div>
             
-            <p className="text-sm text-[#9BAABF] mt-2 max-w-xl leading-relaxed font-medium">
-              Schedule follow-ups, telemedicine appointments, and in-person consultations for patient <span className="font-extrabold text-[#0D1B2A]">{activeProfile.name}</span>.
+            <p className="text-sm font-semibold text-[var(--text-secondary)] mt-2 max-w-xl leading-relaxed">
+              Schedule in-person or telehealth clinical appointments with verified specialists and primary care physicians.
             </p>
           </div>
 
           <button
             onClick={() => setShowBookModal(true)}
-            className="pill-btn pill-btn-primary shadow-lg shadow-[#0066FF]/20 shrink-0 anim-slide-left delay-100"
-            style={{ backgroundColor: '#0066FF', color: 'white' }}
+            className="btn-rect btn-rect-primary flex items-center gap-2 shrink-0 shadow-lg"
           >
             <Plus className="h-4 w-4" /> Book Consultation
           </button>

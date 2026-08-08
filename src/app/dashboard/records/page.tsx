@@ -59,38 +59,35 @@ export default function HealthRecordsPage() {
   return (
     <div className="space-y-8 pb-10">
       {/* Top Banner */}
-      <div className="relative overflow-hidden rounded-3xl frosted-card p-8 border border-white/90 shadow-[6px_6px_16px_rgba(166,180,200,0.45)]">
-        <div className="absolute inset-0 bg-[url('/grid-bg.svg')] opacity-10 mix-blend-overlay"></div>
+      <div className="relative overflow-hidden rounded-2xl glass-panel p-8 border border-white/15 shadow-sm">
         <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
           <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-violet-50 border border-violet-100 mb-3 shadow-sm">
-              <FolderHeart className="h-4 w-4" style={{ color: '#7C5CFC' }} />
-              <span className="text-[11px] font-extrabold uppercase tracking-wider" style={{ color: '#7C5CFC' }}>Records Repository</span>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#F9DF77] text-[#2F3273] text-[11px] font-black shadow-sm mb-3">
+              <FolderHeart className="h-3.5 w-3.5" />
+              <span className="uppercase tracking-widest">Records Repository</span>
             </div>
-            <h1 className="text-3xl font-extrabold tracking-tight text-[#0D1B2A]">
+            <h1 className="text-3xl font-extrabold tracking-tight text-[var(--text-primary)]">
               Health Records Vault
             </h1>
-            <p className="text-[13px] text-[#9BAABF] mt-2 max-w-xl font-medium leading-relaxed">
-              Encrypted clinical records vault for patient <span className="font-bold text-[#0066FF]">{activeProfile.name}</span>. Generate emergency QR access passes or export health records.
+            <p className="text-sm font-semibold text-[var(--text-secondary)] mt-2 max-w-xl leading-relaxed">
+              Encrypted clinical records vault for patient <span className="font-extrabold text-[var(--text-primary)]">{activeProfile.name}</span>. Generate emergency QR access passes or export health records.
             </p>
           </div>
 
           <div className="flex items-center gap-3">
             <button
               onClick={() => setIsQrModalOpen(true)}
-              className="pill-btn flex items-center gap-2 bg-white hover:bg-slate-50 border-2 text-[#0D1B2A]"
-              style={{ borderColor: 'rgba(255,255,255,0.9)' }}
+              className="btn-rect btn-rect-glass"
             >
-              <QrCode className="h-4 w-4" style={{ color: '#0066FF' }} />
-              <span className="font-bold text-[13px]">Health Pass QR</span>
+              <QrCode className="h-4 w-4 text-[#4D50A2]" />
+              <span className="font-bold text-xs">Health Pass QR</span>
             </button>
             <button
               onClick={() => setShowAddModal(true)}
-              className="pill-btn pill-btn-primary flex items-center gap-2 shadow-[0_8px_16px_rgba(0,102,255,0.25)] hover:shadow-[0_4px_12px_rgba(0,102,255,0.15)]"
-              style={{ background: '#0066FF' }}
+              className="btn-rect btn-rect-primary"
             >
               <Plus className="h-4 w-4 text-white" />
-              <span className="font-bold text-[13px] text-white">Add Record</span>
+              <span className="font-bold text-xs text-white">Add Record</span>
             </button>
           </div>
         </div>

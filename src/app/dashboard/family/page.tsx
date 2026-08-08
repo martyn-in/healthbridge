@@ -38,29 +38,25 @@ export default function FamilyPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="frosted-card rounded-3xl p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative overflow-hidden">
-        <div 
-          className="absolute inset-0 pointer-events-none opacity-40" 
-          style={{ backgroundImage: 'radial-gradient(#0066FF20 2px, transparent 2px)', backgroundSize: '24px 24px' }} 
-        />
+      <div className="glass-panel rounded-2xl p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative overflow-hidden border border-white/15">
         <div className="relative z-10">
           <div className="flex items-center gap-2 mb-3">
-            <span className="p-2 rounded-xl" style={{ backgroundColor: '#00D4AA20', color: '#00D4AA' }}>
+            <span className="p-2 rounded-xl bg-[#4D50A2]/10 text-[#4D50A2]">
               <Users className="h-5 w-5" />
             </span>
-            <span className="text-sm font-bold tracking-wider uppercase text-[#0066FF]">Family Workspace</span>
+            <span className="text-xs font-black tracking-widest uppercase text-[#4D50A2]">Family Workspace</span>
           </div>
-          <h1 className="text-3xl font-extrabold text-[#0D1B2A] tracking-tight">
+          <h1 className="text-3xl font-extrabold text-[var(--text-primary)] tracking-tight">
             Family Health Hub
           </h1>
-          <p className="text-sm text-[#9BAABF] mt-2 max-w-xl font-medium leading-relaxed">
+          <p className="text-sm text-[var(--text-secondary)] mt-2 max-w-xl font-semibold leading-relaxed">
             Manage separate medical records, medication timelines, and emergency contacts for parents, spouse, and dependents.
           </p>
         </div>
 
         <button
           onClick={() => setShowAddModal(true)}
-          className="pill-btn pill-btn-primary shadow-lg flex items-center gap-2 relative z-10 whitespace-nowrap"
+          className="btn-rect btn-rect-primary flex items-center gap-2 relative z-10 whitespace-nowrap"
         >
           <Plus className="h-4 w-4" /> Add Member
         </button>

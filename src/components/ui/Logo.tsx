@@ -14,7 +14,7 @@ export const Logo: React.FC<LogoProps> = ({ className = '', size = 'md', showTex
   return (
     <div className={`flex items-center gap-3 ${className}`}>
       {/* Icon container with hands securing heart image / vector fallback */}
-      <div className={`flex items-center justify-center bg-[#6E56CF] text-white shadow-sm overflow-hidden p-1 shrink-0 ${iconBox}`}>
+      <div className={`flex items-center justify-center bg-[#4D50A2] text-white shadow-sm overflow-hidden p-1 shrink-0 ${iconBox}`}>
         <svg
           width={iconSize}
           height={iconSize}
@@ -33,18 +33,18 @@ export const Logo: React.FC<LogoProps> = ({ className = '', size = 'md', showTex
           />
           {/* Hands Securing & Protecting the Heart */}
           <path d="M4.5 16.5C3 15 2 13 2 10.5C2 7 5 5 8 5c1.5 0 2.8.6 3.8 1.6" strokeWidth="2" />
-          <path d="M19.5 16.5C21 15 22 13 22 10.5C22 7 19 5 16 5c-1.5 0-2.8.6-3.8 1.6" strokeWidth="2" />
+          <path d="M19.5 16.5C22 15 22 13 22 10.5C22 7 19 5 16 5c-1.5 0-2.8.6-3.8 1.6" strokeWidth="2" />
           <path d="M7 19c2.5 1.5 7.5 1.5 10 0" strokeWidth="2" strokeLinecap="round" />
         </svg>
       </div>
 
       {showText && (
         <div className="flex flex-col leading-tight select-none">
-          <span className={`font-extrabold tracking-tight text-[#1E1B2E] ${textSize}`}>
+          <span className={`font-extrabold tracking-tight text-[var(--text-primary)] ${textSize}`}>
             HealthBridge
           </span>
           {size !== 'sm' && (
-            <span className="text-[10px] uppercase font-bold tracking-wider text-[#6B677E]">
+            <span className="text-[10px] uppercase font-black tracking-widest text-[#4D50A2]">
               Clinical Platform
             </span>
           )}

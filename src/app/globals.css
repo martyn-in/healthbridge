@@ -3,52 +3,53 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
-/* ─── DESIGN TOKENS (LIGHT MODE GLASS PALETTE) ───────────────────── */
+/* ─── DESIGN TOKENS (APPROVED HEALTHBRIDGE PALETTE) ───────────────────── */
 :root {
-  --hb-indigo:              #2F3273;
-  --hb-indigo-dark:         #1E204A;
-  --hb-violet:              #4D50A2;
-  --hb-violet-light:        #787BC9;
-  --hb-yellow:              #F9DF77;
-  --hb-yellow-dark:         #E5CA55;
-  --hb-white:               #FFFFFF;
-  --hb-bg-light:            #F4F5FB;
-
   --bg-base:                #F4F5FB;
-  --bg-surface:             #FFFFFF;
+  --bg-surface:             rgba(255, 255, 255, 0.85);
   --bg-card:                #FFFFFF;
-  --bg-card-subtle:         #F8F9FE;
+  --bg-card-subtle:         #F1F3FA;
 
-  --text-primary:           #1E204A; /* Deep Indigo Dark */
-  --text-secondary:         #4D50A2; /* Royal Violet */
-  --text-muted:             #6E72B3; /* Soft Slate Violet */
+  --brand-indigo:           #2F3273; /* Deep Indigo - Structural & Titles */
+  --brand-royal:            #4D50A2; /* Royal Violet - Primary Brand & Buttons */
+  --brand-yellow:           #F9DF77; /* Warm Soft Yellow - Accents & Callouts */
+  --brand-white:            #FFFFFF;
 
-  --border-subtle:          rgba(47, 50, 115, 0.08);
-  --border-card:            rgba(47, 50, 115, 0.12);
-  --shadow-sm:              0 4px 16px rgba(47, 50, 115, 0.05);
-  --shadow-md:              0 12px 32px rgba(47, 50, 115, 0.08);
-  --shadow-lg:              0 24px 50px rgba(47, 50, 115, 0.12);
+  --text-primary:           #2F3273; /* Deep Indigo - Ultra Crisp Primary Text */
+  --text-secondary:         #4D50A2; /* Royal Violet - Subtitles */
+  --text-muted:             #64748B; /* Slate Muted */
 
-  --radius-card:            20px;
+  --border-subtle:          rgba(77, 80, 162, 0.12);
+  --border-card:            rgba(77, 80, 162, 0.18);
+  --shadow-sm:              0 4px 20px rgba(47, 50, 115, 0.05);
+  --shadow-md:              0 12px 36px rgba(47, 50, 115, 0.08);
+  --shadow-lg:              0 24px 60px rgba(47, 50, 115, 0.12);
+
+  --radius-card:            16px;
   --radius-btn:             12px;
 }
 
-/* Dark Mode Tokens */
+/* ─── DARK MODE TOKENS (DEEP INDIGO SURFACES) ─── */
 html.dark, .dark {
-  --bg-base:                #12132C;
-  --bg-surface:             #1E204A;
-  --bg-card:                #1E204A;
-  --bg-card-subtle:         #2F3273;
+  --bg-base:                #131428;
+  --bg-surface:             rgba(26, 28, 54, 0.88);
+  --bg-card:                #1A1C36;
+  --bg-card-subtle:         #24274C;
 
-  --text-primary:           #FFFFFF;
-  --text-secondary:         #CBD0FB;
-  --text-muted:             #9CA2DF;
+  --brand-indigo:           #1A1C36;
+  --brand-royal:            #6A6ECC;
+  --brand-yellow:           #F9DF77;
+  --brand-white:            #FFFFFF;
 
-  --border-subtle:          rgba(255, 255, 255, 0.12);
+  --text-primary:           #FFFFFF; /* High Contrast Bright White */
+  --text-secondary:         #C7C9EB; /* Light Periwinkle */
+  --text-muted:             #8E92C4;
+
+  --border-subtle:          rgba(255, 255, 255, 0.10);
   --border-card:            rgba(255, 255, 255, 0.16);
-  --shadow-sm:              0 4px 20px rgba(0, 0, 0, 0.40);
-  --shadow-md:              0 16px 40px rgba(0, 0, 0, 0.55);
-  --shadow-lg:              0 28px 70px rgba(0, 0, 0, 0.70);
+  --shadow-sm:              0 4px 20px rgba(0, 0, 0, 0.45);
+  --shadow-md:              0 16px 40px rgba(0, 0, 0, 0.65);
+  --shadow-lg:              0 28px 70px rgba(0, 0, 0, 0.80);
 }
 
 /* ─── RESET & BASE ────────────────────────────────────────────────── */
@@ -121,15 +122,27 @@ html.dark .glass-panel, html.dark .frosted-glass, html.dark .soft-card, html.dar
 }
 
 .btn-rect-primary {
-  background: linear-gradient(135deg, #4F46E5 0%, #3730A3 100%);
+  background: linear-gradient(135deg, #4D50A2 0%, #2F3273 100%);
   color: #FFFFFF !important;
   border-color: rgba(255, 255, 255, 0.25);
-  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.35);
+  box-shadow: 0 4px 14px rgba(77, 80, 162, 0.35);
 }
 .btn-rect-primary:hover {
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(79, 70, 229, 0.50);
-  background: linear-gradient(135deg, #4338CA 0%, #312E81 100%);
+  box-shadow: 0 6px 20px rgba(77, 80, 162, 0.50);
+  background: linear-gradient(135deg, #3E4188 0%, #222456 100%);
+}
+
+.btn-rect-accent {
+  background: #F9DF77;
+  color: #2F3273 !important;
+  border-color: rgba(47, 50, 115, 0.2);
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(249, 223, 119, 0.4);
+}
+.btn-rect-accent:hover {
+  transform: translateY(-1px);
+  background: #F8D858;
 }
 
 .btn-rect-glass {
@@ -138,8 +151,8 @@ html.dark .glass-panel, html.dark .frosted-glass, html.dark .soft-card, html.dar
   border-color: var(--border-card);
 }
 .btn-rect-glass:hover {
-  background: rgba(99, 102, 241, 0.15);
-  border-color: rgba(99, 102, 241, 0.4);
+  background: rgba(77, 80, 162, 0.12);
+  border-color: rgba(77, 80, 162, 0.35);
   transform: translateY(-1px);
 }
 

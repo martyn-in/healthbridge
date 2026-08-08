@@ -31,15 +31,15 @@ export function DashboardWebGLBackground() {
     container.appendChild(renderer.domElement);
 
     // 2. Ambient & Volumetric Light Nodes
-    const pointLight1 = new THREE.PointLight(0x2f3273, 4, 50); // Deep Indigo
+    const pointLight1 = new THREE.PointLight(0x6366f1, 3, 50); // Electric Indigo
     pointLight1.position.set(10, 15, 10);
     scene.add(pointLight1);
 
-    const pointLight2 = new THREE.PointLight(0x4d50a2, 3, 50); // Royal Violet
+    const pointLight2 = new THREE.PointLight(0xec4899, 2.5, 50); // Pink/Magenta rim
     pointLight2.position.set(-15, -10, 5);
     scene.add(pointLight2);
 
-    const pointLight3 = new THREE.PointLight(0xf9df77, 2, 40); // Warm Soft Yellow
+    const pointLight3 = new THREE.PointLight(0x06b6d4, 2, 40); // Cyan light field
     pointLight3.position.set(0, 5, 15);
     scene.add(pointLight3);
 
@@ -68,7 +68,7 @@ export function DashboardWebGLBackground() {
     if (ctx) {
       const grad = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
       grad.addColorStop(0, 'rgba(255, 255, 255, 1)');
-      grad.addColorStop(0.4, 'rgba(77, 80, 162, 0.6)');
+      grad.addColorStop(0.4, 'rgba(129, 140, 248, 0.6)');
       grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, 64, 64);
@@ -90,7 +90,7 @@ export function DashboardWebGLBackground() {
     // 4. Subtle Wireframe Geometry Floating Grid Layer
     const gridGeo = new THREE.IcosahedronGeometry(25, 2);
     const gridMat = new THREE.MeshBasicMaterial({
-      color: 0x4d50a2,
+      color: 0x6366f1,
       wireframe: true,
       transparent: true,
       opacity: 0.04,
