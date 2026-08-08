@@ -275,7 +275,7 @@ export const Header: React.FC<{ onOpenHealthCard?: () => void }> = ({ onOpenHeal
                       try {
                         await fetch('/api/auth/logout', { method: 'POST' });
                       } catch (e) {}
-                      window.location.href = '/login';
+                      window.location.href = '/';
                     }}
                     className="w-full text-center py-1.5 px-3 block rounded-xl text-xs font-bold text-rose-600 bg-rose-50 dark:bg-rose-950/30 hover:bg-rose-100 transition-colors"
                   >

@@ -31,7 +31,7 @@ export async function GET(req: Request) {
 
   if (error || !code || !state) {
     console.warn('[Google OAuth Callback Error]: User cancelled or missing code/state', error);
-    return NextResponse.redirect(new URL('/login?error=google_auth_cancelled', req.url));
+    return NextResponse.redirect(new URL('/?error=google_auth_cancelled', req.url));
   }
 
   try {
@@ -41,7 +41,7 @@ export async function GET(req: Request) {
     // 1. CSRF State Validation
     if (!storedState || storedState !== state) {
       console.error('[Google OAuth State Mismatch]: Possible CSRF attack detected');
-      return NextResponse.redirect(new URL('/login?error=state_mismatch', req.url));
+      return NextResponse.redirect(new URL('/?error=state_mismatch', req.url));
     }
 
     // Clear state cookie
@@ -105,7 +105,7 @@ export async function GET(req: Request) {
     });
 
     if (convexUser.accountStatus === 'suspended') {
-      return NextResponse.redirect(new URL('/login?error=account_suspended', req.url));
+      return NextResponse.redirect(new URL('/?error=account_suspended', req.url));
     }
 
     // Create or retrieve verified HealthBridge user session object
@@ -134,6 +134,6 @@ export async function GET(req: Request) {
     }
   } catch (err: any) {
     console.error('[Google OAuth Callback Exception]:', err?.message || err);
-    return NextResponse.redirect(new URL('/login?error=auth_failed', req.url));
+    return NextResponse.redirect(new URL('/?error=auth_failed', req.url));
   }
 }

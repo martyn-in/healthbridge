@@ -77,6 +77,6 @@ export async function GET(req: Request) {
     return NextResponse.redirect(authorizeUrl);
   } catch (err: any) {
     console.error('[Google OAuth Start Error]:', err);
-    return NextResponse.redirect(new URL('/login?error=oauth_init_failed', req.url));
+    return NextResponse.redirect(new URL('/?error=oauth_init_failed', req.url));
   }
 }

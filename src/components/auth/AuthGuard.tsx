@@ -50,7 +50,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
       if (isMounted) {
         setIsAuthenticated(false);
         setCheckingAuth(false);
-        router.push(`/login?redirect=${encodeURIComponent(pathname || '/dashboard')}`);
+        router.push(`/?redirect=${encodeURIComponent(pathname || '/dashboard')}`);
       }
     }
 

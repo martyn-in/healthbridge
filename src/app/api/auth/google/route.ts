@@ -17,7 +17,7 @@ export async function POST(req: Request) {
           code,
           client_id: clientId,
           client_secret: clientSecret,
-          redirect_uri: 'https://healthaibridge.vercel.app/login?redirect=%2Fdashboard',
+          redirect_uri: 'https://healthaibridge.vercel.app/?redirect=%2Fdashboard',
           grant_type: 'authorization_code',
         }),
       });
