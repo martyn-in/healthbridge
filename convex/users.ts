@@ -45,6 +45,19 @@ export const syncUser = mutation({
 
     const newUser = await ctx.db.get(newUserId);
 
+    if (newRole === "patient") {
+      await ctx.db.insert("patients", {
+        userId: newUserId,
+        name: args.name,
+        age: 0, // Placeholder, can be updated later
+        gender: "Not specified",
+        bloodGroup: "Unknown",
+        allergies: [],
+        conditions: [],
+        lastVisit: new Date().toISOString(),
+      });
+    }
+
     return {
       id: newUser!._id,
       role: newUser!.role,

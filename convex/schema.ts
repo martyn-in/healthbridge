@@ -46,6 +46,7 @@ export default defineSchema({
     .index("by_status", ["status"]),
 
   patients: defineTable({
+    userId: v.optional(v.id("users")), // Link to the auth user
     name: v.string(),
     age: v.number(),
     gender: v.string(),
@@ -55,7 +56,7 @@ export default defineSchema({
     lastVisit: v.string(), // ISO string date
   }).searchIndex("search_name", {
     searchField: "name",
-  }),
+  }).index("by_userId", ["userId"]),
 
   vitals: defineTable({
     patientId: v.id("patients"),
@@ -96,4 +97,29 @@ export default defineSchema({
     reason: v.string(),
   }).index("by_date", ["date"])
     .index("by_patient", ["patientId"]),
+
+  patientAccessTokens: defineTable({
+    patientId: v.id("users"), // Patient granting access
+    token: v.string(), // Cryptographically random secure token
+    issuedAt: v.string(), // ISO string
+    expiresAt: v.string(), // ISO string
+    revoked: v.boolean(),
+    accessScope: v.string(), // e.g. "full_clinical_profile"
+  }).index("by_token", ["token"]).index("by_patient", ["patientId"]),
+
+  doctorPatientAccess: defineTable({
+    doctorId: v.id("users"), // Authorized doctor
+    patientId: v.id("users"), // Patient being accessed
+    grantedAt: v.string(), // ISO string
+    expiresAt: v.string(), // ISO string
+    tokenId: v.optional(v.id("patientAccessTokens")), // Which token was used
+  }).index("by_doctor_and_patient", ["doctorId", "patientId"]).index("by_doctor", ["doctorId"]),
+
+  clinicalNotes: defineTable({
+    patientId: v.id("users"),
+    doctorId: v.id("users"),
+    note: v.string(),
+    createdAt: v.string(),
+    updatedAt: v.string(),
+  }).index("by_patient", ["patientId"]).index("by_doctor", ["doctorId"]),
 });

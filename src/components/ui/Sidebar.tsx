@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 import {
   LayoutDashboard, Stethoscope, FileText, ScanLine, Pill,
   MapPin, FolderHeart, Calendar, Users, Syringe, Bot,
-  HeartPulse, Settings, Activity, ChevronRight, Menu, X, ShieldAlert,
+  HeartPulse, Settings, Activity, ChevronRight, Menu, X, ShieldAlert, ShieldCheck,
 } from 'lucide-react';
 import { Logo } from './Logo';
 import { useApp } from '@/context/AppContext';
@@ -27,6 +27,7 @@ export const Sidebar: React.FC = () => {
 
   const managementNav = [
     { name: t(language, 'navHome'),         path: '/dashboard',                icon: LayoutDashboard },
+    { name: 'Digital ID',                   path: '/dashboard/digital-id',     icon: ShieldCheck },
     { name: 'Progress & Insights',          path: '/dashboard/progress',       icon: Activity },
     { name: t(language, 'navRecords'),      path: '/dashboard/records',        icon: FolderHeart },
     { name: t(language, 'navAppointments'), path: '/dashboard/appointments',   icon: Calendar },
