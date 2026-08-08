@@ -69,7 +69,7 @@ export async function executeToolCall(
   switch (toolName) {
     case 'getLatestReport':
       return {
-        latestReport: patient.reports?.[0] || null,
+        latestReport: null,
       };
 
     case 'getMedicationSchedule':
@@ -79,32 +79,28 @@ export async function executeToolCall(
 
     case 'getMedicationAdherence':
       return {
-        adherenceRate: '94%',
+        adherenceRate: 'Unknown',
         activeMedicationsCount: patient.medications?.length || 0,
       };
 
     case 'getUpcomingAppointments':
       return {
-        appointments: patient.appointments || [],
+        appointments: patient.upcomingAppointments || [],
       };
 
     case 'getLatestVitals':
       return {
-        heartRate: `${patient.vitals?.heartRateBpm} BPM`,
-        spO2: `${patient.vitals?.spO2Percent}%`,
-        bloodPressure: `${patient.vitals?.bpSystolic}/${patient.vitals?.bpDiastolic} mmHg`,
-        source: 'Connected Wearable',
-        lastUpdated: patient.vitals?.lastUpdated,
+        error: 'Vitals telemetry not available',
       };
 
     case 'getVaccinationStatus':
       return {
-        vaccinations: patient.vaccinations || [],
+        vaccinations: [],
       };
 
     case 'getHealthProgress':
       return {
-        wellness: patient.wellness,
+        wellness: null,
       };
 
     default:

@@ -54,9 +54,13 @@ export default function WellnessPage() {
     updateWellness({ sleepHours: Math.max(0, wellness.sleepHours - 0.5) });
   };
 
-  const [steps, setSteps] = useState(6450);
-  const addSteps = () => setSteps(s => Math.min(20000, s + 500));
-  const removeSteps = () => setSteps(s => Math.max(0, s - 500));
+  const addSteps = () => {
+    updateWellness({ steps: Math.min(20000, wellness.steps + 500) });
+    showToast('Added +500 steps');
+  };
+  const removeSteps = () => {
+    updateWellness({ steps: Math.max(0, wellness.steps - 500) });
+  };
 
   const [mindfulness, setMindfulness] = useState(15);
   const addMindfulness = () => setMindfulness(m => Math.min(120, m + 5));
@@ -154,7 +158,7 @@ export default function WellnessPage() {
             icon={Moon} unit="hrs" onAdd={addSleep} onMinus={removeSleep}
           />
           <MetricRing 
-            title="Daily Steps" value={steps} max={10000} color="#6E56CF" 
+            title="Daily Steps" value={wellness.steps} max={wellness.stepGoal || 8000} color="#6E56CF" 
             icon={Footprints} unit="steps" onAdd={addSteps} onMinus={removeSteps}
           />
           <MetricRing 

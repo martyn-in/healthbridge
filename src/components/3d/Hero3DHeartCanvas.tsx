@@ -171,12 +171,7 @@ export function Hero3DHeartCanvas() {
         </Float>
       </Canvas>
 
-      {/* Floating Spatial Vital Telemetry Badge */}
-      <div className="absolute bottom-3 right-3 pointer-events-none px-3 py-1.5 rounded-xl glass-subcard border border-white/10 flex items-center gap-2 text-[11px] font-mono tracking-tight text-[var(--text-primary)] shadow-lg">
-        <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse shrink-0" />
-        <span className="font-semibold text-rose-400 tabular-nums">78 BPM</span>
-        <span className="text-[var(--text-muted)]">| Sinus Rhythm</span>
-      </div>
+
     </div>
   );
 }

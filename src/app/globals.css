@@ -1,7 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
+
 
 /* ─── DESIGN TOKENS (APPROVED HEALTHBRIDGE PALETTE) ───────────────────── */
 :root {
@@ -58,7 +58,7 @@ html.dark, .dark {
 html { scroll-behavior: smooth; }
 
 body {
-  font-family: 'Outfit', 'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: var(--font-manrope), 'Inter', system-ui, -apple-system, sans-serif;
   background: var(--bg-base);
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
@@ -67,9 +67,12 @@ body {
 }
 
 h1, h2, h3, h4, .font-heading {
-  font-family: 'Space Grotesk', 'Outfit', sans-serif;
+  font-family: var(--font-manrope), system-ui, sans-serif;
   color: var(--text-primary);
+  font-weight: 700;
+  letter-spacing: -0.01em;
 }
+
 
 /* ─── CUSTOM SCROLLBAR ────────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 5px; height: 5px; }
@@ -110,7 +113,7 @@ html.dark .glass-panel, html.dark .frosted-glass, html.dark .soft-card, html.dar
 .btn-rect {
   border-radius: 12px;
   padding: 0.5rem 1.1rem;
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: var(--font-manrope), system-ui, sans-serif;
   font-weight: 600;
   font-size: 0.8125rem;
   letter-spacing: 0.01em;
@@ -120,6 +123,7 @@ html.dark .glass-panel, html.dark .frosted-glass, html.dark .soft-card, html.dar
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   border: 1px solid var(--border-card);
 }
+
 
 .btn-rect-primary {
   background: linear-gradient(135deg, #4D50A2 0%, #2F3273 100%);

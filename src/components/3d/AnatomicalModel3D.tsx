@@ -17,43 +17,43 @@ interface AnatomicalNode {
 const NODES: AnatomicalNode[] = [
   {
     id: 'brain',
-    name: 'Neural Cortex Matrix',
-    category: 'Cognitive & CNS',
+    name: 'Neural Cortex',
+    category: 'Cognitive System',
     position: [0, 1.6, 0],
-    status: 'Optimal Synapse Activity',
-    metrics: 'EEG Delta Sync 98.4%',
+    status: 'Tracking active',
+    metrics: '',
   },
   {
     id: 'heart',
-    name: 'Cardiac Thoracic Node',
+    name: 'Cardiac Node',
     category: 'Cardiovascular System',
     position: [0, 0.7, 0.45],
-    status: 'Sinus Rhythm 72 BPM',
-    metrics: 'BP 118/76 • SpO2 99%',
+    status: 'Tracking active',
+    metrics: '',
   },
   {
     id: 'lungs',
-    name: 'Pulmonary Respiration',
+    name: 'Pulmonary System',
     category: 'Respiratory Track',
     position: [-0.5, 0.7, 0.2],
-    status: 'Clear Airway Capacity',
-    metrics: 'Tidal Vol 500 mL',
+    status: 'Tracking active',
+    metrics: '',
   },
   {
     id: 'liver',
-    name: 'Metabolic Hepatic System',
+    name: 'Hepatic System',
     category: 'Internal Biochemistry',
     position: [0.45, 0.1, 0.3],
-    status: 'ALT / AST Normal Range',
-    metrics: 'Bilirubin 0.8 mg/dL',
+    status: 'Tracking active',
+    metrics: '',
   },
   {
     id: 'spine',
-    name: 'Central Vertebral Pillar',
-    category: 'Musculoskeletal Integrity',
+    name: 'Vertebral Pillar',
+    category: 'Musculoskeletal',
     position: [0, 0.2, -0.4],
-    status: 'Lumbar Alignment Grade A',
-    metrics: 'Flexibility Score 94%',
+    status: 'Tracking active',
+    metrics: '',
   },
 ];
 
@@ -195,9 +195,6 @@ export function AnatomicalModel3D({
                     <div className="text-[11px] text-slate-300 mt-1 flex items-center gap-1.5 font-medium">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                       {node.status}
-                    </div>
-                    <div className="text-[10px] text-teal-300 font-mono mt-0.5 border-t border-slate-800 pt-1">
-                      {node.metrics}
                     </div>
                   </div>
                 </Html>

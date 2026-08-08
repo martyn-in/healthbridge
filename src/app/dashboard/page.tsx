@@ -1,472 +1,463 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import {
   Activity,
   Droplet,
   Brain,
-  ChevronDown,
   ArrowUpRight,
   Download,
   Calendar,
   Target,
   FileText,
   Plus,
-  ShieldAlert,
-  Sparkles,
-  TrendingUp,
-  ShieldCheck,
+  Stethoscope,
+  Pill,
+  Bot,
   Zap,
+  Heart,
+  TrendingUp,
+  AlertCircle,
 } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
-import { DashboardWebGLBackground } from '@/components/3d/DashboardWebGLBackground';
-import { Spatial3DDashboard } from '@/components/3d/Spatial3DDashboard';
 
-/* ─── REAL HEALTH IMPROVEMENT CURVED CHART WITH WebGL GLOW ─── */
-function HealthImprovementChart() {
-  const [selectedPoint, setSelectedPoint] = useState<number>(4);
-  const data = [42, 55, 48, 64, 82, 76, 94];
-  const days = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
+// ── Greeting helper ──────────────────────────────────────────────────────────
+function getGreeting(): string {
+  const h = new Date().getHours();
+  if (h < 12) return 'Good morning';
+  if (h < 17) return 'Good afternoon';
+  return 'Good evening';
+}
 
-  const width = 500;
-  const height = 180;
-
-  const points = data.map((val, idx) => {
-    const x = (idx / (data.length - 1)) * (width - 40) + 20;
-    const y = height - (val / 100) * (height - 40) - 20;
-    return { x, y, val };
-  });
-
-  const pathD = points.reduce((acc, pt, i, arr) => {
-    if (i === 0) return `M ${pt.x} ${pt.y}`;
-    const prev = arr[i - 1];
-    const cx1 = prev.x + (pt.x - prev.x) / 2;
-    const cy1 = prev.y;
-    const cx2 = prev.x + (pt.x - prev.x) / 2;
-    const cy2 = pt.y;
-    return `${acc} C ${cx1} ${cy1}, ${cx2} ${cy2}, ${pt.x} ${pt.y}`;
-  }, '');
-
-  const areaD = `${pathD} L ${points[points.length - 1].x} ${height} L ${points[0].x} ${height} Z`;
-  const activePt = points[selectedPoint];
-
+// ── Empty State Card ─────────────────────────────────────────────────────────
+function EmptyCard({
+  icon: Icon,
+  title,
+  description,
+  ctaLabel,
+  ctaHref,
+}: {
+  icon: any;
+  title: string;
+  description: string;
+  ctaLabel: string;
+  ctaHref: string;
+}) {
   return (
-    <div className="relative w-full space-y-3">
-      <div className="h-[210px] w-full relative">
-        <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-full overflow-visible" preserveAspectRatio="none">
-          <defs>
-            <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#4D50A2" stopOpacity="0.45" />
-              <stop offset="100%" stopColor="#4D50A2" stopOpacity="0.0" />
-            </linearGradient>
-          </defs>
-
-          {/* Area Fill */}
-          <path d={areaD} fill="url(#chartGradient)" />
-
-          {/* Glowing Vector Line */}
-          <path
-            d={pathD}
-            fill="none"
-            stroke="#4D50A2"
-            strokeWidth="3.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="drop-shadow-[0_4px_12px_rgba(77,80,162,0.4)]"
-          />
-
-          {/* Vertical Guidance Line */}
-          {activePt && (
-            <line
-              x1={activePt.x}
-              y1={activePt.y}
-              x2={activePt.x}
-              y2={height}
-              stroke="#4D50A2"
-              strokeWidth="1.5"
-              strokeDasharray="4 4"
-              opacity="0.6"
-            />
-          )}
-
-          {/* Precision Data Nodes */}
-          {points.map((pt, idx) => (
-            <g key={idx} onClick={() => setSelectedPoint(idx)} className="cursor-pointer group">
-              <circle
-                cx={pt.x}
-                cy={pt.y}
-                r={idx === selectedPoint ? '7' : '4.5'}
-                fill={idx === selectedPoint ? '#4D50A2' : '#FFFFFF'}
-                stroke="#4D50A2"
-                strokeWidth={idx === selectedPoint ? '3' : '2'}
-                className="transition-all duration-200 group-hover:scale-125"
-              />
-            </g>
-          ))}
-        </svg>
-
-        {/* Tabular Value Overlay Callout with Warm Soft Yellow Accent */}
-        {activePt && (
-          <div
-            className="absolute transform -translate-x-1/2 -translate-y-full pointer-events-none transition-all duration-200"
-            style={{
-              left: `${(activePt.x / width) * 100}%`,
-              top: `${(activePt.y / height) * 100 - 12}%`,
-            }}
-          >
-            <div className="bg-[#4D50A2] text-white text-[11px] font-bold px-3 py-1.5 rounded-xl shadow-xl border border-white/20 flex flex-col items-center whitespace-nowrap font-mono tabular-nums">
-              <span className="text-[#F9DF77] font-extrabold">{activePt.val}% Vital Optimization</span>
-              <span className="text-[9px] text-white/80 font-normal">Realtime Telemetry</span>
-            </div>
-          </div>
-        )}
+    <div className="flex flex-col items-center justify-center text-center p-6 rounded-2xl border-2 border-dashed border-[#4D50A2]/20 dark:border-white/10 bg-[#4D50A2]/5 dark:bg-white/5 space-y-3">
+      <div className="w-10 h-10 rounded-xl bg-[#4D50A2]/10 dark:bg-white/10 flex items-center justify-center">
+        <Icon className="h-5 w-5 text-[#4D50A2] dark:text-indigo-400" />
       </div>
+      <div className="space-y-1">
+        <p className="text-sm font-semibold text-[var(--text-primary)]">{title}</p>
+        <p className="text-xs text-[var(--text-muted)] leading-relaxed">{description}</p>
+      </div>
+      <Link
+        href={ctaHref}
+        className="btn-rect btn-rect-primary text-xs py-2 px-4"
+      >
+        <Plus className="h-3.5 w-3.5" />
+        <span>{ctaLabel}</span>
+      </Link>
+    </div>
+  );
+}
 
-      {/* Days Selector */}
-      <div className="flex justify-between items-center px-2 text-[11px] font-mono font-bold text-[var(--text-secondary)] border-t border-white/10 pt-2">
-        {days.map((day, idx) => (
-          <span
-            key={day}
-            onClick={() => setSelectedPoint(idx)}
-            className={`cursor-pointer transition-colors px-2 py-0.5 rounded-md ${
-              idx === selectedPoint
-                ? 'text-[#4D50A2] dark:text-[#6A6ECC] bg-[#4D50A2]/10 font-black'
-                : 'hover:text-[var(--text-primary)]'
-            }`}
-          >
-            {day}
-          </span>
-        ))}
+// ── Metric Card (only shown when real data exists) ───────────────────────────
+function MetricCard({
+  icon: Icon,
+  label,
+  value,
+  unit,
+  sub,
+  color = 'indigo',
+}: {
+  icon: any;
+  label: string;
+  value: string | number;
+  unit?: string;
+  sub?: string;
+  color?: 'indigo' | 'cyan' | 'emerald';
+}) {
+  const colorMap = {
+    indigo: 'text-indigo-500 bg-indigo-500/10 border-indigo-500/20',
+    cyan: 'text-cyan-500 bg-cyan-500/10 border-cyan-500/20',
+    emerald: 'text-emerald-500 bg-emerald-500/10 border-emerald-500/20',
+  };
+  return (
+    <div className="glass-subcard p-4 space-y-2">
+      <div className="flex items-center justify-between">
+        <span className="text-xs font-semibold text-[var(--text-secondary)]">{label}</span>
+        <div className={`p-1.5 rounded-lg border ${colorMap[color]}`}>
+          <Icon className="h-3.5 w-3.5" />
+        </div>
+      </div>
+      <div className="text-2xl font-bold tabular-nums text-[var(--text-primary)]">
+        {value}
+        {unit && <span className="text-sm font-normal text-[var(--text-muted)] ml-1">{unit}</span>}
+      </div>
+      {sub && <p className="text-[11px] text-[var(--text-muted)]">{sub}</p>}
+    </div>
+  );
+}
+
+// ── Progress Bar ─────────────────────────────────────────────────────────────
+function ProgressRow({
+  label,
+  value,
+  max,
+  color,
+}: {
+  label: string;
+  value: number;
+  max: number;
+  color: string;
+}) {
+  const pct = Math.min(100, Math.round((value / max) * 100));
+  return (
+    <div className="space-y-1.5">
+      <div className="flex justify-between text-xs font-semibold text-[var(--text-primary)]">
+        <span>{label}</span>
+        <span className="tabular-nums">{pct}%</span>
+      </div>
+      <div className="w-full h-2.5 bg-[#4D50A2]/10 dark:bg-white/10 rounded-full overflow-hidden">
+        <div
+          className="h-full rounded-full transition-all duration-500"
+          style={{ width: `${pct}%`, background: color }}
+        />
       </div>
     </div>
   );
 }
 
+// ── Main Dashboard ───────────────────────────────────────────────────────────
 export default function DashboardPage() {
-  const { activeProfile, reports, appointments, wellness, adherencePercentage } = useApp();
+  const { activeProfile, reports, appointments, wellness, medications, adherencePercentage } = useApp();
 
-  const activeAppointments = appointments.filter((a) => a.status === 'Upcoming');
-  const upcomingAppointment = activeAppointments[0];
+  const upcomingAppointment = appointments.find((a) => a.status === 'Upcoming');
+  const hasHydration = wellness.waterIntakeMl > 0;
+  const hasMindfulness = wellness.mindfulMinutes > 0;
+  const hasSteps = wellness.steps > 0;
+  const hasMedications = medications.length > 0;
+
+  // Progress section: only render when real data is available
+  const progressItems = [
+    hasMedications && {
+      label: 'Medication Adherence',
+      value: adherencePercentage,
+      max: 100,
+      color: 'linear-gradient(90deg, #4D50A2, #2F3273)',
+    },
+    hasHydration && {
+      label: 'Hydration Target',
+      value: wellness.waterIntakeMl,
+      max: wellness.waterGoalMl || 2500,
+      color: 'linear-gradient(90deg, #06b6d4, #3b82f6)',
+    },
+    hasSteps && {
+      label: 'Daily Steps Goal',
+      value: wellness.steps,
+      max: wellness.stepGoal || 8000,
+      color: 'linear-gradient(90deg, #ec4899, #f43f5e)',
+    },
+  ].filter(Boolean) as { label: string; value: number; max: number; color: string }[];
 
   return (
-    <div className="relative min-h-screen space-y-6 pb-12 selection:bg-indigo-500/20 selection:text-indigo-400">
-      {/* ── 1. WEBGL AMBIENT BACKGROUND LAYER ── */}
-      <DashboardWebGLBackground />
+    <div className="space-y-6 pb-12">
 
-      {/* ── 2. ROTATABLE 3D SPATIAL DASHBOARD WRAPPER ── */}
-      <Spatial3DDashboard>
-        <div className="space-y-6 relative z-10">
-          
-          {/* ── TOP MAIN GRID (3-GRID FULL VIEWPORT COMPOSITION) ── */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+      {/* ── GREETING HEADER ── */}
+      <div className="space-y-1">
+        <h1 className="text-2xl sm:text-3xl font-bold text-[var(--text-primary)]">
+          {getGreeting()}, <span className="text-[#4D50A2] dark:text-indigo-400">{activeProfile?.name || 'there'}</span>
+        </h1>
+        <p className="text-sm text-[var(--text-muted)]">
+          Here's your health overview for today.
+        </p>
+      </div>
 
-            {/* ── LEFT HERO GLASS PANEL (CLEAN HIGH-TECH VITAL COMMAND CENTER) ── */}
-            <div className="lg:col-span-7 glass-panel p-7 sm:p-8 relative overflow-hidden flex flex-col justify-between min-h-[420px] rounded-2xl border border-white/15 shadow-2xl">
-              
-              {/* Dynamic Personal Greeting & Headline */}
-              <div className="relative z-20 max-w-lg space-y-3">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-mono font-semibold uppercase tracking-wider">
-                  <Activity className="h-3.5 w-3.5 text-indigo-400 animate-pulse" />
-                  <span>Clinical Command Center</span>
+      {/* ── TOP GRID: Vitals + Quick Actions ── */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+
+        {/* ── LEFT: Health Metrics ── */}
+        <div className="lg:col-span-8 glass-panel p-5 sm:p-6 space-y-5 rounded-2xl">
+          <h2 className="text-base font-bold text-[var(--text-primary)] flex items-center gap-2">
+            <Heart className="h-4 w-4 text-[#4D50A2]" />
+            Today's Health
+          </h2>
+
+          {/* Metric Cards — only show when data exists */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {/* Hydration */}
+            {hasHydration ? (
+              <MetricCard
+                icon={Droplet}
+                label="Hydration"
+                value={wellness.waterIntakeMl}
+                unit="ml"
+                sub={`Target: ${wellness.waterGoalMl || 2500} ml`}
+                color="cyan"
+              />
+            ) : (
+              <div className="glass-subcard p-4 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-semibold text-[var(--text-secondary)]">Hydration</span>
+                  <div className="p-1.5 rounded-lg bg-cyan-500/10 border border-cyan-500/20">
+                    <Droplet className="h-3.5 w-3.5 text-cyan-500" />
+                  </div>
                 </div>
-                
-                <h1 className="text-3xl sm:text-4xl font-extrabold text-[var(--text-primary)] tracking-tight leading-tight">
-                  Hello, <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">{activeProfile?.name || 'Patient'}</span>
-                </h1>
-                
-                <p className="text-lg sm:text-xl font-medium text-[var(--text-secondary)] tracking-tight">
-                  How can HealthBridge assist you today?
-                </p>
+                <p className="text-xs text-[var(--text-muted)]">No intake recorded today</p>
+                <Link href="/dashboard/wellness" className="text-[11px] font-semibold text-[#4D50A2] hover:underline">
+                  Log Water →
+                </Link>
               </div>
+            )}
 
-              {/* Mobile Telemetry Badges (<sm screens) */}
-              <div className="flex sm:hidden items-center gap-2 pt-3 z-20">
-                <div className="px-3 py-1.5 rounded-xl glass-subcard border border-white/10 flex items-center gap-2 text-xs font-mono font-bold text-emerald-400">
-                  <Zap className="h-3.5 w-3.5 text-emerald-400 animate-pulse" />
-                  <span>78 BPM</span>
+            {/* Mindfulness */}
+            {hasMindfulness ? (
+              <MetricCard
+                icon={Brain}
+                label="Mindfulness"
+                value={wellness.mindfulMinutes}
+                unit="mins"
+                sub="Logged today"
+                color="indigo"
+              />
+            ) : (
+              <div className="glass-subcard p-4 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-semibold text-[var(--text-secondary)]">Mindfulness</span>
+                  <div className="p-1.5 rounded-lg bg-indigo-500/10 border border-indigo-500/20">
+                    <Brain className="h-3.5 w-3.5 text-indigo-500" />
+                  </div>
                 </div>
-                <div className="px-3 py-1.5 rounded-xl glass-subcard border border-white/10 flex items-center gap-2 text-xs font-mono font-bold text-cyan-400">
-                  <ShieldCheck className="h-3.5 w-3.5 text-cyan-400" />
-                  <span>98% SpO2</span>
-                </div>
+                <p className="text-xs text-[var(--text-muted)]">No session today</p>
+                <Link href="/dashboard/wellness" className="text-[11px] font-semibold text-[#4D50A2] hover:underline">
+                  Start Session →
+                </Link>
               </div>
+            )}
 
-              {/* Right Side Futuristic Vital Telemetry Matrix (Desktop Visualization) */}
-              <div className="absolute right-6 top-6 sm:top-8 z-10 hidden sm:flex flex-col gap-2 pointer-events-none">
-                <div className="p-3.5 rounded-xl glass-subcard border border-white/10 space-y-1 backdrop-blur-xl">
-                  <div className="flex items-center gap-2 text-[10px] font-mono text-[var(--text-muted)] uppercase tracking-wider">
-                    <Zap className="h-3 w-3 text-emerald-400 animate-pulse" />
-                    <span>Realtime Telemetry</span>
+            {/* Medication Adherence */}
+            {hasMedications ? (
+              <MetricCard
+                icon={Target}
+                label="Adherence"
+                value={adherencePercentage}
+                unit="%"
+                sub={`${medications.length} medication${medications.length > 1 ? 's' : ''} tracked`}
+                color="emerald"
+              />
+            ) : (
+              <div className="glass-subcard p-4 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-semibold text-[var(--text-secondary)]">Adherence</span>
+                  <div className="p-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
+                    <Target className="h-3.5 w-3.5 text-emerald-500" />
                   </div>
-                  <div className="text-lg font-black font-mono tabular-nums text-emerald-400">78 BPM</div>
-                  <div className="text-[10px] text-[var(--text-muted)]">Sinus Rhythm • Normal</div>
                 </div>
-
-                <div className="p-3.5 rounded-xl glass-subcard border border-white/10 space-y-1 backdrop-blur-xl">
-                  <div className="flex items-center gap-2 text-[10px] font-mono text-[var(--text-muted)] uppercase tracking-wider">
-                    <ShieldCheck className="h-3 w-3 text-cyan-400" />
-                    <span>SpO2 Oxygen Sync</span>
-                  </div>
-                  <div className="text-lg font-black font-mono tabular-nums text-cyan-400">98%</div>
-                  <div className="text-[10px] text-[var(--text-muted)]">Blood Oxygen Saturation</div>
-                </div>
+                <p className="text-xs text-[var(--text-muted)]">No medications tracked</p>
+                <Link href="/dashboard/medications" className="text-[11px] font-semibold text-[#4D50A2] hover:underline">
+                  Add Medication →
+                </Link>
               </div>
-
-              {/* 3 Metric Glass Subcards */}
-              <div className="relative z-20 grid grid-cols-1 sm:grid-cols-3 gap-3 mt-10">
-                
-                <div className="glass-subcard p-4 transition-all hover:translate-y-[-2px] hover:border-indigo-500/30">
-                  <div className="flex items-center justify-between text-[var(--text-secondary)] text-xs font-medium mb-1.5">
-                    <span>Adherence Rate</span>
-                    <div className="p-1.5 rounded-lg bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
-                      <Target className="h-3.5 w-3.5" />
-                    </div>
-                  </div>
-                  <div className="text-[10px] text-[var(--text-muted)] font-mono">Status: Optimal</div>
-                  <div className="text-2xl font-black font-mono tabular-nums text-[var(--text-primary)] mt-1">
-                    {adherencePercentage > 0 ? `${adherencePercentage}%` : '94%'}
-                  </div>
-                </div>
-
-                <div className="glass-subcard p-4 transition-all hover:translate-y-[-2px] hover:border-indigo-500/30">
-                  <div className="flex items-center justify-between text-[var(--text-secondary)] text-xs font-medium mb-1.5">
-                    <span>Daily Hydration</span>
-                    <div className="p-1.5 rounded-lg bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
-                      <Droplet className="h-3.5 w-3.5" />
-                    </div>
-                  </div>
-                  <div className="text-[10px] text-[var(--text-muted)] font-mono">
-                    Target: {wellness?.waterGoalMl || 2500} ml
-                  </div>
-                  <div className="text-2xl font-black font-mono tabular-nums text-[var(--text-primary)] mt-1">
-                    {wellness?.waterIntakeMl || 1850} <span className="text-xs font-normal text-[var(--text-muted)]">ml</span>
-                  </div>
-                </div>
-
-                <div className="glass-subcard p-4 transition-all hover:translate-y-[-2px] hover:border-indigo-500/30">
-                  <div className="flex items-center justify-between text-[var(--text-secondary)] text-xs font-medium mb-1.5">
-                    <span>Mindfulness</span>
-                    <div className="p-1.5 rounded-lg bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
-                      <Brain className="h-3.5 w-3.5" />
-                    </div>
-                  </div>
-                  <div className="text-[10px] text-[var(--text-muted)] font-mono">Logged Today</div>
-                  <div className="text-2xl font-black font-mono tabular-nums text-[var(--text-primary)] mt-1">
-                    {wellness?.mindfulMinutes || 35} <span className="text-xs font-normal text-[var(--text-muted)]">mins</span>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-
-            {/* ── RIGHT SUPPORTING ANALYTICS GLASS PANEL ── */}
-            <div className="lg:col-span-5 glass-panel p-7 sm:p-8 flex flex-col justify-between rounded-2xl border border-white/15 shadow-2xl">
-              <div className="flex items-center justify-between mb-4">
-                <div className="space-y-0.5">
-                  <div className="flex items-center gap-2">
-                    <TrendingUp className="h-4 w-4 text-indigo-400" />
-                    <h3 className="text-lg font-bold text-[var(--text-primary)] tracking-tight">Health Improvement</h3>
-                  </div>
-                  <p className="text-xs font-mono text-[var(--text-secondary)]">7-Day Telemetry Trends</p>
-                </div>
-                
-                <button className="btn-rect btn-rect-glass text-xs py-1.5 px-3">
-                  <span>This Week</span>
-                  <ChevronDown className="h-3.5 w-3.5 text-[var(--text-secondary)]" />
-                </button>
-              </div>
-
-              <HealthImprovementChart />
-            </div>
-
+            )}
           </div>
 
-          {/* ── LOWER 3-CARD FULL VIEWPORT GRID ── */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+          {/* Progress Bars — only when real data exists */}
+          {progressItems.length > 0 ? (
+            <div className="space-y-3 pt-2 border-t border-[#4D50A2]/10 dark:border-white/10">
+              <h3 className="text-xs font-bold text-[var(--text-secondary)] uppercase tracking-wider flex items-center gap-1.5">
+                <TrendingUp className="h-3 w-3" /> Daily Goals
+              </h3>
+              {progressItems.map((item) => (
+                <ProgressRow key={item.label} {...item} />
+              ))}
+            </div>
+          ) : (
+            <div className="pt-2 border-t border-[#4D50A2]/10 dark:border-white/10">
+              <p className="text-xs text-[var(--text-muted)] text-center py-2">
+                Log health data to track daily goals
+              </p>
+            </div>
+          )}
+        </div>
 
-            {/* ── CARD 1: MEDICAL REPORTS PANEL ── */}
-            <div className="lg:col-span-5 glass-panel p-6 space-y-4 rounded-2xl border border-white/15">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="p-2 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400">
-                    <FileText className="h-4 w-4" />
+        {/* ── RIGHT: Quick Actions ── */}
+        <div className="lg:col-span-4 glass-panel p-5 sm:p-6 rounded-2xl space-y-4">
+          <h2 className="text-base font-bold text-[var(--text-primary)] flex items-center gap-2">
+            <Zap className="h-4 w-4 text-[#4D50A2]" />
+            Quick Actions
+          </h2>
+          <div className="space-y-2">
+            {[
+              { label: 'Check Symptoms', icon: Stethoscope, href: '/dashboard/symptoms', desc: 'Assess and log how you feel' },
+              { label: 'Upload Report', icon: FileText, href: '/dashboard/reports', desc: 'Add lab results or scans' },
+              { label: 'Add Medication', icon: Pill, href: '/dashboard/medications', desc: 'Track prescriptions' },
+              { label: 'AI Assistant', icon: Bot, href: '/dashboard/assistant', desc: 'Ask a health question' },
+            ].map((action) => {
+              const Icon = action.icon;
+              return (
+                <Link
+                  key={action.href}
+                  href={action.href}
+                  className="flex items-center gap-3 p-3 rounded-xl glass-subcard hover:border-[#4D50A2]/30 dark:hover:border-indigo-400/30 transition-all group"
+                >
+                  <div className="w-8 h-8 rounded-lg bg-[#4D50A2]/10 border border-[#4D50A2]/20 flex items-center justify-center shrink-0">
+                    <Icon className="h-4 w-4 text-[#4D50A2] dark:text-indigo-400" />
                   </div>
-                  <h3 className="text-base font-bold text-[var(--text-primary)]">Diagnostic Reports</h3>
-                </div>
-
-                <Link href="/dashboard/reports" className="btn-rect btn-rect-primary text-xs py-1.5 px-3">
-                  <Plus className="h-3.5 w-3.5" />
-                  <span>Upload Report</span>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-xs font-bold text-[var(--text-primary)]">{action.label}</div>
+                    <div className="text-[11px] text-[var(--text-muted)] truncate">{action.desc}</div>
+                  </div>
+                  <ArrowUpRight className="h-3.5 w-3.5 text-[var(--text-muted)] group-hover:text-[#4D50A2] transition-colors shrink-0" />
                 </Link>
-              </div>
+              );
+            })}
+          </div>
+        </div>
 
-              {reports.length > 0 ? (
-                <div className="space-y-2.5">
-                  {reports.slice(0, 3).map((report) => (
-                    <div
-                      key={report.id}
-                      className="flex items-center justify-between p-3.5 rounded-xl glass-subcard hover:border-indigo-500/30 transition-all"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center shrink-0">
-                          <FileText className="h-4 w-4" />
-                        </div>
-                        <div>
-                          <h4 className="text-xs font-bold text-[var(--text-primary)]">{report.fileName}</h4>
-                          <p className="text-[10px] font-mono text-[var(--text-muted)]">{report.uploadedAt || report.testDate}</p>
-                        </div>
-                      </div>
+      </div>
 
-                      <a
-                        href={report.fileUrl || '#'}
-                        download
-                        className="p-2 rounded-lg btn-rect-glass text-indigo-400 hover:text-white transition-all"
-                      >
-                        <Download className="h-3.5 w-3.5" />
-                      </a>
+      {/* ── BOTTOM GRID: Reports + Appointment ── */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+
+        {/* ── REPORTS ── */}
+        <div className="lg:col-span-7 glass-panel p-5 sm:p-6 space-y-4 rounded-2xl">
+          <div className="flex items-center justify-between">
+            <h2 className="text-base font-bold text-[var(--text-primary)] flex items-center gap-2">
+              <FileText className="h-4 w-4 text-[#4D50A2]" />
+              Medical Reports
+            </h2>
+            <Link href="/dashboard/reports" className="btn-rect btn-rect-primary text-xs py-1.5 px-3">
+              <Plus className="h-3.5 w-3.5" />
+              <span>Upload</span>
+            </Link>
+          </div>
+
+          {reports.length > 0 ? (
+            <div className="space-y-2">
+              {reports.slice(0, 3).map((report) => (
+                <div
+                  key={report.id}
+                  className="flex items-center justify-between p-3.5 rounded-xl glass-subcard hover:border-[#4D50A2]/30 transition-all"
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="w-9 h-9 rounded-lg bg-[#4D50A2]/10 border border-[#4D50A2]/20 text-[#4D50A2] flex items-center justify-center shrink-0">
+                      <FileText className="h-4 w-4" />
                     </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="p-6 text-center glass-subcard rounded-xl border-dashed border-indigo-500/20 space-y-3">
-                  <FileText className="h-8 w-8 mx-auto text-indigo-400/50" />
-                  <div className="space-y-1">
-                    <div className="text-xs font-bold text-[var(--text-primary)]">No medical reports uploaded</div>
-                    <div className="text-[11px] text-[var(--text-muted)]">Scan lab diagnostic records to summarize clinical data</div>
+                    <div className="min-w-0">
+                      <h4 className="text-xs font-bold text-[var(--text-primary)] truncate">{report.fileName}</h4>
+                      <p className="text-[11px] text-[var(--text-muted)]">{report.uploadedAt || report.testDate}</p>
+                    </div>
                   </div>
-                  <Link href="/dashboard/reports" className="btn-rect btn-rect-primary text-xs py-1.5 px-3">
-                    <Plus className="h-3.5 w-3.5" />
-                    <span>Upload Diagnostic File</span>
-                  </Link>
+                  {report.fileUrl && report.fileUrl !== '#' ? (
+                    <a
+                      href={report.fileUrl}
+                      download
+                      title="Download report"
+                      className="p-2 rounded-lg btn-rect-glass text-[#4D50A2] hover:text-white transition-all shrink-0 ml-2"
+                      aria-label={`Download ${report.fileName}`}
+                    >
+                      <Download className="h-3.5 w-3.5" />
+                    </a>
+                  ) : (
+                    <span
+                      title="No file attached"
+                      className="p-2 rounded-lg opacity-30 cursor-not-allowed text-[var(--text-muted)] shrink-0 ml-2"
+                      aria-label="No file available to download"
+                    >
+                      <Download className="h-3.5 w-3.5" />
+                    </span>
+                  )}
                 </div>
+              ))}
+              {reports.length > 3 && (
+                <Link
+                  href="/dashboard/reports"
+                  className="text-xs font-semibold text-[#4D50A2] hover:underline block text-center pt-1"
+                >
+                  View all {reports.length} reports →
+                </Link>
               )}
             </div>
+          ) : (
+            <EmptyCard
+              icon={FileText}
+              title="No reports uploaded yet"
+              description="Upload your lab results, scans, or prescriptions to keep everything in one place."
+              ctaLabel="Upload Report"
+              ctaHref="/dashboard/reports"
+            />
+          )}
+        </div>
 
-            {/* ── CARD 2: UPCOMING CONSULTATION SESSION ── */}
-            <div className="lg:col-span-3 glass-panel p-6 flex flex-col justify-between space-y-4 rounded-2xl border border-white/15">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="p-2 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400">
-                    <Calendar className="h-4 w-4" />
-                  </div>
-                  <h3 className="text-base font-bold text-[var(--text-primary)]">Upcoming Session</h3>
+        {/* ── APPOINTMENT ── */}
+        <div className="lg:col-span-5 glass-panel p-5 sm:p-6 rounded-2xl space-y-4">
+          <div className="flex items-center justify-between">
+            <h2 className="text-base font-bold text-[var(--text-primary)] flex items-center gap-2">
+              <Calendar className="h-4 w-4 text-[#4D50A2]" />
+              Upcoming Appointment
+            </h2>
+            <Link
+              href="/dashboard/appointments"
+              className="p-1.5 rounded-lg btn-rect-glass text-[#4D50A2]"
+              aria-label="View all appointments"
+            >
+              <ArrowUpRight className="h-4 w-4" />
+            </Link>
+          </div>
+
+          {upcomingAppointment ? (
+            <div className="space-y-3">
+              <div className="p-4 rounded-xl glass-subcard border border-[#4D50A2]/20 space-y-1">
+                <div className="text-xs font-semibold text-[var(--text-muted)]">Scheduled</div>
+                <div className="text-xl font-bold tabular-nums text-[var(--text-primary)]">
+                  {upcomingAppointment.time}
                 </div>
-
-                <Link
-                  href="/dashboard/appointments"
-                  className="p-1.5 rounded-lg btn-rect-glass text-indigo-400 hover:text-white"
-                >
-                  <ArrowUpRight className="h-4 w-4" />
-                </Link>
+                <div className="text-sm font-semibold text-[#4D50A2]">{upcomingAppointment.date}</div>
               </div>
-
-              {upcomingAppointment ? (
-                <div className="space-y-3 my-2">
-                  <div className="p-3.5 rounded-xl glass-subcard border border-indigo-500/20 space-y-1">
-                    <div className="text-[10px] font-mono text-[var(--text-muted)] uppercase tracking-wider">Scheduled Time</div>
-                    <div className="text-xl font-black font-mono tabular-nums text-[var(--text-primary)]">{upcomingAppointment.time}</div>
-                    <div className="text-xs font-bold text-indigo-400">{upcomingAppointment.date}</div>
+              <div className="p-3 rounded-xl glass-subcard flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-[#4D50A2]/10 text-[#4D50A2] flex items-center justify-center shrink-0">
+                  <Calendar className="h-4 w-4" />
+                </div>
+                <div className="min-w-0">
+                  <div className="text-xs font-bold text-[var(--text-primary)] truncate">
+                    {upcomingAppointment.doctorName}
                   </div>
-
-                  <div className="p-3 rounded-xl glass-subcard flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-indigo-500/20 text-indigo-300 flex items-center justify-center shrink-0 font-bold text-xs">
-                      <Calendar className="h-4 w-4" />
-                    </div>
-                    <div>
-                      <div className="text-xs font-bold text-[var(--text-primary)]">{upcomingAppointment.doctorName}</div>
-                      <div className="text-[10px] font-mono text-[var(--text-muted)]">{upcomingAppointment.specialty}</div>
-                    </div>
+                  <div className="text-[11px] text-[var(--text-muted)] truncate">
+                    {upcomingAppointment.specialty}
                   </div>
                 </div>
-              ) : (
-                <div className="p-5 text-center glass-subcard rounded-xl border-dashed border-indigo-500/20 space-y-2">
-                  <Calendar className="h-7 w-7 mx-auto text-indigo-400/50" />
-                  <div className="text-xs font-bold text-[var(--text-primary)]">No session booked</div>
-                  <div className="text-[10px] text-[var(--text-muted)]">Book a specialist telemedicine consultation</div>
-                  <Link href="/dashboard/appointments" className="btn-rect btn-rect-primary text-xs py-1 px-3">
-                    <Plus className="h-3 w-3" />
-                    <span>Book Session</span>
-                  </Link>
-                </div>
-              )}
-
-              <Link href="/dashboard/appointments" className="text-center text-xs font-bold text-indigo-400 hover:underline">
-                View All Appointments →
+              </div>
+              <Link
+                href="/dashboard/appointments"
+                className="text-xs font-semibold text-[#4D50A2] hover:underline block text-center"
+              >
+                View all appointments →
               </Link>
             </div>
+          ) : (
+            <EmptyCard
+              icon={Calendar}
+              title="No upcoming appointments"
+              description="Book a consultation with a specialist or your regular doctor."
+              ctaLabel="Book Appointment"
+              ctaHref="/dashboard/appointments"
+            />
+          )}
 
-            {/* ── CARD 3: ACTIVE TREATMENT PATH & GOALS ── */}
-            <div className="lg:col-span-4 glass-panel p-6 space-y-4 rounded-2xl border border-white/15">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="p-2 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400">
-                    <Sparkles className="h-4 w-4" />
-                  </div>
-                  <h3 className="text-base font-bold text-[var(--text-primary)]">Active Path Progress</h3>
-                </div>
-
-                <span className="text-xl font-black font-mono tabular-nums text-indigo-400">
-                  {adherencePercentage > 0 ? `${adherencePercentage}%` : '94%'}
-                </span>
-              </div>
-
-              <div className="space-y-4">
-                
-                <div className="space-y-1.5">
-                  <div className="flex justify-between text-xs font-bold text-[var(--text-primary)] font-mono">
-                    <span>Medication Adherence</span>
-                    <span className="tabular-nums">{adherencePercentage > 0 ? `${adherencePercentage}%` : '94%'}</span>
-                  </div>
-                  <div className="w-full h-3 glass-subcard rounded-lg overflow-hidden p-0.5">
-                    <div
-                      className="h-full rounded-md bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-500"
-                      style={{ width: `${adherencePercentage > 0 ? adherencePercentage : 94}%` }}
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-1.5">
-                  <div className="flex justify-between text-xs font-bold text-[var(--text-primary)] font-mono">
-                    <span>Hydration Target</span>
-                    <span className="tabular-nums">
-                      {Math.min(100, Math.round(((wellness?.waterIntakeMl || 1850) / (wellness?.waterGoalMl || 2500)) * 100))}%
-                    </span>
-                  </div>
-                  <div className="w-full h-3 glass-subcard rounded-lg overflow-hidden p-0.5">
-                    <div
-                      className="h-full rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 transition-all duration-500"
-                      style={{
-                        width: `${Math.min(100, Math.round(((wellness?.waterIntakeMl || 1850) / (wellness?.waterGoalMl || 2500)) * 100))}%`,
-                      }}
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-1.5">
-                  <div className="flex justify-between text-xs font-bold text-[var(--text-primary)] font-mono">
-                    <span>Daily Activity Goal</span>
-                    <span className="tabular-nums">
-                      {Math.min(100, Math.round(((wellness?.steps || 6400) / (wellness?.stepGoal || 8000)) * 100))}%
-                    </span>
-                  </div>
-                  <div className="w-full h-3 glass-subcard rounded-lg overflow-hidden p-0.5">
-                    <div
-                      className="h-full rounded-md bg-gradient-to-r from-pink-500 to-rose-500 transition-all duration-500"
-                      style={{
-                        width: `${Math.min(100, Math.round(((wellness?.steps || 6400) / (wellness?.stepGoal || 8000)) * 100))}%`,
-                      }}
-                    />
-                  </div>
-                </div>
-
-              </div>
-            </div>
-
+          {/* Health tip — static informational, not fake data */}
+          <div className="p-3 rounded-xl bg-[#F9DF77]/20 dark:bg-[#F9DF77]/10 border border-[#F9DF77]/40 dark:border-[#F9DF77]/20 flex items-start gap-2.5">
+            <AlertCircle className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+            <p className="text-[11px] text-amber-900 dark:text-amber-200 font-medium leading-relaxed">
+              HealthBridge AI can help analyse uploaded reports, explain medications, and answer health questions.
+            </p>
           </div>
-
         </div>
-      </Spatial3DDashboard>
+
+      </div>
+
     </div>
   );
 }
