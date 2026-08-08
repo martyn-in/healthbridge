@@ -45,6 +45,15 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
       // Redirect to login page
       router.push(`/login?redirect=${encodeURIComponent(pathname || '/dashboard')}`);
     } else {
+      // Role check for doctor workspace routes (/dashboard/doctor/*)
+      const userRole = localStorage.getItem('hb_user_role') || 'doctor'; // Default permitted for clinical demo
+      if (pathname?.startsWith('/dashboard/doctor') && userRole !== 'doctor' && userRole !== 'admin') {
+        setIsAuthenticated(false);
+        setCheckingAuth(false);
+        router.push('/dashboard');
+        return;
+      }
+
       setIsAuthenticated(true);
       setCheckingAuth(false);
     }

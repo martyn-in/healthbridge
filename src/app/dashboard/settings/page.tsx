@@ -1,11 +1,23 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Settings as SettingsIcon, Shield, Lock, Download, RotateCcw, User, Bell, Globe, AlertTriangle, Check, Mail } from 'lucide-react';
+import { Settings as SettingsIcon, Shield, Lock, Download, RotateCcw, User, Bell, Globe, AlertTriangle, Check, Mail, MapPin, Crosshair, Camera } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
 
 export default function SettingsPage() {
-  const { activeProfile, updatePrimaryProfile, qrSharingEnabled, setQrSharingEnabled, clearAllDataToFreshState, showToast } = useApp();
+  const {
+    activeProfile,
+    updatePrimaryProfile,
+    qrSharingEnabled,
+    setQrSharingEnabled,
+    clearAllDataToFreshState,
+    showToast,
+    locationPermissionState,
+    cameraPermissionState,
+    requestUserLocation,
+    userLocation,
+    userAddress,
+  } = useApp();
 
   const [fullName, setFullName] = useState(activeProfile?.name || '');
   const [email, setEmail] = useState((activeProfile as any)?.email || '');
@@ -232,17 +244,98 @@ export default function SettingsPage() {
           </div>
         </div>
 
-        {/* Privacy & Security Section */}
+        {/* Privacy & Permissions Section */}
         <div className="frosted-card rounded-3xl p-8 border border-white/90 card-lift transition-all delay-400 anim-slide-left">
           <div className="flex items-center gap-3 mb-6">
             <div className="p-2 rounded-xl bg-teal-50 text-[#00D4AA]">
               <Shield className="h-5 w-5" />
             </div>
-            <h3 className="text-xl font-bold text-[#0D1B2A]">Privacy & Security</h3>
+            <div>
+              <h3 className="text-xl font-bold text-[#0D1B2A]">Privacy & Device Permissions</h3>
+              <p className="text-xs font-medium text-[#9BAABF] mt-0.5">Control how HealthBridge uses your location, camera, and emergency medical pass</p>
+            </div>
           </div>
           <div className="h-px w-full bg-slate-200/50 mb-6"></div>
           
           <div className="space-y-4">
+            {/* Location Status Card */}
+            <div className="neu-card rounded-2xl p-5 bg-white/40 space-y-3">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="flex items-start sm:items-center gap-3">
+                  <div className="p-2.5 bg-blue-50 text-[#0066FF] rounded-xl font-bold text-xs shrink-0">
+                    <MapPin className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <p className="font-bold text-[#0D1B2A]">Location Access</p>
+                      <span className={`text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full ${
+                        locationPermissionState === 'allowed'
+                          ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
+                          : locationPermissionState === 'denied'
+                          ? 'bg-red-100 text-red-800 border border-red-200'
+                          : 'bg-amber-100 text-amber-800 border border-amber-200'
+                      }`}>
+                        {locationPermissionState === 'allowed'
+                          ? 'Location available'
+                          : locationPermissionState === 'denied'
+                          ? 'Permission denied'
+                          : 'Location not requested'}
+                      </span>
+                    </div>
+                    <p className="text-xs font-medium text-[#9BAABF] mt-1">
+                      Used for nearby care, hospitals, pharmacies, and Emergency SOS location sharing.
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={requestUserLocation}
+                  className="pill-btn pill-btn-primary text-xs shrink-0 self-start sm:self-center flex items-center gap-1.5"
+                >
+                  <Crosshair className="h-3.5 w-3.5" />
+                  <span>{locationPermissionState === 'allowed' ? 'Refresh GPS' : 'Enable Location'}</span>
+                </button>
+              </div>
+              {userLocation && (
+                <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-xs font-semibold text-slate-600 flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                  <span>{userAddress || `${userLocation.lat.toFixed(4)}, ${userLocation.lng.toFixed(4)}`}</span>
+                </div>
+              )}
+            </div>
+
+            {/* Camera Status Card */}
+            <div className="neu-card rounded-2xl p-5 bg-white/40 space-y-2">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="flex items-start sm:items-center gap-3">
+                  <div className="p-2.5 bg-violet-50 text-[#7C5CFC] rounded-xl font-bold text-xs shrink-0">
+                    <Camera className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <p className="font-bold text-[#0D1B2A]">Camera Access</p>
+                      <span className={`text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full ${
+                        cameraPermissionState === 'allowed'
+                          ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
+                          : cameraPermissionState === 'denied'
+                          ? 'bg-red-100 text-red-800 border border-red-200'
+                          : 'bg-slate-100 text-slate-700 border border-slate-200'
+                      }`}>
+                        {cameraPermissionState === 'allowed'
+                          ? 'Camera available'
+                          : cameraPermissionState === 'denied'
+                          ? 'Permission denied'
+                          : 'Not requested'}
+                      </span>
+                    </div>
+                    <p className="text-xs font-medium text-[#9BAABF] mt-1">
+                      Used strictly when explicitly initiating Doctor QR scanner or document uploads.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Emergency QR Health Pass Toggle Card */}
             <div className="flex items-center justify-between neu-card rounded-2xl p-4 bg-white/40">
               <div className="flex gap-4 items-center">
                 <div className="p-3 bg-teal-50 rounded-xl text-[#00D4AA] hidden sm:block">
@@ -250,13 +343,13 @@ export default function SettingsPage() {
                 </div>
                 <div>
                   <p className="font-bold text-[#0D1B2A]">Emergency QR Pass Authorization</p>
-                  <p className="text-xs font-medium text-[#9BAABF] mt-1 max-w-sm">Allow first responders to scan QR for blood group & allergies.</p>
+                  <p className="text-xs font-medium text-[#9BAABF] mt-1 max-w-sm">Allow verified clinical doctors to scan signed QR token for emergency medical data.</p>
                 </div>
               </div>
               <button 
                 onClick={() => {
                   setQrSharingEnabled(!qrSharingEnabled);
-                  showToast(qrSharingEnabled ? 'QR Access Disabled' : 'QR Access Enabled');
+                  showToast(qrSharingEnabled ? 'Emergency QR Access Disabled' : 'Emergency QR Access Enabled');
                 }}
                 className={`relative w-12 h-6 rounded-full transition-colors duration-300 shadow-inner shrink-0 ${qrSharingEnabled ? 'bg-[#0066FF]' : 'bg-[#D1D8E0]'}`}
               >
@@ -264,6 +357,7 @@ export default function SettingsPage() {
               </button>
             </div>
 
+            {/* Data Portability */}
             <div className="flex items-center justify-between neu-card rounded-2xl p-4 bg-white/40">
               <div>
                 <p className="font-bold text-[#0D1B2A]">Data Portability</p>

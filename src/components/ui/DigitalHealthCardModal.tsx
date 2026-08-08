@@ -21,15 +21,9 @@ export const DigitalHealthCardModal: React.FC<{ isOpen: boolean; onClose: () => 
 
   const primaryContact = emergencyContacts.find((c) => c.isPrimary) || emergencyContacts[0];
 
-  const qrPayload = JSON.stringify({
-    cardId: `HB-QR-${activeProfile.id}`,
-    name: activeProfile.name,
-    bloodGroup: shareBloodGroup ? activeProfile.bloodGroup : 'Restricted',
-    allergies: shareAllergies ? activeProfile.allergies : ['Restricted'],
-    conditions: shareConditions ? activeProfile.conditions : ['Restricted'],
-    emergencyPhone: shareContacts ? primaryContact?.phone : 'Restricted',
-    status: qrSharingEnabled ? 'ACTIVE' : 'DISABLED',
-  });
+  // Tokenized opaque QR payload (no raw medical data inside QR code)
+  const passToken = `hb_pass_token_${activeProfile.id}_${activeProfile.name.toLowerCase().replace(/\s+/g, '_')}`;
+  const qrPayload = `healthbridge://health-pass/${passToken}`;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-sm animate-in fade-in duration-200">
@@ -75,11 +69,16 @@ export const DigitalHealthCardModal: React.FC<{ isOpen: boolean; onClose: () => 
               )}
             </div>
 
-            <p className="text-[11px] text-center text-slate-300">
-              {qrSharingEnabled
-                ? 'Scan with camera in an emergency to access limited medical pass.'
-                : 'QR code access is currently disabled.'}
-            </p>
+            <div className="text-center space-y-1">
+              <span className="text-[10px] font-mono text-teal-300 font-bold bg-white/10 px-3 py-1 rounded-full border border-teal-500/20 inline-block">
+                PASS CODE: {passToken}
+              </span>
+              <p className="text-[11px] text-center text-slate-300">
+                {qrSharingEnabled
+                  ? 'Contains an opaque signed token. Authorized doctors scan or enter pass code for clinical access.'
+                  : 'QR code access is currently disabled.'}
+              </p>
+            </div>
           </div>
 
           {/* QR Safety Controls */}

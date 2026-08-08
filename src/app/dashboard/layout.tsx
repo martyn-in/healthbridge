@@ -7,6 +7,7 @@ import { EmergencySosModal } from '@/components/ui/EmergencySosModal';
 import { DigitalHealthCardModal } from '@/components/ui/DigitalHealthCardModal';
 import { DisclaimerBanner } from '@/components/ui/DisclaimerBanner';
 import { AuthGuard } from '@/components/auth/AuthGuard';
+import { LocationPermissionModal } from '@/components/ui/LocationPermissionModal';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [isHealthCardOpen, setIsHealthCardOpen] = useState(false);
@@ -41,6 +42,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </div>
 
         {/* Global Modals */}
+        <LocationPermissionModal />
         <EmergencySosModal />
         <DigitalHealthCardModal isOpen={isHealthCardOpen} onClose={() => setIsHealthCardOpen(false)} />
       </div>

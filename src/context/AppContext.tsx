@@ -103,6 +103,10 @@ interface AppContextType {
   toastMessage: string | null;
   showToast: (msg: string) => void;
 
+  locationPermissionState: 'not_requested' | 'allowed' | 'denied' | 'deferred';
+  setLocationPermissionState: (val: 'not_requested' | 'allowed' | 'denied' | 'deferred') => void;
+  cameraPermissionState: 'not_requested' | 'allowed' | 'denied';
+  setCameraPermissionState: (val: 'not_requested' | 'allowed' | 'denied') => void;
   userLocation: { lat: number; lng: number } | null;
   userAddress: string;
   requestUserLocation: () => void;
@@ -139,8 +143,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [assistantMessages, setAssistantMessages] = useState<AssistantMessage[]>(defaultLiveAssistantMessages);
 
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [locationPermissionState, setLocationPermissionState] = useState<'not_requested' | 'allowed' | 'denied' | 'deferred'>('not_requested');
+  const [cameraPermissionState, setCameraPermissionState] = useState<'not_requested' | 'allowed' | 'denied'>('not_requested');
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
-  const [userAddress, setUserAddress] = useState<string>('Detecting location...');
+  const [userAddress, setUserAddress] = useState<string>('Location unavailable');
 
   const fetchAddressForCoordinates = async (lat: number, lng: number) => {
     try {
@@ -164,6 +170,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   useEffect(() => {
     if (typeof window !== 'undefined') {
       try {
+        const savedLocPerm = localStorage.getItem('hb_location_permission') as any;
+        if (savedLocPerm) setLocationPermissionState(savedLocPerm);
+
+        const savedCamPerm = localStorage.getItem('hb_camera_permission') as any;
+        if (savedCamPerm) setCameraPermissionState(savedCamPerm);
+
         const savedProfiles = localStorage.getItem('hb_profiles');
         if (savedProfiles) {
           const parsed = JSON.parse(savedProfiles);
@@ -241,6 +253,23 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   }, [darkMode]);
 
+  // Permission persistence sync
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem('hb_location_permission', locationPermissionState);
+      } catch (e) {}
+    }
+  }, [locationPermissionState]);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem('hb_camera_permission', cameraPermissionState);
+      } catch (e) {}
+    }
+  }, [cameraPermissionState]);
+
   const showToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => {
@@ -249,25 +278,46 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const requestUserLocation = () => {
-    if (navigator.geolocation) {
+    if (typeof window !== 'undefined' && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const lat = pos.coords.latitude;
+          const lng = pos.coords.longitude;
+          setUserLocation({ lat, lng });
+          setLocationPermissionState('allowed');
+          fetchAddressForCoordinates(lat, lng);
+          showToast('Live GPS location acquired!');
+        },
+        (err) => {
+          console.warn('Geolocation denied or failed:', err);
+          setLocationPermissionState('denied');
+          setUserAddress('Location unavailable');
+          showToast('Location access denied or unavailable.');
+        },
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+      );
+    } else {
+      setLocationPermissionState('denied');
+      showToast('Geolocation is not supported by your browser.');
+    }
+  };
+
+  const triggerSos = () => {
+    setIsSosActive(true);
+    // If location is allowed, try to get a fresh fix
+    if (locationPermissionState === 'allowed' && typeof window !== 'undefined' && navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (pos) => {
           const lat = pos.coords.latitude;
           const lng = pos.coords.longitude;
           setUserLocation({ lat, lng });
           fetchAddressForCoordinates(lat, lng);
-          showToast('Live GPS location acquired!');
         },
-        (err) => {
-          showToast('GPS access denied or unavailable.');
-        }
+        (err) => console.warn('SOS GPS fetch failed:', err),
+        { enableHighAccuracy: true, timeout: 5000 }
       );
     }
-  };
-
-  const triggerSos = () => {
-    setIsSosActive(true);
-    showToast('EMERGENCY SOS ACTIVATED. Displaying real medical card & 112/108 call actions.');
+    showToast('EMERGENCY SOS ACTIVATED. Displaying real medical card & emergency call actions.');
   };
 
   const cancelSos = () => {
@@ -563,6 +613,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         loadSamplePresets,
         toastMessage,
         showToast,
+        locationPermissionState,
+        setLocationPermissionState,
+        cameraPermissionState,
+        setCameraPermissionState,
         userLocation,
         userAddress,
         requestUserLocation,
