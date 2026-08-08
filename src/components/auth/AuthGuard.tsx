@@ -2,62 +2,64 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { useAuth } from '@clerk/nextjs';
 import { ShieldCheck, Lock } from 'lucide-react';
 import { Logo } from '@/components/ui/Logo';
-
-const clerkPubKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+import { useApp } from '@/context/AppContext';
 
 export function AuthGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
+  const { updatePrimaryProfile } = useApp();
+
   const [checkingAuth, setCheckingAuth] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // Safely check Clerk auth if key exists
-  let clerkIsLoaded = true;
-  let clerkIsSignedIn = false;
-
-  if (clerkPubKey) {
-    try {
-      const auth = useAuth();
-      clerkIsLoaded = auth.isLoaded;
-      clerkIsSignedIn = !!auth.isSignedIn;
-    } catch (e) {
-      // Ignore if outside provider
-    }
-  }
-
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    let isMounted = true;
 
-    const localAuth = localStorage.getItem('hb_user_authenticated') === 'true';
+    async function checkServerSession() {
+      try {
+        const res = await fetch('/api/auth/me', { cache: 'no-store' });
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.authenticated && data.user) {
+            if (isMounted) {
+              // Sync verified server profile
+              updatePrimaryProfile({
+                name: data.user.name,
+                email: data.user.email,
+                avatarUrl: data.user.avatarUrl,
+              });
 
-    // If Clerk is active, check clerkIsSignedIn OR localAuth
-    let authed = localAuth;
-    if (clerkPubKey && clerkIsLoaded) {
-      authed = clerkIsSignedIn || localAuth;
-    }
+              // Check doctor role requirement for /dashboard/doctor/*
+              if (pathname?.startsWith('/dashboard/doctor') && data.user.role !== 'doctor' && data.user.role !== 'admin') {
+                router.push('/dashboard');
+                return;
+              }
 
-    if (!authed) {
-      setIsAuthenticated(false);
-      setCheckingAuth(false);
-      // Redirect to login page
-      router.push(`/login?redirect=${encodeURIComponent(pathname || '/dashboard')}`);
-    } else {
-      // Role check for doctor workspace routes (/dashboard/doctor/*)
-      const userRole = localStorage.getItem('hb_user_role') || 'doctor'; // Default permitted for clinical demo
-      if (pathname?.startsWith('/dashboard/doctor') && userRole !== 'doctor' && userRole !== 'admin') {
-        setIsAuthenticated(false);
-        setCheckingAuth(false);
-        router.push('/dashboard');
-        return;
+              setIsAuthenticated(true);
+              setCheckingAuth(false);
+            }
+            return;
+          }
+        }
+      } catch (err) {
+        console.warn('Server session check error:', err);
       }
 
-      setIsAuthenticated(true);
-      setCheckingAuth(false);
+      if (isMounted) {
+        setIsAuthenticated(false);
+        setCheckingAuth(false);
+        router.push(`/login?redirect=${encodeURIComponent(pathname || '/dashboard')}`);
+      }
     }
-  }, [clerkIsLoaded, clerkIsSignedIn, pathname, router]);
+
+    checkServerSession();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [pathname, router]);
 
   if (checkingAuth || !isAuthenticated) {
     return (
@@ -70,9 +72,9 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
             <Lock className="w-6 h-6 animate-pulse" />
           </div>
           <div>
-            <h2 className="text-lg font-black text-[#0D1B2A]">Securing Clinical Session</h2>
+            <h2 className="text-lg font-black text-[#0D1B2A]">Verifying Google Identity Session</h2>
             <p className="text-xs text-slate-500 mt-1 font-medium">
-              Authenticating user credentials before granting access to dashboard telemetry…
+              Validating HTTP-only session tokens with HealthBridge authentication server…
             </p>
           </div>
           <div className="flex items-center justify-center gap-2 text-xs font-bold text-blue-600 bg-blue-50/80 py-2.5 px-4 rounded-full border border-blue-100">

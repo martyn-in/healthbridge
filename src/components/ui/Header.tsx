@@ -269,17 +269,18 @@ export const Header: React.FC<{ onOpenHealthCard?: () => void }> = ({ onOpenHeal
                   >
                     Edit Profile Details
                   </Link>
-                  <Link
-                    href="/login"
-                    onClick={() => {
-                      localStorage.removeItem('hb_user_authenticated');
-                      localStorage.removeItem('hb_auth_provider');
+                  <button
+                    onClick={async () => {
                       setShowProfileMenu(false);
+                      try {
+                        await fetch('/api/auth/logout', { method: 'POST' });
+                      } catch (e) {}
+                      window.location.href = '/login';
                     }}
                     className="w-full text-center py-1.5 px-3 block rounded-xl text-xs font-bold text-rose-600 bg-rose-50 dark:bg-rose-950/30 hover:bg-rose-100 transition-colors"
                   >
                     Sign Out / Switch Account
-                  </Link>
+                  </button>
                 </div>
               </div>
             )}
