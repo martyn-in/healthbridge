@@ -27,8 +27,15 @@ export async function GET(req: Request) {
     // Clear state cookie
     cookieStore.set('hb_oauth_state', '', { maxAge: 0, path: '/' });
 
-    const clientId = process.env.GOOGLE_CLIENT_ID || process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '213155484261-pp5npa2jurhqds55lk0oevh8ppbj47f0.apps.googleusercontent.com';
-    const clientSecret = process.env.GOOGLE_CLIENT_SECRET || '';
+    const rawClientId =
+      process.env.GOOGLE_CLIENT_ID ||
+      process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ||
+      '213155484261-pp5npa2jurhqds55lk0oevh8ppbj47f0.apps.googleusercontent.com';
+    const clientId = rawClientId.replace(/["']/g, '').trim();
+
+    const rawClientSecret = process.env.GOOGLE_CLIENT_SECRET || '';
+    const clientSecret = rawClientSecret.replace(/["']/g, '').trim();
+
     const redirectUri =
       process.env.GOOGLE_REDIRECT_URI ||
       (process.env.NODE_ENV === 'production'
