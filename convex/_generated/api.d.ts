@@ -14,6 +14,7 @@ import type * as bootstrap from "../bootstrap.js";
 import type * as patients from "../patients.js";
 import type * as seed from "../seed.js";
 import type * as users from "../users.js";
+import type * as wipeMockData from "../wipeMockData.js";
 
 import type {
   ApiFromModules,
@@ -28,6 +29,7 @@ declare const fullApi: ApiFromModules<{
   patients: typeof patients;
   seed: typeof seed;
   users: typeof users;
+  wipeMockData: typeof wipeMockData;
 }>;
 
 /**
