@@ -43,30 +43,26 @@ export default function DoctorScanPage() {
         scannerRef.current = new Html5Qrcode("reader");
       }
 
-      // Fetch available cameras first to avoid environment/facingMode constraint errors on devices without a back camera
-      const cameras = await Html5Qrcode.getCameras();
-      if (!cameras || cameras.length === 0) {
-        throw new Error("No cameras found on this device.");
+      const config = { fps: 10, qrbox: { width: 250, height: 250 }, aspectRatio: 1.0 };
+      
+      const onSuccess = async (decodedText: string) => {
+        if (scannerRef.current && scannerRef.current.isScanning) {
+          await scannerRef.current.stop();
+        }
+        handleScanSuccess(decodedText);
+      };
+
+      try {
+        // First try the back camera (ideal for mobile)
+        await scannerRef.current.start({ facingMode: "environment" }, config, onSuccess, () => {});
+      } catch (err) {
+        // If the back camera fails (e.g., on laptops), try the front camera
+        await scannerRef.current.start({ facingMode: "user" }, config, onSuccess, () => {});
       }
-
-      // Try to select a back camera, otherwise default to the first available camera
-      const backCamera = cameras.find(c => c.label.toLowerCase().includes('back') || c.label.toLowerCase().includes('environment'));
-      const cameraIdToUse = backCamera ? backCamera.id : cameras[0].id;
-
-      await scannerRef.current.start(
-        cameraIdToUse,
-        { fps: 10, qrbox: { width: 250, height: 250 }, aspectRatio: 1.0 },
-        async (decodedText) => {
-          if (scannerRef.current && scannerRef.current.isScanning) {
-            await scannerRef.current.stop();
-          }
-          handleScanSuccess(decodedText);
-        },
-        () => { /* ignore */ }
-      );
     } catch (err: any) {
+      console.error("Scanner Error:", err);
       setScanState('error');
-      setErrorMessage(err?.message || "Camera access denied or unavailable.");
+      setErrorMessage("Please ensure camera permissions are allowed in your browser settings (click the lock icon in the URL bar).");
     }
   };
 
