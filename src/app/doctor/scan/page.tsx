@@ -44,7 +44,7 @@ export default function DoctorScanPage() {
       }
       await scannerRef.current.start(
         { facingMode: "environment" },
-        { fps: 10, qrbox: { width: 250, height: 250 } },
+        { fps: 10, qrbox: { width: 250, height: 250 }, aspectRatio: 1.0 },
         async (decodedText) => {
           if (scannerRef.current && scannerRef.current.isScanning) {
             await scannerRef.current.stop();
@@ -109,7 +109,7 @@ export default function DoctorScanPage() {
         </p>
       </div>
 
-      <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-8 text-center flex flex-col items-center justify-center relative overflow-hidden min-h-[400px]">
+      <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-4 md:p-8 text-center flex flex-col items-center justify-center relative overflow-hidden min-h-[400px]">
         {scanState === 'ready' && (
           <div className="relative z-10 w-full max-w-sm mx-auto aspect-square border-4 border-dashed border-[#4D50A2]/30 rounded-3xl flex flex-col items-center justify-center bg-white/50 backdrop-blur-sm">
             <QrCode className="w-16 h-16 text-[#4D50A2] mb-4" />
@@ -129,8 +129,8 @@ export default function DoctorScanPage() {
         )}
 
         {scanState === 'scanning' && (
-          <div className="w-full max-w-sm mx-auto">
-            <div id="reader" className="rounded-3xl overflow-hidden border-4 border-[#4D50A2]/50 shadow-lg" />
+          <div className="w-full max-w-sm mx-auto flex flex-col items-center">
+            <div id="reader" className="w-full aspect-square rounded-3xl overflow-hidden border-4 border-[#4D50A2]/50 shadow-lg [&_video]:object-cover [&_video]:w-full [&_video]:h-full" />
             <button 
               onClick={cancelScan}
               className="mt-6 px-6 py-3 bg-slate-100 text-slate-700 rounded-xl font-bold hover:bg-slate-200 transition-colors"
