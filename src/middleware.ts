@@ -7,22 +7,37 @@ const SESSION_SECRET_KEY = new TextEncoder().encode(
   process.env.SESSION_SECRET || 'healthbridge_secure_session_secret_key_2026_prod'
 );
 
+const ADMIN_SESSION_COOKIE = 'healthbridge_admin_session';
+const ADMIN_SECRET_KEY = new TextEncoder().encode(
+  process.env.CONVEX_ADMIN_SECRET || 'fallback-secret-for-development'
+);
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Protect /dashboard, /doctor, and /admin routes
-  if (pathname.startsWith('/dashboard') || pathname.startsWith('/doctor') || pathname.startsWith('/admin')) {
+  // Protect Admin routes
+  if (pathname.startsWith('/admin')) {
+    const adminToken = request.cookies.get(ADMIN_SESSION_COOKIE)?.value;
+    if (!adminToken) {
+      return NextResponse.redirect(new URL('/?admin=true', request.url));
+    }
+    try {
+      await jwtVerify(adminToken, ADMIN_SECRET_KEY);
+      return NextResponse.next();
+    } catch (e) {
+      const response = NextResponse.redirect(new URL('/?admin=true', request.url));
+      response.cookies.delete(ADMIN_SESSION_COOKIE);
+      return response;
+    }
+  }
+
+  // Protect /dashboard and /doctor routes
+  if (pathname.startsWith('/dashboard') || pathname.startsWith('/doctor')) {
     const token = request.cookies.get(SESSION_COOKIE_NAME)?.value;
 
     if (!token) {
       const isDoctorRoute = pathname.startsWith('/doctor');
-      const isAdminRoute = pathname.startsWith('/admin');
-      
-      let loginUrl;
-      if (isAdminRoute) loginUrl = new URL('/login/admin', request.url);
-      else if (isDoctorRoute) loginUrl = new URL('/login/doctor', request.url);
-      else loginUrl = new URL('/login/patient', request.url);
-      
+      const loginUrl = new URL(isDoctorRoute ? '/login/doctor' : '/login/patient', request.url);
       loginUrl.searchParams.set('redirect', pathname);
       return NextResponse.redirect(loginUrl);
     }
@@ -42,18 +57,10 @@ export async function middleware(request: NextRequest) {
         throw new Error('Account suspended');
       }
 
-      // Role check for Admin routes
-      if (pathname.startsWith('/admin')) {
-        if (role !== 'admin') {
-          return NextResponse.redirect(new URL('/dashboard', request.url));
-        }
-      }
-
       // Role check for Doctor routes
       if (pathname.startsWith('/doctor')) {
         if (role !== 'doctor') {
-          // If a patient or admin tries to access doctor portal, kick them back
-          return NextResponse.redirect(new URL(role === 'admin' ? '/admin' : '/dashboard', request.url));
+          return NextResponse.redirect(new URL('/dashboard', request.url));
         }
 
         // If they are a doctor but NOT verified, restrict to /doctor/verification
@@ -70,7 +77,7 @@ export async function middleware(request: NextRequest) {
       // Role check for Patient routes
       if (pathname.startsWith('/dashboard')) {
         if (role !== 'patient') {
-          return NextResponse.redirect(new URL(role === 'admin' ? '/admin' : '/doctor', request.url));
+          return NextResponse.redirect(new URL('/doctor', request.url));
         }
       }
 

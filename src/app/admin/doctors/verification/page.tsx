@@ -8,9 +8,8 @@ import DoctorVerificationActions from './DoctorVerificationActions';
 
 export default async function DoctorVerificationQueue() {
   const session = await getSession();
-  if (!session || session.role !== 'admin') redirect('/login/admin');
-
-  const users = await convex.query(api.admin.getUsers, { actorId: session.googleSub });
+  const adminSecret = process.env.CONVEX_ADMIN_SECRET || '';
+  const users = await convex.query(api.admin.getUsers, { adminSecret });
   const pendingDoctors = users.filter(u => u.role === 'doctor' && u.doctorVerificationStatus === 'pending');
 
   return (
@@ -72,7 +71,7 @@ export default async function DoctorVerificationQueue() {
                 </div>
 
                 <div className="flex md:flex-col gap-3 shrink-0">
-                   <DoctorVerificationActions targetUserId={doctor._id} actorId={session.googleSub} />
+                   <DoctorVerificationActions targetUserId={doctor._id} />
                 </div>
               </div>
             </div>

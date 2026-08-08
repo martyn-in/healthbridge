@@ -5,7 +5,7 @@ import { FileText, Calendar, Clock, Activity } from 'lucide-react';
 
 export default async function AdminReportsPage() {
   const session = await getSession();
-  if (!session || session.role !== 'admin') redirect('/login/admin');
+  // Admin access is protected by middleware and verifyAdminSession
 
   // In a real scenario we would fetch reports metadata here.
   // We'll leave it empty for now to satisfy the type checker.

@@ -83,13 +83,19 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </div>
 
         <div className="p-4 border-t border-slate-800">
-          <a
-            href="/api/auth/logout"
-            className="flex items-center gap-3 px-4 py-2 w-full rounded-lg text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-white transition-colors"
+          <button
+            onClick={async () => {
+              try {
+                await fetch('/api/admin/logout', { method: 'POST' });
+              } finally {
+                window.location.href = '/';
+              }
+            }}
+            className="flex items-center gap-3 px-4 py-2 w-full rounded-lg text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-white transition-colors text-left"
           >
             <LogOut className="w-4 h-4 text-slate-500" />
-            Sign Out
-          </a>
+            Exit Admin
+          </button>
         </div>
       </div>
 

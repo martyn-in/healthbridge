@@ -9,9 +9,8 @@ import UserActions from './UserActions';
 
 export default async function AdminUsersPage() {
   const session = await getSession();
-  if (!session || session.role !== 'admin') redirect('/login/admin');
-
-  const users = await convex.query(api.admin.getUsers, { actorId: session.googleSub });
+  const adminSecret = process.env.CONVEX_ADMIN_SECRET || '';
+  const users = await convex.query(api.admin.getUsers, { adminSecret });
 
   return (
     <div className="space-y-6 animate-fade-in max-w-6xl mx-auto">
@@ -89,8 +88,7 @@ export default async function AdminUsersPage() {
                      <UserActions 
                         userId={user._id} 
                         currentStatus={user.accountStatus} 
-                        isSelf={user.googleSub === session.googleSub} 
-                        actorId={session.googleSub} 
+                        isSelf={false} 
                      />
                   </td>
                 </tr>

@@ -7,7 +7,7 @@ import { Calendar, Clock, User } from 'lucide-react';
 
 export default async function AdminAppointmentsPage() {
   const session = await getSession();
-  if (!session || session.role !== 'admin') redirect('/login/admin');
+  // Admin access is protected by middleware and verifyAdminSession
 
   // Fetch from convex (We'll reuse getByDate which gets all if no date is passed)
   const appointments = await convex.query(api.appointments.getByDate, {});

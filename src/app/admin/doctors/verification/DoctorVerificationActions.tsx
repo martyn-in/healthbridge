@@ -1,14 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useMutation } from 'convex/react';
-import { api } from '@convex/_generated/api';
+import { verifyDoctorAction } from '@/app/admin/actions';
 import { Id } from '@convex/_generated/dataModel';
 import { CheckCircle2, XCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
-export default function DoctorVerificationActions({ targetUserId, actorId }: { targetUserId: Id<"users">, actorId: string }) {
-  const verifyDoctor = useMutation(api.admin.verifyDoctor);
+export default function DoctorVerificationActions({ targetUserId }: { targetUserId: Id<"users"> }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
@@ -21,7 +19,7 @@ export default function DoctorVerificationActions({ targetUserId, actorId }: { t
 
     setLoading(true);
     try {
-      await verifyDoctor({ actorId, targetUserId, status });
+      await verifyDoctorAction(targetUserId, status);
       alert(`Doctor application ${status}.`);
       router.refresh();
     } catch (err: any) {

@@ -16,10 +16,9 @@ import { redirect } from 'next/navigation';
 
 export default async function AdminDashboard() {
   const session = await getSession();
-  if (!session || session.role !== 'admin') redirect('/login/admin');
-
-  const overview = await convex.query(api.admin.getOverview, { actorId: session.googleSub });
-  const pendingDoctors = await convex.query(api.admin.getUsers, { actorId: session.googleSub }).then(
+  const adminSecret = process.env.CONVEX_ADMIN_SECRET || '';
+  const overview = await convex.query(api.admin.getOverview, { adminSecret });
+  const pendingDoctors = await convex.query(api.admin.getUsers, { adminSecret }).then(
     users => users.filter(u => u.role === 'doctor' && u.doctorVerificationStatus === 'pending').slice(0, 5)
   );
 

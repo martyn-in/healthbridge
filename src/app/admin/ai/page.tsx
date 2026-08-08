@@ -5,7 +5,7 @@ import { Cpu } from 'lucide-react';
 
 export default async function AdminAIPage() {
   const session = await getSession();
-  if (!session || session.role !== 'admin') redirect('/login/admin');
+  // Admin access is protected by middleware and verifyAdminSession
 
   return (
     <div className="space-y-6 animate-fade-in max-w-6xl mx-auto">

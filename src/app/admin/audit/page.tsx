@@ -7,9 +7,8 @@ import { ShieldCheck, Calendar, Hash, User, Activity } from 'lucide-react';
 
 export default async function AdminAuditPage() {
   const session = await getSession();
-  if (!session || session.role !== 'admin') redirect('/login/admin');
-
-  const logs = await convex.query(api.admin.getAuditLogs, { actorId: session.googleSub });
+  const adminSecret = process.env.CONVEX_ADMIN_SECRET || '';
+  const logs = await convex.query(api.admin.getAuditLogs, { adminSecret });
 
   return (
     <div className="space-y-6 animate-fade-in max-w-6xl mx-auto">

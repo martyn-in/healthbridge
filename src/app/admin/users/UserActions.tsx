@@ -1,15 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useMutation } from 'convex/react';
-import { api } from '@convex/_generated/api';
+import { toggleUserStatusAction } from '@/app/admin/actions';
 import { Id } from '@convex/_generated/dataModel';
 import { MoreVertical, Ban, CheckCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
-export default function UserActions({ userId, currentStatus, isSelf, actorId }: { userId: Id<"users">, currentStatus: string, isSelf: boolean, actorId: string }) {
+export default function UserActions({ userId, currentStatus, isSelf }: { userId: Id<"users">, currentStatus: string, isSelf: boolean }) {
   const [isOpen, setIsOpen] = useState(false);
-  const toggleStatus = useMutation(api.admin.toggleUserStatus);
   const router = useRouter();
 
   if (isSelf) {
@@ -26,7 +24,7 @@ export default function UserActions({ userId, currentStatus, isSelf, actorId }: 
     }
 
     try {
-      await toggleStatus({ actorId, targetUserId: userId, status: newStatus });
+      await toggleUserStatusAction(userId, newStatus as any);
       alert(`User account has been ${newStatus}.`);
       router.refresh();
     } catch (err: any) {

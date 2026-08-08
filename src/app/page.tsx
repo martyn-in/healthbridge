@@ -1,22 +1,46 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Logo } from '@/components/ui/Logo';
 import { User, Stethoscope } from 'lucide-react';
+import { AdminAccessModal } from '@/components/admin/AdminAccessModal';
 
 export default function RootPage() {
-  const handleLogoClick = () => {
-    window.location.href = "/login/admin";
-  };
+  const [showAdminModal, setShowAdminModal] = useState(false);
+
+  // Check if we were redirected here because of missing admin session
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('admin') === 'true') {
+        setShowAdminModal(true);
+        // Clean up URL
+        window.history.replaceState({}, '', '/');
+      }
+    }
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#F4F5FB] flex flex-col items-center justify-center p-6 font-sans relative">
+      {/* Subtle Admin Dot */}
+      <button 
+        onClick={() => setShowAdminModal(true)}
+        className="absolute top-4 right-4 p-4 text-slate-300 hover:text-slate-400 transition-colors focus:outline-none"
+        title="Admin Access"
+      >
+        •
+      </button>
+
+      {showAdminModal && (
+        <AdminAccessModal onClose={() => setShowAdminModal(false)} />
+      )}
+
       <div className="max-w-2xl w-full text-center space-y-12">
         {/* Header */}
         <div className="space-y-6">
           <div className="w-16 h-16 rounded-2xl bg-[#2F3273] text-white flex items-center justify-center mx-auto shadow-xl">
-            <Logo size="lg" showText={false} onClick={handleLogoClick} />
+            <Logo size="lg" showText={false} />
           </div>
           <div className="space-y-3">
             <h1 className="text-4xl md:text-5xl font-extrabold text-[var(--text-primary)] tracking-tight">

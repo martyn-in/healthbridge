@@ -3,23 +3,17 @@ import { v } from "convex/values";
 import { Id } from "./_generated/dataModel";
 
 // Helper to enforce admin authorization
-async function requireAdmin(ctx: any, actorId: string) {
-  const user = await ctx.db
-    .query("users")
-    .withIndex("by_googleSub", (q: any) => q.eq("googleSub", actorId))
-    .first();
-    
-  if (!user || user.role !== "admin" || user.accountStatus !== "active") {
+function requireAdmin(adminSecret?: string) {
+  if (adminSecret !== process.env.CONVEX_ADMIN_SECRET) {
     throw new Error("Unauthorized: Admin access required");
   }
-  return user;
 }
 
 // Log audit action
-async function logAudit(ctx: any, actorId: string, actorRole: string, action: string, targetType: string, targetId?: string, metadata?: any) {
+async function logAudit(ctx: any, action: string, targetType: string, targetId?: string, metadata?: any) {
   await ctx.db.insert("auditLogs", {
-    actorId,
-    actorRole,
+    actorId: "admin",
+    actorRole: "admin",
     action,
     targetType,
     targetId,
@@ -29,9 +23,9 @@ async function logAudit(ctx: any, actorId: string, actorRole: string, action: st
 }
 
 export const getOverview = query({
-  args: { actorId: v.string() },
+  args: { adminSecret: v.string() },
   handler: async (ctx, args) => {
-    await requireAdmin(ctx, args.actorId);
+    requireAdmin(args.adminSecret);
 
     const users = await ctx.db.query("users").collect();
     const patientsCount = users.filter((u: any) => u.role === "patient").length;
@@ -55,25 +49,25 @@ export const getOverview = query({
 });
 
 export const getUsers = query({
-  args: { actorId: v.string() },
+  args: { adminSecret: v.string() },
   handler: async (ctx, args) => {
-    await requireAdmin(ctx, args.actorId);
+    requireAdmin(args.adminSecret);
     return await ctx.db.query("users").order("desc").take(500);
   }
 });
 
 export const getAuditLogs = query({
-  args: { actorId: v.string() },
+  args: { adminSecret: v.string() },
   handler: async (ctx, args) => {
-    await requireAdmin(ctx, args.actorId);
+    requireAdmin(args.adminSecret);
     return await ctx.db.query("auditLogs").order("desc").take(100);
   }
 });
 
 export const verifyDoctor = mutation({
-  args: { actorId: v.string(), targetUserId: v.id("users"), status: v.union(v.literal("approved"), v.literal("rejected")) },
+  args: { adminSecret: v.string(), targetUserId: v.id("users"), status: v.union(v.literal("approved"), v.literal("rejected")) },
   handler: async (ctx, args) => {
-    const adminUser = await requireAdmin(ctx, args.actorId);
+    requireAdmin(args.adminSecret);
     const targetUser = await ctx.db.get(args.targetUserId);
 
     if (!targetUser) throw new Error("User not found");
@@ -85,16 +79,16 @@ export const verifyDoctor = mutation({
       updatedAt: new Date().toISOString()
     });
 
-    await logAudit(ctx, args.actorId, adminUser.role, args.status === "approved" ? "DOCTOR_APPROVED" : "DOCTOR_REJECTED", "user", args.targetUserId, { status: args.status });
+    await logAudit(ctx, args.status === "approved" ? "DOCTOR_APPROVED" : "DOCTOR_REJECTED", "user", args.targetUserId, { status: args.status });
 
     return { success: true };
   }
 });
 
 export const toggleUserStatus = mutation({
-  args: { actorId: v.string(), targetUserId: v.id("users"), status: v.union(v.literal("active"), v.literal("suspended")) },
+  args: { adminSecret: v.string(), targetUserId: v.id("users"), status: v.union(v.literal("active"), v.literal("suspended")) },
   handler: async (ctx, args) => {
-    const adminUser = await requireAdmin(ctx, args.actorId);
+    requireAdmin(args.adminSecret);
     const targetUser = await ctx.db.get(args.targetUserId);
 
     if (!targetUser) throw new Error("User not found");
@@ -107,7 +101,7 @@ export const toggleUserStatus = mutation({
       updatedAt: new Date().toISOString()
     });
 
-    await logAudit(ctx, args.actorId, adminUser.role, args.status === "suspended" ? "USER_SUSPENDED" : "USER_ACTIVATED", "user", args.targetUserId, { status: args.status });
+    await logAudit(ctx, args.status === "suspended" ? "USER_SUSPENDED" : "USER_ACTIVATED", "user", args.targetUserId, { status: args.status });
 
     return { success: true };
   }
