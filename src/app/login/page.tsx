@@ -47,7 +47,7 @@ function LoginContent() {
   const searchParams = useSearchParams();
   const redirectUrl = searchParams.get('redirect') || '/dashboard';
 
-  const { updatePrimaryProfile, showToast } = useApp();
+  const { activeProfile, updatePrimaryProfile, showToast } = useApp();
 
   const [mode, setMode] = useState<'signin' | 'signup'>('signin');
   const [email, setEmail] = useState('');
@@ -56,11 +56,8 @@ function LoginContent() {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
-  // Google OAuth Client ID
-  const [customClientId, setCustomClientId] = useState<string>(
-    '213155484261-meqs44mna8jdcunvhfmrirje4snoh43b.apps.googleusercontent.com'
-  );
-  const [showConfigHelp, setShowConfigHelp] = useState(false);
+  // Google OAuth Client ID (internal server/env setting, hidden from UI)
+  const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '213155484261-meqs44mna8jdcunvhfmrirje4snoh43b.apps.googleusercontent.com';
 
   const googleBtnRef = useRef<HTMLDivElement>(null);
 
@@ -92,7 +89,7 @@ function LoginContent() {
       if (window.google?.accounts?.id) {
         try {
           window.google.accounts.id.initialize({
-            client_id: customClientId.trim(),
+            client_id: googleClientId.trim(),
             callback: handleGoogleCallback,
             auto_select: false,
           });
@@ -116,7 +113,7 @@ function LoginContent() {
     };
 
     loadGoogleSdk();
-  }, [mode, customClientId]);
+  }, [mode, googleClientId]);
 
   // Handle Callback from Real Google OAuth
   const handleGoogleCallback = (response: any) => {
@@ -327,40 +324,6 @@ function LoginContent() {
               </button>
             )}
           </div>
-
-          {/* Config Helper Toggle */}
-          <div className="text-center mb-4">
-            <button
-              type="button"
-              onClick={() => setShowConfigHelp(!showConfigHelp)}
-              className="text-[11px] font-semibold text-[var(--text-muted)] hover:text-[#4D50A2] transition-colors inline-flex items-center gap-1"
-            >
-              <Settings className="w-3 h-3" />
-              <span>Google Cloud Client ID Settings</span>
-            </button>
-          </div>
-
-          {showConfigHelp && (
-            <div className="mb-4 p-3 rounded-xl glass-subcard text-xs space-y-2">
-              <div className="font-bold text-[var(--text-primary)] flex items-center gap-1.5">
-                <Key className="w-3.5 h-3.5 text-[#4D50A2]" />
-                <span>Custom Google OAuth Client ID</span>
-              </div>
-              <input
-                type="text"
-                value={customClientId}
-                onChange={(e) => setCustomClientId(e.target.value)}
-                placeholder="Enter Google Client ID"
-                className="w-full px-3 py-1.5 glass-subcard rounded-xl text-[11px] font-mono text-[var(--text-primary)]"
-              />
-              <p className="text-[10px] text-[var(--text-muted)] leading-tight">
-                To fix <strong>Error 401: invalid_client</strong> in Google Cloud Console:
-                <br />1. Go to <strong>console.cloud.google.com</strong> → APIs & Services → Credentials.
-                <br />2. Create OAuth 2.0 Client ID (Web Application).
-                <br />3. Add Authorized JS Origin: <code>https://healthaibridge.vercel.app</code>
-              </p>
-            </div>
-          )}
 
           <div className="relative flex py-2 items-center mb-4">
             <div className="flex-grow border-t border-white/20" />
