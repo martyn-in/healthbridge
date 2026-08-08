@@ -16,14 +16,9 @@ export function formatSafeErrorResponse(error: unknown): ChatResponse {
   console.error('[HealthBridge AI Error Handler]:', error);
 
   return {
-    answer:
-      'HealthBridge AI is temporarily unavailable. Your core health tools and Emergency SOS remain active. Please try your request again in a few moments.',
+    answer: 'HealthBridge AI is temporarily unavailable. Please try again.',
     urgency: 'routine',
-    suggestedActions: [
-      { label: 'Check Symptoms', actionPath: '/dashboard/symptoms' },
-      { label: 'View Reports', actionPath: '/dashboard/reports' },
-      { label: 'Activate Emergency SOS', actionPath: '/dashboard', triggerSos: true },
-    ],
+    suggestedActions: [],
     route: null,
     emergency: false,
   };
