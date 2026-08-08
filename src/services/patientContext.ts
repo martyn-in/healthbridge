@@ -21,7 +21,7 @@ export interface AuthenticatedPatientData {
 export function getAuthenticatedPatientContext(profileId?: string): AuthenticatedPatientData {
   return {
     profileId: profileId || 'prof-primary',
-    name: 'Martin P',
+    name: 'Patient User',
     age: 32,
     allergies: ['Penicillin'],
     conditions: ['Mild Hypertension'],
