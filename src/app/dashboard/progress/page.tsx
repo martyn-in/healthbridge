@@ -133,11 +133,10 @@ function SteppedHealthProgressChart() {
             )}
             <div className="w-9 sm:w-11 glass-subcard rounded-2xl p-1 flex items-end h-[130px]">
               <div
-                className={`w-full rounded-xl transition-all duration-500 ${
-                  bar.active
+                className={`w-full rounded-xl transition-all duration-500 ${bar.active
                     ? 'bg-gradient-to-t from-[#6E56CF] to-[#B9ACFF] shadow-md'
                     : 'bg-gradient-to-t from-[#E8E3FF] to-[var(--bg-card-subtle)] group-hover:from-[#B9ACFF]'
-                }`}
+                  }`}
                 style={{ height: `${bar.height}%` }}
               />
             </div>
@@ -156,7 +155,7 @@ export default function ProgressPage() {
 
   return (
     <div className="space-y-8 pb-12 font-sans selection:bg-[#E8E3FF] selection:text-[#6E56CF]">
-      
+
       {/* ── PAGE HEADER (IMAGE 2 COMPOSITION) ── */}
       <div className="max-w-xl space-y-1">
         <h1 className="text-3xl sm:text-5xl font-light text-[var(--text-primary)] leading-tight tracking-tight">
@@ -208,7 +207,7 @@ export default function ProgressPage() {
         <div className="lg:col-span-5 glass-panel rounded-3xl p-6 space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="text-base font-bold text-[var(--text-primary)]">Mental Progress <span className="text-xs font-normal text-[var(--text-secondary)]">this week</span></h3>
-            
+
             <button className="flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold glass-pill text-[var(--text-primary)]">
               <span>Week</span>
               <ChevronDown className="h-3 w-3" />
